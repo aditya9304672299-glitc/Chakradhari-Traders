@@ -585,6 +585,30 @@
             document.getElementById('tabLogs').style.display = 'none';
             document.getElementById('loginPass').value = '';
         }
-    </script>
+        <!-- PDF Controls -->
+<div class="controls" style="margin-top: 20px;">
+    <h3>📄 Date-Range PDF Download</h3>
+    <div style="display: flex; gap: 10px;">
+        <input type="date" id="pdfStart">
+        <input type="date" id="pdfEnd">
+    </div>
+    <button onclick="generateCustomPDF()" style="background: #FFC107; color: black;">Generate & Email PDF</button>
+</div> function generateCustomPDF() {
+    const start = document.getElementById('pdfStart').value;
+    const end = document.getElementById('pdfEnd').value;
+    if(!start || !end) return alert("Kripya dono dates chunein.");
+
+    // Data Filter
+    const filtered = cloudKhataData.filter(e => e.entryDate >= start && e.entryDate <= end);
+    
+    // PDF banane ki logic (Print function se)
+    alert("PDF taiyar hai! Print menu me 'Save as PDF' chunein.");
+    window.print();
+ </script> <!-- PDF Controls -->
+    // Email Popup
+    const subject = "Hisab Kitab: " + start + " to " + end;
+    const body = "Namaste, ye raha mera " + start + " se " + end + " tak ka hisab.";
+    window.location.href = `mailto:chakradhari2026@gmail.com?subject=${subject}&body=${body}`;
+} </script>
 </body>
 </html>
