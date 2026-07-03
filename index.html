@@ -7,7 +7,10 @@
     <style>
         :root { --primary: #d32f2f; --dark: #1a1a1a; --grey: #2d2d2d; --light: #f5f5f5; --steel: #4682B4; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background-color: var(--dark); color: var(--light); padding: 20px; }
+        
+        /* SECURITY: Text Selection and Basic Copy Block */
+        body { background-color: var(--dark); color: var(--light); padding: 20px; user-select: none; -webkit-user-select: none; }
+        
         header { text-align: center; padding: 30px; background: var(--grey); border-radius: 12px; margin-bottom: 25px; border-bottom: 5px solid var(--primary); }
         header h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; }
         .info-bar { background: var(--grey); padding: 15px; border-radius: 8px; margin-bottom: 25px; display: flex; flex-wrap: wrap; justify-content: space-around; font-size: 0.9rem; border: 1px solid #444; }
@@ -20,7 +23,7 @@
         button { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
         button:hover { background: #b71c1c; }
         
-        /* Main Dashboard Layout */
+        /* Main Dashboard */
         .main-content { display: none; }
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { background: var(--grey); color: white; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: auto; margin: 0; }
@@ -31,34 +34,49 @@
         .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
         .img-card { background: var(--grey); border-radius: 8px; overflow: hidden; border: 1px solid #444; position: relative; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
         .img-card:hover { transform: translateY(-5px); }
-        .img-card img { width: 100%; height: 250px; object-fit: cover; transition: 0.5s; cursor: pointer; }
+        
+        /* Image Drag Block */
+        .img-card img { width: 100%; height: 250px; object-fit: cover; transition: 0.5s; cursor: pointer; pointer-events: auto; }
         .img-card-body { padding: 15px; text-align: center; }
         .img-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
         
-        /* Action Buttons for Owner */
         .owner-actions { display: flex; gap: 10px; margin-top: 10px; }
         .btn-replace { background: #2196F3; }
         .btn-delete { background: #f44336; }
         
-        /* Zoom Modal */
-        .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .modal-content { max-width: 80%; max-height: 80%; border-radius: 8px; transition: transform 0.3s; }
-        .modal-close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
-        .zoom-controls { position: absolute; bottom: 30px; display: flex; gap: 20px; }
-        .zoom-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 5px; cursor: pointer; }
-
         /* Khata Section */
         .khata-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        .khata-list { background: var(--grey); padding: 20px; border-radius: 8px; height: 600px; overflow-y: auto; }
+        .khata-list { background: var(--grey); padding: 20px; border-radius: 8px; height: 650px; overflow-y: auto; position: relative; }
         .khata-item { background: #222; padding: 15px; border-radius: 6px; margin-bottom: 12px; border-left: 5px solid var(--primary); position: relative; }
         .khata-item.supplier { border-left-color: var(--steel); }
         .del-entry-btn { background: #f44336; padding: 5px 10px; font-size: 0.8rem; width: auto; position: absolute; top: 15px; right: 15px; }
         
         .logout-btn { background: #555; width: auto; padding: 8px 15px; float: right; margin-top: -50px; }
         .hidden-file-input { display: none; }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
+        .modal-content { max-width: 80%; max-height: 80%; border-radius: 8px; transition: transform 0.3s; }
+        .modal-close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+        .zoom-controls { position: absolute; bottom: 30px; display: flex; gap: 20px; }
+        .zoom-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+
+        /* Print/PDF Styling */
+        @media print {
+            body { background: white; color: black; }
+            body * { visibility: hidden; }
+            .khata-list, .khata-list * { visibility: visible; color: black; }
+            .khata-list { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 0; overflow: visible; height: auto; }
+            .khata-item { border: 1px solid #ccc; background: white; page-break-inside: avoid; }
+            .del-entry-btn, #filterDate, .print-btn, .clear-btn { display: none !important; }
+            h3 { color: black; }
+        }
     </style>
+    <!-- FIREBASE CLOUD LIBRARIES -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 </head>
-<body>
+<body oncontextmenu="return false;"> <!-- Right Click Blocked -->
 
     <div id="loginPage" class="login-container">
         <h2>Chakradhari Traders Login</h2>
@@ -99,12 +117,10 @@
             <div id="tabLogs" class="tab-btn" onclick="switchTab('logs')" style="display: none;">📱 Customer Login Logs</div>
         </div>
 
-        <!-- SHOWROOM -->
         <div id="showroomSection">
             <div class="controls">
                 <h3>Lohe aur Steel ke Behtareen Designs</h3>
-                <p style="color: #aaa; margin-bottom: 10px;">Niche dropdown se item select karein aur designs dekhein:</p>
-                <select id="itemFilter" onchange="loadImages()">
+                <select id="itemFilter" onchange="loadImagesUI()">
                     <option value="Iron Gate">💥 Iron Gate (Lohe ka Phatak)</option>
                     <option value="Steel Gate">✨ Steel Gate (Premium)</option>
                     <option value="Khatiya">🛏️ Khatiya / Palang</option>
@@ -115,12 +131,21 @@
                     <option value="Railing">🪜 Stairs Railing</option>
                     <option value="Almirah">🗄️ Iron Almirah</option>
                     <option value="Sofa">🛋️ Iron/Steel Sofa Set</option>
+                    <option value="Door">🚪 Iron Door</option>
+                    <option value="Rolling Shutter">🏬 Rolling Shutter</option>
+                    <option value="Boundary Wall">🧱 Boundary Wall Design</option>
+                    <option value="Shed">🏠 Iron Shed</option>
+                    <option value="Truss">🏗️ Truss Work</option>
+                    <option value="Steel Grill">❇️ Steel Grill</option>
+                    <option value="Steel Railing">🌟 Steel Railing</option>
+                    <option value="Spiral Stairs">🪜 Spiral Stairs</option>
+                    <option value="Racks">🗄️ Iron/Steel Racks</option>
+                    <option value="Jhula">🎢 Iron Jhula (Swing)</option>
                 </select>
             </div>
             <div class="image-grid" id="imageGrid"></div>
         </div>
 
-        <!-- KHATA BOOK -->
         <div id="khataSection" style="display: none;">
             <div class="khata-grid">
                 <div class="controls">
@@ -144,14 +169,19 @@
                     <textarea id="kNote" placeholder="Koi note likhna hai?"></textarea>
                     <button onclick="saveKhataEntry()">Hisab Save Karo</button>
                 </div>
-                <div class="khata-list">
-                    <h3>📋 Saved Ledger (Saara Hisab-Kitab)</h3>
-                    <div id="khataDisplay" style="margin-top: 15px;"></div>
+                
+                <div class="khata-list" id="printSection">
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center;">
+                        <h3 style="margin: 0; flex-grow: 1;">📋 Saved Ledger</h3>
+                        <input type="date" id="filterDate" onchange="loadKhataUI()" style="margin: 0; width: 150px; padding: 8px;">
+                        <button class="clear-btn" onclick="clearFilter()" style="background: #555; width: auto; padding: 8px 15px;">Clear</button>
+                        <button class="print-btn" onclick="printKhata()" style="background: #FF9800; color: black; width: auto; padding: 8px 15px;">📄 Save PDF</button>
+                    </div>
+                    <div id="khataDisplay"></div>
                 </div>
             </div>
         </div>
 
-        <!-- CUSTOMER LOGS -->
         <div id="logsSection" style="display: none;">
             <div class="controls">
                 <h3>📱 Website Pe Aaye Grahakon ke Numbers</h3>
@@ -171,18 +201,43 @@
     </div>
 
     <input type="file" id="replaceFileInput" class="hidden-file-input" accept="image/*" onchange="handleImageFileChange()">
-    <!-- Naya Input Add Image ke liye -->
     <input type="file" id="addFileInput" class="hidden-file-input" accept="image/*" onchange="handleAddImageFileChange()">
 
     <script>
+        // SECURITY - Disable F12 and Shortcuts safely
+        document.ondragstart = function() { return false; };
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123) return false;
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 73) return false;
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 74) return false;
+            if(e.ctrlKey && e.keyCode == 85) return false;
+        };
+
+        // FIREBASE CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "AIzaSyDYuJJ1jbWF-NELI-B8BikkkVqdhMmklYw",
+            authDomain: "chakradhari-traders.firebaseapp.com",
+            databaseURL: "https://chakradhari-traders-default-rtdb.firebaseio.com",
+            projectId: "chakradhari-traders",
+            storageBucket: "chakradhari-traders.firebasestorage.app",
+            messagingSenderId: "444707223808",
+            appId: "1:444707223808:web:629ad531aeb3b94074dbe5"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         let currentZoom = 1;
         let loggedInRole = 'customer';
         let currentReplacingKey = '';
         let currentReplacingIndex = -1;
         let currentAddingKey = '';
 
+        let cloudImagesData = {};
+        let cloudKhataData = [];
+        let cloudLogsData = [];
+
         const defaultImages = {
-            "Iron Gate": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600", "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600", "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=600"],
+            "Iron Gate": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600"],
             "Steel Gate": ["https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"],
             "Khatiya": ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600"],
             "Window": ["https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?w=600"],
@@ -191,11 +246,53 @@
             "Ventilator": ["https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
             "Railing": ["https://images.unsplash.com/photo-1563714113014-25cb4cf3952a?w=600"],
             "Almirah": ["https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600"],
-            "Sofa": ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600"]
+            "Sofa": ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600"],
+            "Door": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600"],
+            "Rolling Shutter": ["https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"],
+            "Boundary Wall": ["https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=600"],
+            "Shed": ["https://images.unsplash.com/photo-1560026857-e6f77cc8bc4a?w=600"],
+            "Truss": ["https://images.unsplash.com/photo-1504913659239-6abc87875a63?w=600"],
+            "Steel Grill": ["https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=600"],
+            "Steel Railing": ["https://images.unsplash.com/photo-1563714113014-25cb4cf3952a?w=600"],
+            "Spiral Stairs": ["https://images.unsplash.com/photo-1508214300305-645001ff9fce?w=600"],
+            "Racks": ["https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600"],
+            "Jhula": ["https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600"]
         };
 
-        if(!localStorage.getItem('customShowroomImages')) {
-            localStorage.setItem('customShowroomImages', JSON.stringify(defaultImages));
+        // LOAD DATA FROM CLOUD
+        db.ref('customShowroomImages').on('value', (snapshot) => {
+            let data = snapshot.val();
+            if(!data) {
+                data = defaultImages;
+                db.ref('customShowroomImages').set(defaultImages);
+            }
+            cloudImagesData = data;
+            loadImagesUI();
+        });
+
+        db.ref('shopKhata').on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            cloudKhataData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+            loadKhataUI();
+        });
+
+        db.ref('siteLogs').on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            cloudLogsData = Object.keys(data).map(key => data[key]);
+            loadLogsUI();
+        });
+
+        window.onload = function() {
+            if(localStorage.getItem('isOwnerLoggedIn') === 'true') {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('mainDashboard').style.display = 'block';
+                document.getElementById('tabKhata').style.display = 'block';
+                document.getElementById('tabLogs').style.display = 'block';
+                loggedInRole = 'owner';
+                loadImagesUI();
+                loadKhataUI();
+                loadLogsUI();
+            }
         }
 
         function toggleRoleFields() {
@@ -211,37 +308,34 @@
             if (role === 'owner') {
                 const pass = document.getElementById('loginPass').value;
                 if (pass === 'Aditya930@') { 
+                    localStorage.setItem('isOwnerLoggedIn', 'true');
                     document.getElementById('loginPage').style.display = 'none';
                     document.getElementById('mainDashboard').style.display = 'block';
                     document.getElementById('tabKhata').style.display = 'block';
                     document.getElementById('tabLogs').style.display = 'block';
-                    loadImages();
-                    loadKhata();
-                    loadLogs();
+                    loadImagesUI();
+                    loadKhataUI();
+                    loadLogsUI();
                 } else { alert("Galat Password hai!"); }
             } else {
                 const phone = document.getElementById('loginPhone').value;
                 if (phone.length >= 10) {
-                    let logs = JSON.parse(localStorage.getItem('siteLogs')) || [];
-                    logs.push({ phone: phone, role: role, time: new Date().toLocaleString() });
-                    localStorage.setItem('siteLogs', JSON.stringify(logs));
-                    
+                    db.ref('siteLogs').push({ phone: phone, role: role, time: new Date().toLocaleString() });
                     document.getElementById('loginPage').style.display = 'none';
                     document.getElementById('mainDashboard').style.display = 'block';
                     document.getElementById('tabKhata').style.display = 'none';
                     document.getElementById('tabLogs').style.display = 'none';
-                    loadImages();
+                    loadImagesUI();
                 } else { alert("Kripya sahi 10 digit ka phone number dalein."); }
             }
         }
 
-        function loadImages() {
+        function loadImagesUI() {
             const item = document.getElementById('itemFilter').value;
             const grid = document.getElementById('imageGrid');
             grid.innerHTML = '';
             
-            let allImages = JSON.parse(localStorage.getItem('customShowroomImages'));
-            let imgs = allImages[item] || [];
+            let imgs = cloudImagesData[item] || [];
 
             imgs.forEach((imgUrl, index) => {
                 let ownerButtons = '';
@@ -267,11 +361,10 @@
                     </div>`;
             });
 
-            // Owner ke liye naya add button
             if(loggedInRole === 'owner') {
                 grid.innerHTML += `
-                    <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:#222; border: 2px dashed #555;">
-                        <div style="text-align:center; padding: 40px;">
+                    <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:#222; border: 2px dashed #555; min-height:250px;">
+                        <div style="text-align:center; padding: 20px;">
                             <h3 style="color:#aaa; margin-bottom:15px;">Naya Design Jodein</h3>
                             <button style="background:#4caf50;" onclick="triggerAdd('${item}')">+ Add Image</button>
                         </div>
@@ -292,44 +385,34 @@
         }
 
         function handleImageFileChange() {
-            const fileInput = document.getElementById('replaceFileInput');
-            const file = fileInput.files[0];
+            const file = document.getElementById('replaceFileInput').files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function (e) {
-                let allImages = JSON.parse(localStorage.getItem('customShowroomImages'));
-                allImages[currentReplacingKey][currentReplacingIndex] = e.target.result;
-                localStorage.setItem('customShowroomImages', JSON.stringify(allImages));
-                loadImages();
+                cloudImagesData[currentReplacingKey][currentReplacingIndex] = e.target.result;
+                db.ref('customShowroomImages/' + currentReplacingKey).set(cloudImagesData[currentReplacingKey]);
             };
             reader.readAsDataURL(file);
-            fileInput.value = ''; 
+            document.getElementById('replaceFileInput').value = ''; 
         }
 
         function handleAddImageFileChange() {
-            const fileInput = document.getElementById('addFileInput');
-            const file = fileInput.files[0];
+            const file = document.getElementById('addFileInput').files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function (e) {
-                let allImages = JSON.parse(localStorage.getItem('customShowroomImages'));
-                if(!allImages[currentAddingKey]) allImages[currentAddingKey] = [];
-                allImages[currentAddingKey].push(e.target.result);
-                localStorage.setItem('customShowroomImages', JSON.stringify(allImages));
-                loadImages();
+                if(!cloudImagesData[currentAddingKey]) cloudImagesData[currentAddingKey] = [];
+                cloudImagesData[currentAddingKey].push(e.target.result);
+                db.ref('customShowroomImages/' + currentAddingKey).set(cloudImagesData[currentAddingKey]);
             };
             reader.readAsDataURL(file);
-            fileInput.value = ''; 
+            document.getElementById('addFileInput').value = ''; 
         }
 
         function deleteImage(category, index) {
             if(confirm("Kya aap sach me is image ko delete karna chahte hain?")) {
-                let allImages = JSON.parse(localStorage.getItem('customShowroomImages'));
-                allImages[category].splice(index, 1);
-                localStorage.setItem('customShowroomImages', JSON.stringify(allImages));
-                loadImages();
+                cloudImagesData[category].splice(index, 1);
+                db.ref('customShowroomImages/' + category).set(cloudImagesData[category]);
             }
         }
 
@@ -358,8 +441,9 @@
         }
 
         function saveKhataEntry() {
-            let khata = JSON.parse(localStorage.getItem('shopKhata')) || [];
+            const today = new Date().toISOString().split('T')[0];
             const entry = {
+                entryDate: today, 
                 type: document.getElementById('khataType').value,
                 name: document.getElementById('kName').value,
                 phone: document.getElementById('kPhone').value,
@@ -371,9 +455,8 @@
                 adv2: parseFloat(document.getElementById('kAdv2').value) || 0,
                 note: document.getElementById('kNote').value
             };
-            khata.push(entry);
-            localStorage.setItem('shopKhata', JSON.stringify(khata));
-            loadKhata();
+            
+            db.ref('shopKhata').push(entry);
             
             document.getElementById('kName').value = '';
             document.getElementById('kPhone').value = '';
@@ -386,12 +469,23 @@
             document.getElementById('kNote').value = '';
         }
 
-        function loadKhata() {
+        function loadKhataUI() {
             const display = document.getElementById('khataDisplay');
             display.innerHTML = '';
-            let khata = JSON.parse(localStorage.getItem('shopKhata')) || [];
             
-            khata.forEach((e, index) => {
+            const filterDate = document.getElementById('filterDate').value;
+            let filteredKhata = cloudKhataData;
+            
+            if(filterDate) {
+                filteredKhata = cloudKhataData.filter(e => e.entryDate === filterDate || e.date1 === filterDate || e.date2 === filterDate);
+            }
+
+            if(filteredKhata.length === 0) {
+                display.innerHTML = `<p style="color:#aaa;">Is date par koi hisab nahi mila.</p>`;
+                return;
+            }
+            
+            filteredKhata.forEach((e) => {
                 let paid = e.adv1 + e.adv2;
                 let due = e.total - paid;
                 
@@ -401,8 +495,9 @@
 
                 display.innerHTML += `
                     <div class="khata-item ${e.type}">
-                        <button class="del-entry-btn" onclick="deleteKhataEntry(${index})">🗑️ Delete</button>
+                        <button class="del-entry-btn" onclick="deleteKhataEntry('${e.id}')">🗑️ Delete</button>
                         <h4><b>${e.name}</b> (${e.type.toUpperCase()}) - Ph: ${e.phone}</h4>
+                        <p style="font-size:0.8rem; color:#888;">Entry Date: ${e.entryDate || 'N/A'}</p>
                         <p><b>Kaam:</b> ${e.item} | <b>Total:</b> Rs. ${e.total}</p>
                         ${adv1Html}
                         ${adv2Html}
@@ -412,25 +507,30 @@
             });
         }
 
-        function deleteKhataEntry(index) {
+        function clearFilter() {
+            document.getElementById('filterDate').value = '';
+            loadKhataUI();
+        }
+
+        function printKhata() { window.print(); }
+
+        function deleteKhataEntry(id) {
             if(confirm("Kya aap sach me is entry ko delete karna chahte hain?")) {
-                let khata = JSON.parse(localStorage.getItem('shopKhata')) || [];
-                khata.splice(index, 1);
-                localStorage.setItem('shopKhata', JSON.stringify(khata));
-                loadKhata();
+                db.ref('shopKhata/' + id).remove();
             }
         }
 
-        function loadLogs() {
+        function loadLogsUI() {
             const display = document.getElementById('logDisplay');
             display.innerHTML = '';
-            let logs = JSON.parse(localStorage.getItem('siteLogs')) || [];
-            logs.reverse().forEach(l => {
+            let logs = [...cloudLogsData].reverse();
+            logs.forEach(l => {
                 display.innerHTML += `<p style="padding:8px; border-bottom:1px solid #444;">⏱️ <b>${l.time}</b> -> Role: ${l.role.toUpperCase()} | Phone: <b>${l.phone}</b></p>`;
             });
         }
 
         function logout() {
+            localStorage.setItem('isOwnerLoggedIn', 'false');
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
             document.getElementById('tabKhata').style.display = 'none';
