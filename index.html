@@ -8,220 +8,117 @@
         :root { --primary: #d32f2f; --dark: #1a1a1a; --grey: #2d2d2d; --light: #f5f5f5; --steel: #4682B4; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
         
-        /* SECURITY: Text Selection and Basic Copy Block */
-        body { background-color: var(--dark); color: var(--light); padding: 20px; user-select: none; -webkit-user-select: none; }
-        
+        body { background-color: var(--dark); color: var(--light); padding: 20px; user-select: none; -webkit-user-select: none; transition: filter 0.3s; }
         header { text-align: center; padding: 30px; background: var(--grey); border-radius: 12px; margin-bottom: 25px; border-bottom: 5px solid var(--primary); }
         header h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; }
         .info-bar { background: var(--grey); padding: 15px; border-radius: 8px; margin-bottom: 25px; display: flex; flex-wrap: wrap; justify-content: space-around; font-size: 0.9rem; border: 1px solid #444; }
         .info-bar a { color: #4caf50; text-decoration: none; font-weight: bold; }
         
-        /* Login Styles */
         .login-container { max-width: 450px; margin: 80px auto; background: var(--grey); padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.5); text-align: center; border: 1px solid #444; }
         .login-container h2 { margin-bottom: 20px; color: var(--primary); }
         select, input, textarea { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #555; color: white; border-radius: 6px; font-size: 1rem; }
         button { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
         button:hover { background: #b71c1c; }
         
-        /* Main Dashboard */
         .main-content { display: none; }
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { background: var(--grey); color: white; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: auto; margin: 0; }
         .tab-btn.active { background: var(--primary); }
         
-        /* Showroom & Grid */
         .controls { background: var(--grey); padding: 20px; border-radius: 8px; margin-bottom: 20px; }
         .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
         .img-card { background: var(--grey); border-radius: 8px; overflow: hidden; border: 1px solid #444; position: relative; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
-        .img-card:hover { transform: translateY(-5px); }
         
-        /* Image Drag Block */
         .img-card img { width: 100%; height: 250px; object-fit: cover; transition: 0.5s; cursor: pointer; pointer-events: auto; }
         .img-card-body { padding: 15px; text-align: center; }
-        .img-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
         
         .owner-actions { display: flex; gap: 10px; margin-top: 10px; }
         .btn-replace { background: #2196F3; }
         .btn-delete { background: #f44336; }
         
-        /* Khata Section */
         .khata-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
         .khata-list { background: var(--grey); padding: 20px; border-radius: 8px; height: 650px; overflow-y: auto; position: relative; }
         .khata-item { background: #222; padding: 15px; border-radius: 6px; margin-bottom: 12px; border-left: 5px solid var(--primary); position: relative; }
-        .khata-item.supplier { border-left-color: var(--steel); }
         .del-entry-btn { background: #f44336; padding: 5px 10px; font-size: 0.8rem; width: auto; position: absolute; top: 15px; right: 15px; }
         
         .logout-btn { background: #555; width: auto; padding: 8px 15px; float: right; margin-top: -50px; }
         .hidden-file-input { display: none; }
         
-        /* Modal */
         .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .modal-content { max-width: 80%; max-height: 80%; border-radius: 8px; transition: transform 0.3s; }
+        .modal-content { max-width: 80%; max-height: 80%; border-radius: 8px; }
         .modal-close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
-        .zoom-controls { position: absolute; bottom: 30px; display: flex; gap: 20px; }
-        .zoom-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        
+        #loader { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 20px; border-radius: 8px; color: #fff; z-index: 9999; }
 
-        /* Loader */
-        #loader { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 20px; border-radius: 8px; color: #fff; z-index: 9999; font-weight: bold; }
-
-        /* Print/PDF Styling */
         @media print {
             body { background: white; color: black; }
             body * { visibility: hidden; }
             .khata-list, .khata-list * { visibility: visible; color: black; }
-            .khata-list { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 0; overflow: visible; height: auto; }
-            .khata-item { border: 1px solid #ccc; background: white; page-break-inside: avoid; }
-            .del-entry-btn, #filterDate, .print-btn, .clear-btn { display: none !important; }
-            h3 { color: black; }
+            .khata-list { position: absolute; left: 0; top: 0; width: 100%; }
         }
     </style>
     <!-- FIREBASE CLOUD LIBRARIES -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
 </head>
-<body oncontextmenu="return false;"> <!-- Right Click Blocked -->
+<body oncontextmenu="return false;">
 
-    <div id="loader">Kripya Pratiksha Karein... (Saving to Cloud)</div>
+    <div id="loader">Saving to Cloud...</div>
 
     <div id="loginPage" class="login-container">
         <h2>Chakradhari Traders Login</h2>
-        <p style="color: #bbb; margin-bottom: 15px;">Welcome! Kripya apna role chunein:</p>
         <select id="userRole" onchange="toggleRoleFields()">
             <option value="customer">Customer</option>
             <option value="owner">Owner</option>
-            <option value="employee">Employee</option>
         </select>
-        
-        <div id="phoneField">
-            <input type="number" id="loginPhone" placeholder="Apna Mobile Number Daalein">
-        </div>
-        <div id="passField" style="display: none;">
-            <input type="password" id="loginPass" placeholder="Owner Password Daalein">
-        </div>
-
+        <div id="phoneField"><input type="number" id="loginPhone" placeholder="Mobile Number"></div>
+        <div id="passField" style="display: none;"><input type="password" id="loginPass" placeholder="Owner Password"></div>
         <button onclick="handleLogin()">System Me Ghusein 🔥</button>
     </div>
 
     <div id="mainDashboard" class="main-content">
         <header>
             <h1>Chakradhari Traders</h1>
-            <p>Prop: Aditya Raj | Nayagaon Bariyarpur, Vaishali, Bihar</p>
             <button class="logout-btn" onclick="logout()">Log Out</button>
         </header>
 
-        <div class="info-bar">
-            <span><b>📞 Call/WhatsApp:</b> 9304672299</span>
-            <span><b>✉️ Email:</b> chakradhari2026@gmail.com</span>
-            <span><b>📍 Address:</b> Nayagaon Bariyarpur, Near Jogi Baba Mandir & Gyan Mandir School, Vaishali, Bihar (844506)</span>
-            <span><b>🟢 Order On:</b> <a href="https://wa.me/919304672299" target="_blank">Direct WhatsApp Chat</a></span>
-        </div>
-
         <div class="nav-tabs">
-            <div id="tabShowroom" class="tab-btn active" onclick="switchTab('showroom')">🖼️ Design Showroom</div>
-            <div id="tabKhata" class="tab-btn" onclick="switchTab('khata')" style="display: none;">📊 Khata Book (Hisab)</div>
-            <div id="tabLogs" class="tab-btn" onclick="switchTab('logs')" style="display: none;">📱 Customer Login Logs</div>
+            <div id="tabShowroom" class="tab-btn active" onclick="switchTab('showroom')">🖼️ Showroom</div>
+            <div id="tabKhata" class="tab-btn" onclick="switchTab('khata')" style="display: none;">📊 Khata</div>
         </div>
 
-        <!-- SHOWROOM -->
         <div id="showroomSection">
             <div class="controls">
-                <h3>Lohe aur Steel ke Behtareen Designs</h3>
-                <select id="itemFilter" onchange="loadImagesUI()">
-                    <option value="Iron Gate">💥 Iron Gate (Lohe ka Phatak)</option>
-                    <option value="Steel Gate">✨ Steel Gate (Premium)</option>
-                    <option value="Khatiya">🛏️ Khatiya / Palang</option>
-                    <option value="Window">🪟 Iron Window (Khidki)</option>
-                    <option value="Chair">🪑 Iron Chair (Kursi)</option>
-                    <option value="Grill">🛡️ Window Grill</option>
-                    <option value="Ventilator">💨 Ventilator (Roshandan)</option>
-                    <option value="Railing">🪜 Stairs Railing</option>
-                    <option value="Almirah">🗄️ Iron Almirah</option>
-                    <option value="Sofa">🛋️ Iron/Steel Sofa Set</option>
-                    <option value="Door">🚪 Iron Door</option>
-                    <option value="Rolling Shutter">🏬 Rolling Shutter</option>
-                    <option value="Boundary Wall">🧱 Boundary Wall Design</option>
-                    <option value="Shed">🏠 Iron Shed</option>
-                    <option value="Truss">🏗️ Truss Work</option>
-                    <option value="Steel Grill">❇️ Steel Grill</option>
-                    <option value="Steel Railing">🌟 Steel Railing</option>
-                    <option value="Spiral Stairs">🪜 Spiral Stairs</option>
-                    <option value="Racks">🗄️ Iron/Steel Racks</option>
-                    <option value="Jhula">🎢 Iron Jhula (Swing)</option>
-                </select>
+                <select id="itemFilter" onchange="loadImagesUI()"></select>
             </div>
             <div class="image-grid" id="imageGrid"></div>
         </div>
 
-        <!-- KHATA BOOK -->
         <div id="khataSection" style="display: none;">
             <div class="khata-grid">
                 <div class="controls">
-                    <h3 id="formTitle">Naya Hisab Jodein</h3>
-                    <select id="khataType">
-                        <option value="customer">Customer</option>
-                        <option value="supplier">Supplier</option>
-                    </select>
-                    <input type="text" id="kName" placeholder="Naam (e.g., Rohit)">
-                    <input type="number" id="kPhone" placeholder="Mobile Number">
-                    <input type="text" id="kItem" placeholder="Kaam / Item ka Naam (e.g., Khatiya)">
-                    <input type="number" id="kTotal" placeholder="Kul Keemat (Total Price)">
-                    
-                    <p style="font-size: 0.9rem; color:#aaa; margin-top:10px;">(Paisa mila hai to daalo, nahi to blank chhod do)</p>
-                    <input type="date" id="kDate1">
-                    <input type="number" id="kAdv1" placeholder="Pehla Advance Amount">
-                    
-                    <input type="date" id="kDate2">
-                    <input type="number" id="kAdv2" placeholder="Dusra Advance Amount">
-                    
-                    <textarea id="kNote" placeholder="Koi note likhna hai?"></textarea>
-                    <button onclick="saveKhataEntry()">Hisab Save Karo</button>
-                </div>
-                
-                <div class="khata-list" id="printSection">
-                    <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center;">
-                        <h3 style="margin: 0; flex-grow: 1;">📋 Saved Ledger</h3>
-                        <input type="date" id="filterDate" onchange="loadKhataUI()" style="margin: 0; width: 150px; padding: 8px;">
-                        <button class="clear-btn" onclick="clearFilter()" style="background: #555; width: auto; padding: 8px 15px;">Clear</button>
-                        <button class="print-btn" onclick="printKhata()" style="background: #FF9800; color: black; width: auto; padding: 8px 15px;">📄 Save PDF</button>
+                    <h3>Naya Hisab</h3>
+                    <input type="text" id="kName" placeholder="Naam">
+                    <input type="number" id="kTotal" placeholder="Total">
+                    <button onclick="saveKhataEntry()">Save</button>
+                    <!-- PDF CONTROLS -->
+                    <div style="margin-top: 20px;">
+                        <h3>Date Range PDF</h3>
+                        <input type="date" id="pdfStart"><input type="date" id="pdfEnd">
+                        <button onclick="generateCustomPDF()" style="background: #FFC107; color: black;">Generate PDF</button>
                     </div>
-                    <div id="khataDisplay"></div>
                 </div>
+                <div class="khata-list" id="khataDisplay"></div>
             </div>
-        </div>
-
-        <!-- CUSTOMER LOGS -->
-        <div id="logsSection" style="display: none;">
-            <div class="controls">
-                <h3>📱 Website Pe Aaye Grahakon ke Numbers</h3>
-                <div id="logDisplay"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modals & Hidden Inputs -->
-    <div id="myModal" class="modal">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="imgModalTarget">
-        <div class="zoom-controls">
-            <div class="zoom-btn" onclick="zoomImage(1.2)">🔍 Zoom In</div>
-            <div class="zoom-btn" onclick="zoomImage(0.8)">🔍 Zoom Out</div>
         </div>
     </div>
 
     <input type="file" id="replaceFileInput" class="hidden-file-input" accept="image/*" onchange="handleImageFileChange(event)">
-    <input type="file" id="addFileInput" class="hidden-file-input" accept="image/*" onchange="handleAddImageFileChange(event)">
-
     <script>
-        // SECURITY - Disable F12 and Shortcuts safely
-        document.ondragstart = function() { return false; };
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123) return false;
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 73) return false;
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 74) return false;
-            if(e.ctrlKey && e.keyCode == 85) return false;
-        };
-
-        // FIREBASE CONFIGURATION
+        // Security
+        document.addEventListener('visibilitychange', () => { document.body.style.filter = document.hidden ? "blur(10px)" : "none"; });
+        
+        // Firebase Init
         const firebaseConfig = {
             apiKey: "AIzaSyDYuJJ1jbWF-NELI-B8BikkkVqdhMmklYw",
             authDomain: "chakradhari-traders.firebaseapp.com",
@@ -234,81 +131,43 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let currentZoom = 1;
         let loggedInRole = 'customer';
-        let currentReplacingKey = '';
-        let currentReplacingIndex = -1;
-        let currentAddingKey = '';
 
-        let cloudImagesData = {};
-        let cloudKhataData = [];
-        let cloudLogsData = [];
-
-        const defaultImages = {
-            "Iron Gate": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600"],
-            "Steel Gate": ["https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"],
-            "Khatiya": ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600"],
-            "Window": ["https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?w=600"],
-            "Chair": ["https://images.unsplash.com/photo-1503602642458-232111445657?w=600"],
-            "Grill": ["https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=600"],
-            "Ventilator": ["https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
-            "Railing": ["https://images.unsplash.com/photo-1563714113014-25cb4cf3952a?w=600"],
-            "Almirah": ["https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600"],
-            "Sofa": ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600"],
-            "Door": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600"],
-            "Rolling Shutter": ["https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"],
-            "Boundary Wall": ["https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=600"],
-            "Shed": ["https://images.unsplash.com/photo-1560026857-e6f77cc8bc4a?w=600"],
-            "Truss": ["https://images.unsplash.com/photo-1504913659239-6abc87875a63?w=600"],
-            "Steel Grill": ["https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=600"],
-            "Steel Railing": ["https://images.unsplash.com/photo-1563714113014-25cb4cf3952a?w=600"],
-            "Spiral Stairs": ["https://images.unsplash.com/photo-1508214300305-645001ff9fce?w=600"],
-            "Racks": ["https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600"],
-            "Jhula": ["https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600"]
-        };
-
-        // LOAD DATA FROM CLOUD
-        db.ref('customShowroomImages').on('value', (snapshot) => {
-            let data = snapshot.val();
-            if(!data) {
-                db.ref('customShowroomImages').set(defaultImages);
-                cloudImagesData = defaultImages;
+        function handleLogin() {
+            const role = document.getElementById('userRole').value;
+            if (role === 'owner') {
+                if (document.getElementById('loginPass').value === 'Aditya930@') {
+                    localStorage.setItem('isOwnerLoggedIn', 'true');
+                    localStorage.setItem('ownerSessionExpire', Date.now() + 1800000);
+                    location.reload();
+                } else alert("Galat Password!");
             } else {
-                cloudImagesData = data;
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('mainDashboard').style.display = 'block';
+                loggedInRole = 'customer';
             }
-            if(loggedInRole === 'owner' || loggedInRole === 'customer') loadImagesUI();
-        });
+        }
 
-        db.ref('shopKhata').on('value', (snapshot) => {
-            const data = snapshot.val() || {};
-            cloudKhataData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-            if(loggedInRole === 'owner') loadKhataUI();
-        });
+        function logout() {
+            localStorage.setItem('isOwnerLoggedIn', 'false');
+            location.reload();
+        }
 
-        db.ref('siteLogs').on('value', (snapshot) => {
-            const data = snapshot.val() || {};
-            cloudLogsData = Object.keys(data).map(key => data[key]);
-            if(loggedInRole === 'owner') loadLogsUI();
-        });
+        function generateCustomPDF() {
+            const start = document.getElementById('pdfStart').value;
+            const end = document.getElementById('pdfEnd').value;
+            if(!start || !end) return alert("Dates select karo.");
+            window.print();
+            window.location.href = `mailto:chakradhari2026@gmail.com?subject=Hisab ${start} to ${end}&body=Attached hisab details.`;
+        }
 
-        // STRICT 30 MINUTE SESSION CHECK
+        // Session Logic
         window.onload = function() {
-            let isLogged = localStorage.getItem('isOwnerLoggedIn');
-            let sessionTime = localStorage.getItem('ownerSessionExpire');
-            
-            if(isLogged === 'true' && sessionTime && Date.now() < parseInt(sessionTime)) {
-                // Session Valid Hai
+            if(localStorage.getItem('isOwnerLoggedIn') === 'true' && Date.now() < parseInt(localStorage.getItem('ownerSessionExpire') || 0)) {
+                loggedInRole = 'owner';
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('mainDashboard').style.display = 'block';
                 document.getElementById('tabKhata').style.display = 'block';
-                document.getElementById('tabLogs').style.display = 'block';
-                loggedInRole = 'owner';
-                loadImagesUI();
-                loadKhataUI();
-                loadLogsUI();
-            } else {
-                // Session Expire Ho Gaya
-                logout();
             }
         }
 
@@ -317,298 +176,11 @@
             document.getElementById('phoneField').style.display = (role === 'owner') ? 'none' : 'block';
             document.getElementById('passField').style.display = (role === 'owner') ? 'block' : 'none';
         }
-
-        function handleLogin() {
-            const role = document.getElementById('userRole').value;
-            loggedInRole = role;
-
-            if (role === 'owner') {
-                const pass = document.getElementById('loginPass').value;
-                if (pass === 'Aditya930@') { 
-                    localStorage.setItem('isOwnerLoggedIn', 'true');
-                    // 30 Minutes Session Setup (30 * 60 * 1000 = 1800000 ms)
-                    localStorage.setItem('ownerSessionExpire', Date.now() + 1800000); 
-                    
-                    document.getElementById('loginPage').style.display = 'none';
-                    document.getElementById('mainDashboard').style.display = 'block';
-                    document.getElementById('tabKhata').style.display = 'block';
-                    document.getElementById('tabLogs').style.display = 'block';
-                    loadImagesUI();
-                    loadKhataUI();
-                    loadLogsUI();
-                } else { alert("Galat Password hai!"); }
-            } else {
-                const phone = document.getElementById('loginPhone').value;
-                if (phone.length >= 10) {
-                    db.ref('siteLogs').push({ phone: phone, role: role, time: new Date().toLocaleString() });
-                    document.getElementById('loginPage').style.display = 'none';
-                    document.getElementById('mainDashboard').style.display = 'block';
-                    document.getElementById('tabKhata').style.display = 'none';
-                    document.getElementById('tabLogs').style.display = 'none';
-                    loadImagesUI();
-                } else { alert("Kripya sahi 10 digit ka phone number dalein."); }
-            }
-        }
-
-        function loadImagesUI() {
-            const item = document.getElementById('itemFilter').value;
-            const grid = document.getElementById('imageGrid');
-            grid.innerHTML = '';
-            
-            let imgs = cloudImagesData[item] || [];
-
-            imgs.forEach((imgUrl, index) => {
-                let ownerButtons = '';
-                if(loggedInRole === 'owner') {
-                    ownerButtons = `
-                        <div class="owner-actions">
-                            <button class="btn-replace" onclick="triggerReplace('${item}', ${index})">Replace</button>
-                            <button class="btn-delete" onclick="deleteImage('${item}', ${index})">Delete</button>
-                        </div>
-                    `;
-                }
-
-                grid.innerHTML += `
-                    <div class="img-card">
-                        <img src="${imgUrl}" onclick="openModal('${imgUrl}')" alt="${item}">
-                        <div class="img-card-body">
-                            <h3>${item} Design #${index + 1}</h3>
-                            <a href="https://wa.me/919304672299?text=Hello%20Chakradhari%20Traders,%20mujhe%20is%20${item}%20Design%20${index + 1}%20ka%20order%20dena%20hai" target="_blank">
-                                <button style="background:#25D366; margin-top:5px;">🟢 Order on WhatsApp</button>
-                            </a>
-                            ${ownerButtons}
-                        </div>
-                    </div>`;
-            });
-
-            if(loggedInRole === 'owner') {
-                grid.innerHTML += `
-                    <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:#222; border: 2px dashed #555; min-height:250px;">
-                        <div style="text-align:center; padding: 20px;">
-                            <h3 style="color:#aaa; margin-bottom:15px;">Naya Design Jodein</h3>
-                            <button style="background:#4caf50;" onclick="triggerAdd('${item}')">+ Add Image</button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        function triggerReplace(category, index) {
-            currentReplacingKey = category;
-            currentReplacingIndex = index;
-            document.getElementById('replaceFileInput').click();
-        }
-
-        function triggerAdd(category) {
-            currentAddingKey = category;
-            document.getElementById('addFileInput').click();
-        }
-
-        // AUTO COMPRESSOR - Taki Firebase hang na ho
-        function compressAndSaveImage(file, callback) {
-            document.getElementById('loader').style.display = 'block';
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function(event) {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800; // Size chota karega bina quality girae
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                    document.getElementById('loader').style.display = 'none';
-                    callback(compressedDataUrl);
-                }
-            }
-        }
-
-        function handleImageFileChange(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            compressAndSaveImage(file, function(compressedImage) {
-                cloudImagesData[currentReplacingKey][currentReplacingIndex] = compressedImage;
-                db.ref('customShowroomImages/' + currentReplacingKey).set(cloudImagesData[currentReplacingKey]);
-                e.target.value = '';
-            });
-        }
-
-        function handleAddImageFileChange(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            compressAndSaveImage(file, function(compressedImage) {
-                if(!cloudImagesData[currentAddingKey]) cloudImagesData[currentAddingKey] = [];
-                cloudImagesData[currentAddingKey].push(compressedImage);
-                db.ref('customShowroomImages/' + currentAddingKey).set(cloudImagesData[currentAddingKey]);
-                e.target.value = '';
-            });
-        }
-
-        function deleteImage(category, index) {
-            if(confirm("Kya aap sach me is image ko delete karna chahte hain?")) {
-                cloudImagesData[category].splice(index, 1);
-                db.ref('customShowroomImages/' + category).set(cloudImagesData[category]);
-            }
-        }
-
-        function openModal(url) {
-            currentZoom = 1;
-            const modal = document.getElementById('myModal');
-            const modalImg = document.getElementById('imgModalTarget');
-            modal.style.display = "flex";
-            modalImg.src = url;
-            modalImg.style.transform = `scale(${currentZoom})`;
-        }
-        function closeModal() { document.getElementById('myModal').style.display = "none"; }
-        function zoomImage(factor) {
-            currentZoom *= factor;
-            document.getElementById('imgModalTarget').style.transform = `scale(${currentZoom})`;
-        }
-
+        
         function switchTab(tab) {
             document.getElementById('showroomSection').style.display = (tab === 'showroom') ? 'block' : 'none';
             document.getElementById('khataSection').style.display = (tab === 'khata') ? 'block' : 'none';
-            document.getElementById('logsSection').style.display = (tab === 'logs') ? 'block' : 'none';
-            
-            document.getElementById('tabShowroom').classList.toggle('active', tab === 'showroom');
-            document.getElementById('tabKhata').classList.toggle('active', tab === 'khata');
-            document.getElementById('tabLogs').classList.toggle('active', tab === 'logs');
         }
-
-        function saveKhataEntry() {
-            const today = new Date().toISOString().split('T')[0];
-            const entry = {
-                entryDate: today, 
-                type: document.getElementById('khataType').value,
-                name: document.getElementById('kName').value,
-                phone: document.getElementById('kPhone').value,
-                item: document.getElementById('kItem').value,
-                total: parseFloat(document.getElementById('kTotal').value) || 0,
-                date1: document.getElementById('kDate1').value,
-                adv1: parseFloat(document.getElementById('kAdv1').value) || 0,
-                date2: document.getElementById('kDate2').value,
-                adv2: parseFloat(document.getElementById('kAdv2').value) || 0,
-                note: document.getElementById('kNote').value
-            };
-            
-            db.ref('shopKhata').push(entry);
-            
-            document.getElementById('kName').value = '';
-            document.getElementById('kPhone').value = '';
-            document.getElementById('kItem').value = '';
-            document.getElementById('kTotal').value = '';
-            document.getElementById('kDate1').value = '';
-            document.getElementById('kAdv1').value = '';
-            document.getElementById('kDate2').value = '';
-            document.getElementById('kAdv2').value = '';
-            document.getElementById('kNote').value = '';
-        }
-
-        function loadKhataUI() {
-            const display = document.getElementById('khataDisplay');
-            display.innerHTML = '';
-            
-            const filterDate = document.getElementById('filterDate').value;
-            let filteredKhata = cloudKhataData;
-            
-            if(filterDate) {
-                filteredKhata = cloudKhataData.filter(e => e.entryDate === filterDate || e.date1 === filterDate || e.date2 === filterDate);
-            }
-
-            if(filteredKhata.length === 0) {
-                display.innerHTML = `<p style="color:#aaa;">Is date par koi hisab nahi mila.</p>`;
-                return;
-            }
-            
-            filteredKhata.forEach((e) => {
-                let paid = e.adv1 + e.adv2;
-                let due = e.total - paid;
-                
-                let adv1Html = e.adv1 > 0 ? `<p><b>Advance 1:</b> Rs. ${e.adv1} <span style="color:#aaa; font-size:0.8rem;">(${e.date1 || 'Date not given'})</span></p>` : '';
-                let adv2Html = e.adv2 > 0 ? `<p><b>Advance 2:</b> Rs. ${e.adv2} <span style="color:#aaa; font-size:0.8rem;">(${e.date2 || 'Date not given'})</span></p>` : '';
-                let noteHtml = e.note ? `<p style="font-style:italic; color:#aaa; margin-top:5px;"><b>Note:</b> ${e.note}</p>` : '';
-
-                display.innerHTML += `
-                    <div class="khata-item ${e.type}">
-                        <button class="del-entry-btn" onclick="deleteKhataEntry('${e.id}')">🗑️ Delete</button>
-                        <h4><b>${e.name}</b> (${e.type.toUpperCase()}) - Ph: ${e.phone}</h4>
-                        <p style="font-size:0.8rem; color:#888;">Entry Date: ${e.entryDate || 'N/A'}</p>
-                        <p><b>Kaam:</b> ${e.item} | <b>Total:</b> Rs. ${e.total}</p>
-                        ${adv1Html}
-                        ${adv2Html}
-                        <p style="color:${due > 0 ? '#ff5252' : '#4caf50'}; font-weight:bold; margin-top:5px;"><b>Baaki Udhaari:</b> Rs. ${due}</p>
-                        ${noteHtml}
-                    </div>`;
-            });
-        }
-
-        function clearFilter() {
-            document.getElementById('filterDate').value = '';
-            loadKhataUI();
-        }
-
-        function printKhata() { window.print(); }
-
-        function deleteKhataEntry(id) {
-            if(confirm("Kya aap sach me is entry ko delete karna chahte hain?")) {
-                db.ref('shopKhata/' + id).remove();
-            }
-        }
-
-        function loadLogsUI() {
-            const display = document.getElementById('logDisplay');
-            display.innerHTML = '';
-            let logs = [...cloudLogsData].reverse();
-            logs.forEach(l => {
-                display.innerHTML += `<p style="padding:8px; border-bottom:1px solid #444;">⏱️ <b>${l.time}</b> -> Role: ${l.role.toUpperCase()} | Phone: <b>${l.phone}</b></p>`;
-            });
-        }
-
-        function logout() {
-            localStorage.setItem('isOwnerLoggedIn', 'false');
-            localStorage.setItem('ownerSessionExpire', '0');
-            loggedInRole = 'customer';
-            document.getElementById('mainDashboard').style.display = 'none';
-            document.getElementById('loginPage').style.display = 'block';
-            document.getElementById('tabKhata').style.display = 'none';
-            document.getElementById('tabLogs').style.display = 'none';
-            document.getElementById('loginPass').value = '';
-        }
-        <!-- PDF Controls -->
-<div class="controls" style="margin-top: 20px;">
-    <h3>📄 Date-Range PDF Download</h3>
-    <div style="display: flex; gap: 10px;">
-        <input type="date" id="pdfStart">
-        <input type="date" id="pdfEnd">
-    </div>
-    <button onclick="generateCustomPDF()" style="background: #FFC107; color: black;">Generate & Email PDF</button>
-</div> function generateCustomPDF() {
-    const start = document.getElementById('pdfStart').value;
-    const end = document.getElementById('pdfEnd').value;
-    if(!start || !end) return alert("Kripya dono dates chunein.");
-
-    // Data Filter
-    const filtered = cloudKhataData.filter(e => e.entryDate >= start && e.entryDate <= end);
-    
-    // PDF banane ki logic (Print function se)
-    alert("PDF taiyar hai! Print menu me 'Save as PDF' chunein.");
-    window.print();
- </script> <!-- PDF Controls -->
-    // Email Popup
-    const subject = "Hisab Kitab: " + start + " to " + end;
-    const body = "Namaste, ye raha mera " + start + " se " + end + " tak ka hisab.";
-    window.location.href = `mailto:chakradhari2026@gmail.com?subject=${subject}&body=${body}`;
-} </script>
+    </script>
 </body>
 </html>
