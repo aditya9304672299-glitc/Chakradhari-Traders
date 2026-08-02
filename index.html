@@ -50,7 +50,12 @@
         
         /* Khata Section */
         .khata-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        .khata-list { background: var(--grey); padding: 20px; border-radius: 8px; height: 750px; overflow-y: auto; position: relative; border: 1px solid #444; }
+        .khata-list { background: var(--grey); padding: 20px; border-radius: 8px; height: 780px; overflow-y: auto; position: relative; border: 1px solid #444; }
+        
+        /* Separate Section Headers */
+        .section-header { background: #111; padding: 12px 18px; border-radius: 6px; margin-top: 20px; margin-bottom: 15px; border-left: 5px solid var(--primary); font-size: 1.15rem; font-weight: bold; }
+        .section-header.supplier-header { border-left-color: var(--steel); margin-top: 30px; }
+        
         .khata-item { background: #222; padding: 18px; border-radius: 8px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; border-top: 1px solid #333; border-right: 1px solid #333; border-bottom: 1px solid #333; }
         .khata-item.supplier { border-left-color: var(--steel); }
         
@@ -83,7 +88,7 @@
             .khata-list { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 0; overflow: visible; height: auto; border: none; }
             .khata-item { border: 1px solid #ccc; background: white; page-break-inside: avoid; margin-bottom: 20px; }
             .khata-actions, #filterDate, .print-btn, .clear-btn { display: none !important; }
-            h3 { color: black; }
+            h3, .section-header { color: black; background: #eee !important; }
         }
     </style>
     <!-- FIREBASE CLOUD LIBRARIES -->
@@ -168,7 +173,7 @@
             <div class="image-grid" id="imageGrid"></div>
         </div>
 
-        <!-- KHATA BOOK (UPGRADED) -->
+        <!-- KHATA BOOK (UPGRADED: SEPARATE CUSTOMER & SUPPLIER SECTIONS) -->
         <div id="khataSection" style="display: none;">
             <div class="khata-grid">
                 <div class="controls">
@@ -220,15 +225,22 @@
                     <button id="cancelEditBtn" onclick="resetKhataForm()" style="display: none; background: #555;">Cancel Editing</button>
                 </div>
                 
-                <!-- LEDGER DISPLAY SIDE -->
+                <!-- LEDGER DISPLAY SIDE WITH COMPLETELY SEPARATED CUSTOMER & SUPPLIER BOXES -->
                 <div class="khata-list" id="printSection">
-                    <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center;">
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #444; padding-bottom: 15px;">
                         <h3 style="margin: 0; flex-grow: 1;">📋 Saved Ledger Book</h3>
                         <input type="date" id="filterDate" onchange="loadKhataUI()" style="margin: 0; width: 150px; padding: 8px;">
                         <button class="clear-btn" onclick="clearFilter()" style="background: #555; width: auto; padding: 8px 15px;">Clear</button>
                         <button class="print-btn" onclick="printKhata()" style="background: #FF9800; color: black; width: auto; padding: 8px 15px;">📄 Save PDF</button>
                     </div>
-                    <div id="khataDisplay"></div>
+
+                    <!-- CUSTOMER LEDGER SECTION -->
+                    <div class="section-header">👤 Grahak Khata (Customer Ledger)</div>
+                    <div id="customerDisplay"></div>
+
+                    <!-- SUPPLIER LEDGER SECTION -->
+                    <div class="section-header supplier-header">🏢 Supplier Khata (Samaan Wala Ledger)</div>
+                    <div id="supplierDisplay"></div>
                 </div>
             </div>
         </div>
@@ -535,7 +547,7 @@
             document.getElementById('tabLogs').classList.toggle('active', tab === 'logs');
         }
 
-        /* KHATA BOOK LOGIC: CALCULATOR & EDIT SUPPORT */
+        /* KHATA BOOK LOGIC: CALCULATOR & EDIT SUPPORT WITH ERROR CATCHING */
         function toggleKhataFields() {
             const type = document.getElementById('khataType').value;
             const addr = document.getElementById('kAddress');
@@ -561,7 +573,10 @@
 
         function saveKhataEntry() {
             const name = document.getElementById('kName').value.trim();
-            if(!name) return alert("Kripya Naam likhein!");
+            if(!name) {
+                alert("Kripya Grahak / Supplier ka Naam likhein!");
+                return;
+            }
 
             const today = new Date().toISOString().split('T')[0];
             const editId = document.getElementById('editEntryId').value;
@@ -587,13 +602,24 @@
             };
             
             if(editId) {
-                db.ref('shopKhata/' + editId).update(entry);
-                alert("Hisab successfully update ho gaya!");
+                db.ref('shopKhata/' + editId).update(entry)
+                  .then(() => {
+                      alert("Hisab successfully update ho gaya! ✅");
+                      resetKhataForm();
+                  })
+                  .catch((err) => {
+                      alert("Error: " + err.message + "\nCheck Firebase Database Rules!");
+                  });
             } else {
-                db.ref('shopKhata').push(entry);
+                db.ref('shopKhata').push(entry)
+                  .then(() => {
+                      alert("Naya Hisab successfully save ho gaya! ✅");
+                      resetKhataForm();
+                  })
+                  .catch((err) => {
+                      alert("Error: " + err.message + "\nCheck Firebase Database Rules!");
+                  });
             }
-            
-            resetKhataForm();
         }
 
         function editKhataEntry(id) {
@@ -649,9 +675,12 @@
             document.getElementById('cancelEditBtn').style.display = "none";
         }
 
+        /* FULLY SEPARATED RENDERING FOR CUSTOMER & SUPPLIER LEDGERS */
         function loadKhataUI() {
-            const display = document.getElementById('khataDisplay');
-            display.innerHTML = '';
+            const custDisplay = document.getElementById('customerDisplay');
+            const suppDisplay = document.getElementById('supplierDisplay');
+            custDisplay.innerHTML = '';
+            suppDisplay.innerHTML = '';
             
             const filterDate = document.getElementById('filterDate').value;
             let filteredKhata = cloudKhataData;
@@ -660,44 +689,60 @@
                 filteredKhata = cloudKhataData.filter(e => e.entryDate === filterDate || e.date1 === filterDate || e.date2 === filterDate || e.date3 === filterDate);
             }
 
-            if(filteredKhata.length === 0) {
-                display.innerHTML = `<p style="color:#aaa;">Is date par koi hisab nahi mila.</p>`;
-                return;
-            }
-            
-            filteredKhata.forEach((e) => {
-                let paid = (e.pay1 || 0) + (e.pay2 || 0) + (e.pay3 || 0);
-                let due = (e.total || 0) - paid;
-                
-                let pay1Html = e.pay1 > 0 ? `<p><b>1st Payment:</b> Rs. ${e.pay1} <span style="color:#aaa; font-size:0.8rem;">(${e.date1 || 'Date not given'})</span></p>` : '';
-                let pay2Html = e.pay2 > 0 ? `<p><b>2nd Payment:</b> Rs. ${e.pay2} <span style="color:#aaa; font-size:0.8rem;">(${e.date2 || 'Date not given'})</span></p>` : '';
-                let pay3Html = e.pay3 > 0 ? `<p><b>3rd Payment:</b> Rs. ${e.pay3} <span style="color:#aaa; font-size:0.8rem;">(${e.date3 || 'Date not given'})</span></p>` : '';
-                
-                let addressHtml = e.address ? `<p style="font-size:0.85rem; color:#ccc;"><b>Address:</b> ${e.address}</p>` : '';
-                let noteHtml = e.note ? `<p style="font-style:italic; color:#aaa; margin-top:6px;"><b>Note:</b> ${e.note}</p>` : '';
+            const customers = filteredKhata.filter(e => e.type === 'customer');
+            const suppliers = filteredKhata.filter(e => e.type === 'supplier');
 
-                display.innerHTML += `
-                    <div class="khata-item ${e.type}">
-                        <div class="khata-actions">
-                            <button class="action-btn btn-edit" onclick="editKhataEntry('${e.id}')">✏️ Edit</button>
-                            <button class="action-btn btn-del" onclick="deleteKhataEntry('${e.id}')">🗑️ Delete</button>
-                        </div>
-                        <h4><b>${e.name}</b> (${e.type.toUpperCase()}) - Ph: ${e.phone || 'N/A'}</h4>
-                        ${addressHtml}
-                        <p style="font-size:0.8rem; color:#888; margin-bottom:8px;">Entry Date: ${e.entryDate || 'N/A'}</p>
-                        <div style="background:#111; padding:10px; border-radius:6px; margin: 8px 0; white-space: pre-line;">
-                            <b>Kaam / Item Details:</b><br>${e.item || 'No item description'}
-                        </div>
-                        <p><b>Kul Keemat (Total):</b> Rs. ${e.total || 0}</p>
-                        ${pay1Html}
-                        ${pay2Html}
-                        ${pay3Html}
-                        <p style="color:${due > 0 ? '#ff5252' : '#4caf50'}; font-size:1.05rem; font-weight:bold; margin-top:8px;">
-                            <b>Baaki Udhaari (Due):</b> Rs. ${due}
-                        </p>
-                        ${noteHtml}
-                    </div>`;
-            });
+            // 1. Render Customers
+            if(customers.length === 0) {
+                custDisplay.innerHTML = `<p style="color:#888; padding: 10px 0;">Abhi tak koi Customer ka hisab nahi hai.</p>`;
+            } else {
+                customers.forEach((e) => {
+                    custDisplay.innerHTML += createKhataCardHTML(e);
+                });
+            }
+
+            // 2. Render Suppliers
+            if(suppliers.length === 0) {
+                suppDisplay.innerHTML = `<p style="color:#888; padding: 10px 0;">Abhi tak koi Supplier ka hisab nahi hai.</p>`;
+            } else {
+                suppliers.forEach((e) => {
+                    suppDisplay.innerHTML += createKhataCardHTML(e);
+                });
+            }
+        }
+
+        function createKhataCardHTML(e) {
+            let paid = (e.pay1 || 0) + (e.pay2 || 0) + (e.pay3 || 0);
+            let due = (e.total || 0) - paid;
+            
+            let pay1Html = e.pay1 > 0 ? `<p><b>1st Payment:</b> Rs. ${e.pay1} <span style="color:#aaa; font-size:0.8rem;">(${e.date1 || 'Date not given'})</span></p>` : '';
+            let pay2Html = e.pay2 > 0 ? `<p><b>2nd Payment:</b> Rs. ${e.pay2} <span style="color:#aaa; font-size:0.8rem;">(${e.date2 || 'Date not given'})</span></p>` : '';
+            let pay3Html = e.pay3 > 0 ? `<p><b>3rd Payment:</b> Rs. ${e.pay3} <span style="color:#aaa; font-size:0.8rem;">(${e.date3 || 'Date not given'})</span></p>` : '';
+            
+            let addressHtml = e.address ? `<p style="font-size:0.85rem; color:#ccc;"><b>Address:</b> ${e.address}</p>` : '';
+            let noteHtml = e.note ? `<p style="font-style:italic; color:#aaa; margin-top:6px;"><b>Note:</b> ${e.note}</p>` : '';
+
+            return `
+                <div class="khata-item ${e.type}">
+                    <div class="khata-actions">
+                        <button class="action-btn btn-edit" onclick="editKhataEntry('${e.id}')">✏️ Edit</button>
+                        <button class="action-btn btn-del" onclick="deleteKhataEntry('${e.id}')">🗑️ Delete</button>
+                    </div>
+                    <h4><b>${e.name}</b> (${e.type.toUpperCase()}) - Ph: ${e.phone || 'N/A'}</h4>
+                    ${addressHtml}
+                    <p style="font-size:0.8rem; color:#888; margin-bottom:8px;">Entry Date: ${e.entryDate || 'N/A'}</p>
+                    <div style="background:#111; padding:10px; border-radius:6px; margin: 8px 0; white-space: pre-line;">
+                        <b>Kaam / Item Details:</b><br>${e.item || 'No item description'}
+                    </div>
+                    <p><b>Kul Keemat (Total):</b> Rs. ${e.total || 0}</p>
+                    ${pay1Html}
+                    ${pay2Html}
+                    ${pay3Html}
+                    <p style="color:${due > 0 ? '#ff5252' : '#4caf50'}; font-size:1.05rem; font-weight:bold; margin-top:8px;">
+                        <b>Baaki Udhaari (Due):</b> Rs. ${due}
+                    </p>
+                    ${noteHtml}
+                </div>`;
         }
 
         function clearFilter() {
