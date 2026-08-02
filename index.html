@@ -87,7 +87,7 @@
             .khata-list, .khata-list * { visibility: visible; color: black; }
             .khata-list { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 0; overflow: visible; height: auto; border: none; }
             .khata-item { border: 1px solid #ccc; background: white; page-break-inside: avoid; margin-bottom: 20px; }
-            .khata-actions, #filterDate, .print-btn, .clear-btn { display: none !important; }
+            .khata-actions, #filterType, #filterDate, .print-btn, .clear-btn { display: none !important; }
             h3, .section-header { color: black; background: #eee !important; }
         }
     </style>
@@ -173,7 +173,7 @@
             <div class="image-grid" id="imageGrid"></div>
         </div>
 
-        <!-- KHATA BOOK (UPGRADED: SEPARATE CUSTOMER & SUPPLIER SECTIONS) -->
+        <!-- KHATA BOOK -->
         <div id="khataSection" style="display: none;">
             <div class="khata-grid">
                 <div class="controls">
@@ -225,21 +225,29 @@
                     <button id="cancelEditBtn" onclick="resetKhataForm()" style="display: none; background: #555;">Cancel Editing</button>
                 </div>
                 
-                <!-- LEDGER DISPLAY SIDE WITH COMPLETELY SEPARATED CUSTOMER & SUPPLIER BOXES -->
+                <!-- LEDGER DISPLAY SIDE WITH TOP SELECT FILTER -->
                 <div class="khata-list" id="printSection">
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #444; padding-bottom: 15px;">
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #444; padding-bottom: 15px;">
                         <h3 style="margin: 0; flex-grow: 1;">📋 Saved Ledger Book</h3>
+                        
+                        <!-- DROP DOWN TO SHOW/HIDE SECTIONS COMPLETELY -->
+                        <select id="filterType" onchange="loadKhataUI()" style="margin: 0; width: 180px; padding: 8px; background: #222; border: 1px solid #555; color: white; border-radius: 6px;">
+                            <option value="all">🔍 All (Sabhi Dekho)</option>
+                            <option value="customer">👤 Only Customers</option>
+                            <option value="supplier">🏢 Only Suppliers</option>
+                        </select>
+
                         <input type="date" id="filterDate" onchange="loadKhataUI()" style="margin: 0; width: 150px; padding: 8px;">
                         <button class="clear-btn" onclick="clearFilter()" style="background: #555; width: auto; padding: 8px 15px;">Clear</button>
                         <button class="print-btn" onclick="printKhata()" style="background: #FF9800; color: black; width: auto; padding: 8px 15px;">📄 Save PDF</button>
                     </div>
 
                     <!-- CUSTOMER LEDGER SECTION -->
-                    <div class="section-header">👤 Grahak Khata (Customer Ledger)</div>
+                    <div id="customerHeader" class="section-header">👤 Grahak Khata (Customer Ledger)</div>
                     <div id="customerDisplay"></div>
 
                     <!-- SUPPLIER LEDGER SECTION -->
-                    <div class="section-header supplier-header">🏢 Supplier Khata (Samaan Wala Ledger)</div>
+                    <div id="supplierHeader" class="section-header supplier-header">🏢 Supplier Khata (Samaan Wala Ledger)</div>
                     <div id="supplierDisplay"></div>
                 </div>
             </div>
@@ -547,7 +555,7 @@
             document.getElementById('tabLogs').classList.toggle('active', tab === 'logs');
         }
 
-        /* KHATA BOOK LOGIC: CALCULATOR & EDIT SUPPORT WITH ERROR CATCHING */
+        /* KHATA BOOK LOGIC: CALCULATOR & EDIT SUPPORT */
         function toggleKhataFields() {
             const type = document.getElementById('khataType').value;
             const addr = document.getElementById('kAddress');
@@ -675,16 +683,20 @@
             document.getElementById('cancelEditBtn').style.display = "none";
         }
 
-        /* FULLY SEPARATED RENDERING FOR CUSTOMER & SUPPLIER LEDGERS */
+        /* 100% CLEAN TOGGLING OF CUSTOMER & SUPPLIER VIEWS */
         function loadKhataUI() {
             const custDisplay = document.getElementById('customerDisplay');
             const suppDisplay = document.getElementById('supplierDisplay');
+            const custHeader = document.getElementById('customerHeader');
+            const suppHeader = document.getElementById('supplierHeader');
+            
             custDisplay.innerHTML = '';
             suppDisplay.innerHTML = '';
             
             const filterDate = document.getElementById('filterDate').value;
-            let filteredKhata = cloudKhataData;
+            const filterType = document.getElementById('filterType').value || 'all';
             
+            let filteredKhata = cloudKhataData;
             if(filterDate) {
                 filteredKhata = cloudKhataData.filter(e => e.entryDate === filterDate || e.date1 === filterDate || e.date2 === filterDate || e.date3 === filterDate);
             }
@@ -692,22 +704,34 @@
             const customers = filteredKhata.filter(e => e.type === 'customer');
             const suppliers = filteredKhata.filter(e => e.type === 'supplier');
 
-            // 1. Render Customers
-            if(customers.length === 0) {
-                custDisplay.innerHTML = `<p style="color:#888; padding: 10px 0;">Abhi tak koi Customer ka hisab nahi hai.</p>`;
+            // 1. Customer Section Control
+            if(filterType === 'all' || filterType === 'customer') {
+                custHeader.style.display = 'block';
+                if(customers.length === 0) {
+                    custDisplay.innerHTML = `<p style="color:#888; padding: 10px 0;">Abhi tak koi Customer ka hisab nahi hai.</p>`;
+                } else {
+                    customers.forEach((e) => {
+                        custDisplay.innerHTML += createKhataCardHTML(e);
+                    });
+                }
             } else {
-                customers.forEach((e) => {
-                    custDisplay.innerHTML += createKhataCardHTML(e);
-                });
+                custHeader.style.display = 'none';
+                custDisplay.innerHTML = '';
             }
 
-            // 2. Render Suppliers
-            if(suppliers.length === 0) {
-                suppDisplay.innerHTML = `<p style="color:#888; padding: 10px 0;">Abhi tak koi Supplier ka hisab nahi hai.</p>`;
+            // 2. Supplier Section Control
+            if(filterType === 'all' || filterType === 'supplier') {
+                suppHeader.style.display = 'block';
+                if(suppliers.length === 0) {
+                    suppDisplay.innerHTML = `<p style="color:#888; padding: 10px 0;">Abhi tak koi Supplier ka hisab nahi hai.</p>`;
+                } else {
+                    suppliers.forEach((e) => {
+                        suppDisplay.innerHTML += createKhataCardHTML(e);
+                    });
+                }
             } else {
-                suppliers.forEach((e) => {
-                    suppDisplay.innerHTML += createKhataCardHTML(e);
-                });
+                suppHeader.style.display = 'none';
+                suppDisplay.innerHTML = '';
             }
         }
 
@@ -747,6 +771,7 @@
 
         function clearFilter() {
             document.getElementById('filterDate').value = '';
+            document.getElementById('filterType').value = 'all';
             loadKhataUI();
         }
 
