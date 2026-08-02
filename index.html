@@ -3,92 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chakradhari Traders - Bihar</title>
+    <title>Chakradhari Traders - ERP System</title>
     <style>
-        :root { --primary: #d32f2f; --dark: #1a1a1a; --grey: #2d2d2d; --light: #f5f5f5; --steel: #4682B4; }
+        :root { 
+            --primary: #d32f2f; 
+            --blue: #2563eb; 
+            --dark: #0f172a; 
+            --card-bg: #1e293b; 
+            --card-inner: #0f172a; 
+            --light: #f8fafc; 
+            --steel: #4682B4; 
+            --green: #16a34a; 
+            --red: #dc2626; 
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
         
-        /* SECURITY: Text Selection and Basic Copy Block */
-        body { background-color: var(--dark); color: var(--light); padding: 20px; user-select: none; -webkit-user-select: none; }
+        body { background-color: var(--dark); color: var(--light); padding: 15px; user-select: none; -webkit-user-select: none; }
         
-        header { text-align: center; padding: 30px; background: var(--grey); border-radius: 12px; margin-bottom: 25px; border-bottom: 5px solid var(--primary); }
-        header h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase; }
-        .info-bar { background: var(--grey); padding: 15px; border-radius: 8px; margin-bottom: 25px; display: flex; flex-wrap: wrap; justify-content: space-around; font-size: 0.9rem; border: 1px solid #444; }
-        .info-bar a { color: #4caf50; text-decoration: none; font-weight: bold; }
+        header { text-align: center; padding: 25px; background: var(--card-bg); border-radius: 16px; margin-bottom: 20px; border-bottom: 4px solid var(--blue); }
+        header h1 { color: #fff; font-size: 2.2rem; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+        header p { color: #94a3b8; font-size: 0.95rem; }
+        
+        .info-bar { background: var(--card-bg); padding: 12px; border-radius: 12px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-around; font-size: 0.88rem; border: 1px solid #334155; }
+        .info-bar a { color: #4ade80; text-decoration: none; font-weight: bold; }
         
         /* Login Styles */
-        .login-container { max-width: 450px; margin: 80px auto; background: var(--grey); padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.5); text-align: center; border: 1px solid #444; }
-        .login-container h2 { margin-bottom: 20px; color: var(--primary); }
-        select, input, textarea { width: 100%; padding: 12px; margin: 8px 0; background: #222; border: 1px solid #555; color: white; border-radius: 6px; font-size: 1rem; }
-        button { background: var(--primary); color: white; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; margin-top: 10px; transition: 0.3s; }
-        button:hover { background: #b71c1c; }
+        .login-container { max-width: 420px; margin: 80px auto; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; border: 1px solid #334155; }
+        .login-container h2 { margin-bottom: 20px; color: var(--blue); }
+        select, input, textarea { width: 100%; padding: 12px; margin: 8px 0; background: var(--card-inner); border: 1px solid #475569; color: white; border-radius: 8px; font-size: 0.95rem; }
+        button { background: var(--blue); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; margin-top: 10px; transition: 0.2s; }
+        button:hover { opacity: 0.9; }
         
-        /* Password Toggle Box */
         .password-box { display: flex; align-items: center; gap: 8px; }
-        .password-box button { width: auto; margin: 0; padding: 12px 15px; background: #444; font-size: 0.85rem; }
+        .password-box button { width: auto; margin: 0; padding: 12px 15px; background: #334155; font-size: 0.85rem; }
         
-        /* Main Dashboard */
+        /* Dashboard Tabs */
         .main-content { display: none; }
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { background: var(--grey); color: white; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: auto; margin: 0; }
-        .tab-btn.active { background: var(--primary); }
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { background: var(--card-bg); color: #cbd5e1; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; width: auto; margin: 0; border: 1px solid #334155; }
+        .tab-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
         
-        /* Showroom & Grid */
-        .controls { background: var(--grey); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #444; }
+        /* Showroom Section */
+        .controls { background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155; }
         .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .img-card { background: var(--grey); border-radius: 8px; overflow: hidden; border: 1px solid #444; position: relative; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
-        .img-card:hover { transform: translateY(-5px); }
-        
-        /* Image Drag Block */
-        .img-card img { width: 100%; height: 250px; object-fit: cover; transition: 0.5s; cursor: pointer; pointer-events: auto; }
+        .img-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #334155; transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+        .img-card img { width: 100%; height: 240px; object-fit: cover; cursor: pointer; }
         .img-card-body { padding: 15px; text-align: center; }
-        .img-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
-        
         .owner-actions { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-replace { background: #2196F3; }
-        .btn-delete { background: #f44336; }
         
-        /* Khata Section */
-        .khata-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        .khata-list { background: var(--grey); padding: 20px; border-radius: 8px; height: 780px; overflow-y: auto; position: relative; border: 1px solid #444; }
+        /* ==================== ERP LEDGER UI (SCREENSHOT 1 STYLE) ==================== */
+        .erp-top-bar { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; background: var(--card-bg); padding: 15px; border-radius: 14px; border: 1px solid #334155; }
+        .erp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
         
-        /* Separate Section Headers */
-        .section-header { background: #111; padding: 12px 18px; border-radius: 6px; margin-top: 20px; margin-bottom: 15px; border-left: 5px solid var(--primary); font-size: 1.15rem; font-weight: bold; }
-        .section-header.supplier-header { border-left-color: var(--steel); margin-top: 30px; }
+        /* Person Master Card */
+        .person-card { background: var(--card-bg); border-radius: 18px; border: 1px solid #334155; overflow: hidden; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .person-card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+        .avatar-circle { width: 48px; height: 48px; border-radius: 50%; background: var(--blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: bold; flex-shrink: 0; }
+        .person-card.supplier .avatar-circle { background: var(--steel); }
+        .person-name h3 { font-size: 1.15rem; color: #fff; line-height: 1.2; }
+        .person-name p { font-size: 0.85rem; color: #94a3b8; margin-top: 3px; }
         
-        .khata-item { background: #222; padding: 18px; border-radius: 8px; margin-bottom: 15px; border-left: 6px solid var(--primary); position: relative; border-top: 1px solid #333; border-right: 1px solid #333; border-bottom: 1px solid #333; }
-        .khata-item.supplier { border-left-color: var(--steel); }
+        .stats-box { background: var(--card-inner); border-radius: 14px; padding: 14px; display: grid; grid-template-columns: 1fr 1fr; text-align: center; margin-bottom: 16px; border: 1px solid #334155; }
+        .stat-item h4 { font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; font-weight: 600; }
+        .stat-item p { font-size: 1.35rem; font-weight: 800; color: #fff; }
+        .stat-item.outstanding p { color: #3b82f6; }
         
-        .khata-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; }
-        .action-btn { padding: 6px 12px; font-size: 0.8rem; width: auto; margin: 0; border-radius: 4px; font-weight: bold; }
-        .btn-edit { background: #FF9800; color: black; }
-        .btn-del { background: #f44336; color: white; }
+        .person-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .action-icon-btn { background: var(--blue); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.2s; }
+        .action-icon-btn:hover { background: #1d4ed8; }
+        
+        /* ==================== CUSTOMER DETAIL VIEW (SCREENSHOT 2 STYLE) ==================== */
+        #personDetailView { display: none; }
+        .detail-banner { background: var(--blue); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(37,99,235,0.3); }
+        .detail-banner h2 { font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .detail-banner .subtitle { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 20px; font-weight: 600; }
+        
+        .banner-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .banner-stat-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); border-radius: 14px; padding: 14px; text-align: center; }
+        .banner-stat-card h3 { font-size: 1.3rem; font-weight: 800; color: #fff; }
+        .banner-stat-card p { font-size: 0.8rem; color: #e2e8f0; font-weight: 600; margin-top: 2px; }
+        
+        .works-section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .works-section-title h3 { font-size: 1.4rem; color: #fff; font-weight: 700; }
+        
+        /* Work Card (Screenshot 2 Style) */
+        .work-card { background: var(--card-bg); border-radius: 16px; border: 1px solid #334155; padding: 18px; margin-bottom: 15px; position: relative; }
+        .work-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .work-header h4 { font-size: 1.15rem; color: #fff; font-weight: 700; margin-bottom: 4px; }
+        .work-header .category-badge { font-size: 0.78rem; color: #94a3b8; }
+        .status-badge { background: #fef9c3; color: #854d0e; font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 14px; }
+        .status-badge.delivered { background: #dcfce7; color: #166534; }
+        
+        .work-amounts-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--card-inner); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #334155; }
+        .amt-box h5 { font-size: 0.75rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px; }
+        .amt-box p { font-size: 1.1rem; font-weight: 800; color: #fff; }
+        .amt-box.received p { color: #22c55e; }
+        .amt-box.pending p { color: #ef4444; }
+        
+        .work-item-actions { position: absolute; top: 18px; right: 18px; display: flex; gap: 6px; }
+        .work-btn { background: #334155; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer; font-weight: bold; }
+        .work-btn:hover { background: #475569; }
+        
+        /* Floating Add Button for Customer Detail */
+        .floating-add-btn { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; width: 64px; height: 64px; border-radius: 50%; border: none; font-size: 2.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(37,99,235,0.6); z-index: 100; transition: 0.2s; }
+        .floating-add-btn:hover { transform: scale(1.08); }
+
+        /* Modal for Add / Edit Work */
+        .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 15px; }
+        .modal-content { background: var(--card-bg); max-width: 550px; width: 100%; border-radius: 18px; padding: 25px; border: 1px solid #475569; max-height: 90vh; overflow-y: auto; position: relative; }
+        .modal-close { position: absolute; top: 18px; right: 22px; font-size: 1.8rem; color: #94a3b8; cursor: pointer; }
         
         .calc-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
         .payment-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         
-        .logout-btn { background: #555; width: auto; padding: 8px 15px; float: right; margin-top: -50px; }
+        .logout-btn { background: #475569; width: auto; padding: 8px 15px; float: right; margin-top: -45px; }
         .hidden-file-input { display: none; }
-        
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .modal-content { max-width: 80%; max-height: 80%; border-radius: 8px; transition: transform 0.3s; }
-        .modal-close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
-        .zoom-controls { position: absolute; bottom: 30px; display: flex; gap: 20px; }
-        .zoom-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        #loader { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.85); padding: 20px 30px; border-radius: 12px; color: #fff; z-index: 9999; font-weight: bold; border: 1px solid #475569; }
 
-        /* Loader */
-        #loader { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 20px; border-radius: 8px; color: #fff; z-index: 9999; font-weight: bold; }
-
-        /* Print/PDF Styling */
         @media print {
             body { background: white; color: black; }
             body * { visibility: hidden; }
-            .khata-list, .khata-list * { visibility: visible; color: black; }
-            .khata-list { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 0; overflow: visible; height: auto; border: none; }
-            .khata-item { border: 1px solid #ccc; background: white; page-break-inside: avoid; margin-bottom: 20px; }
-            .khata-actions, #filterType, #filterDate, .print-btn, .clear-btn { display: none !important; }
-            h3, .section-header { color: black; background: #eee !important; }
+            #personDetailView, #personDetailView * { visibility: visible; color: black; }
+            #personDetailView { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 0; }
+            .detail-banner { background: #eee !important; color: black !important; }
+            .work-card, .banner-stat-card { border: 1px solid #ccc !important; background: white !important; }
+            .work-item-actions, .floating-add-btn, .back-btn { display: none !important; }
         }
     </style>
     <!-- FIREBASE CLOUD LIBRARIES -->
@@ -101,8 +140,8 @@
 
     <!-- LOGIN PAGE -->
     <div id="loginPage" class="login-container">
-        <h2>Chakradhari Traders Login</h2>
-        <p style="color: #bbb; margin-bottom: 15px;">Welcome! Kripya apna role chunein:</p>
+        <h2>Chakradhari Traders ERP</h2>
+        <p style="color: #94a3b8; margin-bottom: 15px;">Welcome! Kripya apna role chunein:</p>
         <select id="userRole" onchange="toggleRoleFields()">
             <option value="customer">Customer</option>
             <option value="owner">Owner</option>
@@ -132,21 +171,20 @@
 
         <div class="info-bar">
             <span><b>📞 Call/WhatsApp:</b> 9304672299</span>
-            <span><b>✉️ Email:</b> chakradhari2026@gmail.com</span>
-            <span><b>📍 Address:</b> Nayagaon Bariyarpur, Near Jogi Baba Mandir & Gyan Mandir School, Vaishali, Bihar (844506)</span>
-            <span><b>🟢 Order On:</b> <a href="https://wa.me/919304672299" target="_blank">Direct WhatsApp Chat</a></span>
+            <span><b>📍 Address:</b> Nayagaon Bariyarpur, Vaishali, Bihar (844506)</span>
+            <span><b>🟢 WhatsApp Order:</b> <a href="https://wa.me/919304672299" target="_blank">Direct Chat</a></span>
         </div>
 
         <div class="nav-tabs">
             <div id="tabShowroom" class="tab-btn active" onclick="switchTab('showroom')">🖼️ Design Showroom</div>
-            <div id="tabKhata" class="tab-btn" onclick="switchTab('khata')" style="display: none;">📊 Khata Book (Hisab)</div>
+            <div id="tabKhata" class="tab-btn" onclick="switchTab('khata')" style="display: none;">📊 ERP Ledger Book</div>
             <div id="tabLogs" class="tab-btn" onclick="switchTab('logs')" style="display: none;">📱 Customer Login Logs</div>
         </div>
 
         <!-- SHOWROOM -->
         <div id="showroomSection">
             <div class="controls">
-                <h3>Lohe aur Steel ke Behtareen Designs</h3>
+                <h3 style="color:#fff; margin-bottom: 10px;">Lohe aur Steel ke Behtareen Designs</h3>
                 <select id="itemFilter" onchange="loadImagesUI()">
                     <option value="Iron Gate">💥 Iron Gate (Lohe ka Phatak)</option>
                     <option value="Steel Gate">✨ Steel Gate (Premium)</option>
@@ -173,83 +211,62 @@
             <div class="image-grid" id="imageGrid"></div>
         </div>
 
-        <!-- KHATA BOOK -->
+        <!-- ERP KHATA BOOK SECTION -->
         <div id="khataSection" style="display: none;">
-            <div class="khata-grid">
-                <div class="controls">
-                    <h3 id="formTitle">Naya Hisab Jodein</h3>
-                    <input type="hidden" id="editEntryId" value="">
+            
+            <!-- 1. MASTER CARDS LIST VIEW (SCREENSHOT 1) -->
+            <div id="ledgerGridView">
+                <div class="erp-top-bar">
+                    <h3 style="flex-grow: 1; color: #fff;">📋 Saved ERP Ledger Accounts</h3>
                     
-                    <label style="font-size: 0.85rem; color: #aaa;">Khata Type Check Karein:</label>
-                    <select id="khataType" onchange="toggleKhataFields()">
-                        <option value="customer">Customer (Grahak)</option>
-                        <option value="supplier">Supplier (Samaan Wala)</option>
+                    <select id="filterType" onchange="loadLedgerGridUI()" style="width: 180px; margin: 0;">
+                        <option value="all">🔍 All (Sabhi Dekho)</option>
+                        <option value="customer">👤 Only Customers</option>
+                        <option value="supplier">🏢 Only Suppliers</option>
                     </select>
 
-                    <!-- Common Details -->
-                    <input type="text" id="kName" placeholder="Naam (e.g., Rohit Kumar)">
-                    <input type="number" id="kPhone" placeholder="Mobile Number">
-                    <input type="text" id="kAddress" placeholder="Address / Pata (Customer Ke Liye)">
-
-                    <!-- Step-by-Step Work / Items List -->
-                    <label style="font-size: 0.85rem; color: #aaa; margin-top: 8px; display: block;">Kaam / Item Detail (Line by line number ke sath):</label>
-                    <textarea id="kItem" rows="3" placeholder="1. 40kg Iron Gate&#10;2. Window Grill 2 piece"></textarea>
-
-                    <!-- Calculator Pricing Row -->
-                    <label style="font-size: 0.85rem; color: #aaa; margin-top: 8px; display: block;">Pricing Calculator (Qty/Weight × Rate - Discount):</label>
-                    <div class="calc-row">
-                        <input type="number" id="kQty" placeholder="Weight/Qty" oninput="calculateTotal()">
-                        <input type="number" id="kRate" placeholder="Rate (Rs)" oninput="calculateTotal()">
-                        <input type="number" id="kDiscount" placeholder="Discount (Rs)" oninput="calculateTotal()">
-                    </div>
-                    <input type="number" id="kTotal" placeholder="Kul Keemat (Total Price)" style="border-color: var(--primary); font-weight: bold;">
-
-                    <!-- Installment Payment History -->
-                    <label style="font-size: 0.85rem; color: #aaa; margin-top: 8px; display: block;">Payment History (Paisa mila to likhein):</label>
-                    <div class="payment-row">
-                        <input type="date" id="kDate1">
-                        <input type="number" id="kPay1" placeholder="1st Payment Amount">
-                    </div>
-                    <div class="payment-row">
-                        <input type="date" id="kDate2">
-                        <input type="number" id="kPay2" placeholder="2nd Payment Amount">
-                    </div>
-                    <div class="payment-row">
-                        <input type="date" id="kDate3">
-                        <input type="number" id="kPay3" placeholder="3rd Payment Amount">
-                    </div>
-
-                    <textarea id="kNote" placeholder="Koi special note likhna hai?"></textarea>
-                    
-                    <button id="saveBtn" onclick="saveKhataEntry()">Hisab Save Karo</button>
-                    <button id="cancelEditBtn" onclick="resetKhataForm()" style="display: none; background: #555;">Cancel Editing</button>
+                    <button onclick="openWorkModalForNewPerson()" style="width: auto; margin: 0; padding: 10px 18px; background: #16a34a;">
+                        ➕ Naya Grahak / Kaam Jodein
+                    </button>
                 </div>
-                
-                <!-- LEDGER DISPLAY SIDE WITH TOP SELECT FILTER -->
-                <div class="khata-list" id="printSection">
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #444; padding-bottom: 15px;">
-                        <h3 style="margin: 0; flex-grow: 1;">📋 Saved Ledger Book</h3>
-                        
-                        <!-- DROP DOWN TO SHOW/HIDE SECTIONS COMPLETELY -->
-                        <select id="filterType" onchange="loadKhataUI()" style="margin: 0; width: 180px; padding: 8px; background: #222; border: 1px solid #555; color: white; border-radius: 6px;">
-                            <option value="all">🔍 All (Sabhi Dekho)</option>
-                            <option value="customer">👤 Only Customers</option>
-                            <option value="supplier">🏢 Only Suppliers</option>
-                        </select>
 
-                        <input type="date" id="filterDate" onchange="loadKhataUI()" style="margin: 0; width: 150px; padding: 8px;">
-                        <button class="clear-btn" onclick="clearFilter()" style="background: #555; width: auto; padding: 8px 15px;">Clear</button>
-                        <button class="print-btn" onclick="printKhata()" style="background: #FF9800; color: black; width: auto; padding: 8px 15px;">📄 Save PDF</button>
+                <div class="erp-grid" id="masterCardsContainer"></div>
+            </div>
+
+            <!-- 2. CUSTOMER DETAILS VIEW (SCREENSHOT 2) -->
+            <div id="personDetailView">
+                <button class="back-btn" onclick="closePersonDetail()" style="width: auto; background: #334155; margin-bottom: 20px; padding: 10px 18px;">
+                    ⬅️ Back to Ledger List
+                </button>
+
+                <div class="detail-banner">
+                    <h2 id="detailOutstandingAmt">₹0</h2>
+                    <div class="subtitle">Outstanding</div>
+                    <div class="banner-stats-grid">
+                        <div class="banner-stat-card">
+                            <h3 id="detailBusinessAmt">₹0</h3>
+                            <p>Business</p>
+                        </div>
+                        <div class="banner-stat-card">
+                            <h3 id="detailReceivedAmt">₹0</h3>
+                            <p>Received</p>
+                        </div>
+                        <div class="banner-stat-card">
+                            <h3 id="detailWorksCount">0</h3>
+                            <p>Works</p>
+                        </div>
                     </div>
-
-                    <!-- CUSTOMER LEDGER SECTION -->
-                    <div id="customerHeader" class="section-header">👤 Grahak Khata (Customer Ledger)</div>
-                    <div id="customerDisplay"></div>
-
-                    <!-- SUPPLIER LEDGER SECTION -->
-                    <div id="supplierHeader" class="section-header supplier-header">🏢 Supplier Khata (Samaan Wala Ledger)</div>
-                    <div id="supplierDisplay"></div>
                 </div>
+
+                <div class="works-section-title">
+                    <h3 id="detailPersonNameTitle">Works</h3>
+                    <button onclick="printPersonDetail()" style="width: auto; margin: 0; padding: 8px 15px; background: #f59e0b; color: #000;">📄 Print Detail PDF</button>
+                </div>
+
+                <div id="worksCardsContainer"></div>
+
+                <!-- Floating + Button for this person -->
+                <button class="floating-add-btn" onclick="openWorkModalForCurrentPerson()" title="Add Work for this Customer">+</button>
             </div>
         </div>
 
@@ -262,14 +279,71 @@
         </div>
     </div>
 
-    <!-- Modals & Hidden Inputs -->
+    <!-- MODAL FOR ADDING / EDITING WORK ENTRY -->
+    <div id="workModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeWorkModal()">&times;</span>
+            <h3 id="workModalTitle" style="color: var(--blue); margin-bottom: 15px;">Naya Kaam (Work) Jodein</h3>
+            <input type="hidden" id="editEntryId" value="">
+            
+            <label style="font-size: 0.85rem; color: #94a3b8;">Khata Type:</label>
+            <select id="khataType" onchange="toggleKhataFields()">
+                <option value="customer">Customer (Grahak)</option>
+                <option value="supplier">Supplier (Samaan Wala)</option>
+            </select>
+
+            <input type="text" id="kName" placeholder="Grahak / Supplier ka Naam (e.g., Rohit Kumar)">
+            <input type="number" id="kPhone" placeholder="Mobile Number">
+            <input type="text" id="kAddress" placeholder="Address / Pata">
+
+            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Work Title / Kaam ka Naam:</label>
+            <input type="text" id="kWorkTitle" placeholder="e.g., Gate to cut krke chota krna tha">
+
+            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px; display: block;">Work Category & Status:</label>
+            <div class="calc-row">
+                <input type="text" id="kCategory" placeholder="Category (Repair, Fabrication)">
+                <select id="kStatus">
+                    <option value="Delivered">🟢 Delivered</option>
+                    <option value="In Progress">🟡 In Progress</option>
+                    <option value="Pending">🔴 Pending</option>
+                </select>
+            </div>
+
+            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Kaam / Item Detail (Full Description):</label>
+            <textarea id="kItem" rows="2" placeholder="1. 40kg Iron Gate&#10;2. Window Grill 2 piece"></textarea>
+
+            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Pricing Calculator (Qty × Rate - Discount):</label>
+            <div class="calc-row">
+                <input type="number" id="kQty" placeholder="Qty/Weight" oninput="calculateTotal()">
+                <input type="number" id="kRate" placeholder="Rate (Rs)" oninput="calculateTotal()">
+                <input type="number" id="kDiscount" placeholder="Discount" oninput="calculateTotal()">
+            </div>
+            <input type="number" id="kTotal" placeholder="Final Bill Price (Rs)" style="border-color: var(--blue); font-weight: bold;">
+
+            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Payment History (Paisa mila to likhein):</label>
+            <div class="payment-row">
+                <input type="date" id="kDate1">
+                <input type="number" id="kPay1" placeholder="1st Payment Amount">
+            </div>
+            <div class="payment-row">
+                <input type="date" id="kDate2">
+                <input type="number" id="kPay2" placeholder="2nd Payment Amount">
+            </div>
+            <div class="payment-row">
+                <input type="date" id="kDate3">
+                <input type="number" id="kPay3" placeholder="3rd Payment Amount">
+            </div>
+
+            <textarea id="kNote" placeholder="Koi special note likhna hai?"></textarea>
+            
+            <button onclick="saveWorkEntry()" style="background: var(--blue); padding: 14px;">Kaam Save Karo 🔥</button>
+        </div>
+    </div>
+
+    <!-- Image Zoom Modal -->
     <div id="myModal" class="modal">
         <span class="modal-close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="imgModalTarget">
-        <div class="zoom-controls">
-            <div class="zoom-btn" onclick="zoomImage(1.2)">🔍 Zoom In</div>
-            <div class="zoom-btn" onclick="zoomImage(0.8)">🔍 Zoom Out</div>
-        </div>
+        <img class="modal-content" id="imgModalTarget" style="max-height: 80vh; object-fit: contain;">
     </div>
 
     <input type="file" id="replaceFileInput" class="hidden-file-input" accept="image/*" onchange="handleImageFileChange(event)">
@@ -298,55 +372,35 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let currentZoom = 1;
         let loggedInRole = 'customer';
-        let currentReplacingKey = '';
-        let currentReplacingIndex = -1;
-        let currentAddingKey = '';
-
         let cloudImagesData = {};
         let cloudKhataData = [];
         let cloudLogsData = [];
+        let currentActivePersonKey = null;
 
         const defaultImages = {
             "Iron Gate": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600"],
             "Steel Gate": ["https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"],
             "Khatiya": ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600"],
-            "Window": ["https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?w=600"],
-            "Chair": ["https://images.unsplash.com/photo-1503602642458-232111445657?w=600"],
-            "Grill": ["https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=600"],
-            "Ventilator": ["https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600"],
-            "Railing": ["https://images.unsplash.com/photo-1563714113014-25cb4cf3952a?w=600"],
-            "Almirah": ["https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600"],
-            "Sofa": ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600"],
-            "Door": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600"],
-            "Rolling Shutter": ["https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"],
-            "Boundary Wall": ["https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=600"],
-            "Shed": ["https://images.unsplash.com/photo-1560026857-e6f77cc8bc4a?w=600"],
-            "Truss": ["https://images.unsplash.com/photo-1504913659239-6abc87875a63?w=600"],
-            "Steel Grill": ["https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?w=600"],
-            "Steel Railing": ["https://images.unsplash.com/photo-1563714113014-25cb4cf3952a?w=600"],
-            "Spiral Stairs": ["https://images.unsplash.com/photo-1508214300305-645001ff9fce?w=600"],
-            "Racks": ["https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600"],
-            "Jhula": ["https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600"]
+            "Window": ["https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?w=600"]
         };
 
-        // LOAD DATA FROM CLOUD
+        // LOAD CLOUD DATA
         db.ref('customShowroomImages').on('value', (snapshot) => {
             let data = snapshot.val();
-            if(!data) {
-                db.ref('customShowroomImages').set(defaultImages);
-                cloudImagesData = defaultImages;
-            } else {
-                cloudImagesData = data;
-            }
+            cloudImagesData = data || defaultImages;
             if(loggedInRole === 'owner' || loggedInRole === 'customer') loadImagesUI();
         });
 
         db.ref('shopKhata').on('value', (snapshot) => {
             const data = snapshot.val() || {};
             cloudKhataData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-            if(loggedInRole === 'owner') loadKhataUI();
+            if(loggedInRole === 'owner') {
+                loadLedgerGridUI();
+                if(currentActivePersonKey) {
+                    renderPersonDetailView(currentActivePersonKey);
+                }
+            }
         });
 
         db.ref('siteLogs').on('value', (snapshot) => {
@@ -355,11 +409,10 @@
             if(loggedInRole === 'owner') loadLogsUI();
         });
 
-        // 1-HOUR OWNER SESSION CHECK (60 * 60 * 1000 = 3600000 ms)
+        // 1-HOUR OWNER SESSION CHECK
         window.onload = function() {
             let isLogged = localStorage.getItem('isOwnerLoggedIn');
             let sessionTime = localStorage.getItem('ownerSessionExpire');
-            
             if(isLogged === 'true' && sessionTime && Date.now() < parseInt(sessionTime)) {
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('mainDashboard').style.display = 'block';
@@ -367,11 +420,9 @@
                 document.getElementById('tabLogs').style.display = 'block';
                 loggedInRole = 'owner';
                 loadImagesUI();
-                loadKhataUI();
+                loadLedgerGridUI();
                 loadLogsUI();
-            } else {
-                logout();
-            }
+            } else { logout(); }
         };
 
         function toggleRoleFields() {
@@ -382,11 +433,7 @@
 
         function togglePassView() {
             const passInput = document.getElementById('loginPass');
-            if(passInput.type === 'password') {
-                passInput.type = 'text';
-            } else {
-                passInput.type = 'password';
-            }
+            passInput.type = (passInput.type === 'password') ? 'text' : 'password';
         }
 
         function handleLogin() {
@@ -397,14 +444,13 @@
                 const pass = document.getElementById('loginPass').value;
                 if (pass === 'Aditya930@') { 
                     localStorage.setItem('isOwnerLoggedIn', 'true');
-                    localStorage.setItem('ownerSessionExpire', Date.now() + 3600000); // 1 Hour Duration
-                    
+                    localStorage.setItem('ownerSessionExpire', Date.now() + 3600000);
                     document.getElementById('loginPage').style.display = 'none';
                     document.getElementById('mainDashboard').style.display = 'block';
                     document.getElementById('tabKhata').style.display = 'block';
                     document.getElementById('tabLogs').style.display = 'block';
                     loadImagesUI();
-                    loadKhataUI();
+                    loadLedgerGridUI();
                     loadLogsUI();
                 } else { alert("Galat Password hai!"); }
             } else {
@@ -420,131 +466,6 @@
             }
         }
 
-        function loadImagesUI() {
-            const item = document.getElementById('itemFilter').value;
-            const grid = document.getElementById('imageGrid');
-            grid.innerHTML = '';
-            
-            let imgs = cloudImagesData[item] || [];
-
-            imgs.forEach((imgUrl, index) => {
-                let ownerButtons = '';
-                if(loggedInRole === 'owner') {
-                    ownerButtons = `
-                        <div class="owner-actions">
-                            <button class="btn-replace" onclick="triggerReplace('${item}', ${index})">Replace</button>
-                            <button class="btn-delete" onclick="deleteImage('${item}', ${index})">Delete</button>
-                        </div>
-                    `;
-                }
-
-                grid.innerHTML += `
-                    <div class="img-card">
-                        <img src="${imgUrl}" onclick="openModal('${imgUrl}')" alt="${item}">
-                        <div class="img-card-body">
-                            <h3>${item} Design #${index + 1}</h3>
-                            <a href="https://wa.me/919304672299?text=Hello%20Chakradhari%20Traders,%20mujhe%20is%20${item}%20Design%20${index + 1}%20ka%20order%20dena%20hai" target="_blank">
-                                <button style="background:#25D366; margin-top:5px;">🟢 Order on WhatsApp</button>
-                            </a>
-                            ${ownerButtons}
-                        </div>
-                    </div>`;
-            });
-
-            if(loggedInRole === 'owner') {
-                grid.innerHTML += `
-                    <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:#222; border: 2px dashed #555; min-height:250px;">
-                        <div style="text-align:center; padding: 20px;">
-                            <h3 style="color:#aaa; margin-bottom:15px;">Naya Design Jodein</h3>
-                            <button style="background:#4caf50;" onclick="triggerAdd('${item}')">+ Add Image</button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        function triggerReplace(category, index) {
-            currentReplacingKey = category;
-            currentReplacingIndex = index;
-            document.getElementById('replaceFileInput').click();
-        }
-
-        function triggerAdd(category) {
-            currentAddingKey = category;
-            document.getElementById('addFileInput').click();
-        }
-
-        function compressAndSaveImage(file, callback) {
-            document.getElementById('loader').style.display = 'block';
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function(event) {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                    document.getElementById('loader').style.display = 'none';
-                    callback(compressedDataUrl);
-                };
-            };
-        }
-
-        function handleImageFileChange(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            compressAndSaveImage(file, function(compressedImage) {
-                cloudImagesData[currentReplacingKey][currentReplacingIndex] = compressedImage;
-                db.ref('customShowroomImages/' + currentReplacingKey).set(cloudImagesData[currentReplacingKey]);
-                e.target.value = '';
-            });
-        }
-
-        function handleAddImageFileChange(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            compressAndSaveImage(file, function(compressedImage) {
-                if(!cloudImagesData[currentAddingKey]) cloudImagesData[currentAddingKey] = [];
-                cloudImagesData[currentAddingKey].push(compressedImage);
-                db.ref('customShowroomImages/' + currentAddingKey).set(cloudImagesData[currentAddingKey]);
-                e.target.value = '';
-            });
-        }
-
-        function deleteImage(category, index) {
-            if(confirm("Kya aap sach me is image ko delete karna chahte hain?")) {
-                cloudImagesData[category].splice(index, 1);
-                db.ref('customShowroomImages/' + category).set(cloudImagesData[category]);
-            }
-        }
-
-        function openModal(url) {
-            currentZoom = 1;
-            const modal = document.getElementById('myModal');
-            const modalImg = document.getElementById('imgModalTarget');
-            modal.style.display = "flex";
-            modalImg.src = url;
-            modalImg.style.transform = `scale(${currentZoom})`;
-        }
-        function closeModal() { document.getElementById('myModal').style.display = "none"; }
-        function zoomImage(factor) {
-            currentZoom *= factor;
-            document.getElementById('imgModalTarget').style.transform = `scale(${currentZoom})`;
-        }
-
         function switchTab(tab) {
             document.getElementById('showroomSection').style.display = (tab === 'showroom') ? 'block' : 'none';
             document.getElementById('khataSection').style.display = (tab === 'khata') ? 'block' : 'none';
@@ -553,48 +474,253 @@
             document.getElementById('tabShowroom').classList.toggle('active', tab === 'showroom');
             document.getElementById('tabKhata').classList.toggle('active', tab === 'khata');
             document.getElementById('tabLogs').classList.toggle('active', tab === 'logs');
+            if(tab === 'khata') closePersonDetail();
         }
 
-        /* KHATA BOOK LOGIC: CALCULATOR & EDIT SUPPORT */
+        /* ==================== ERP LEDGER MASTER CARDS GRID (SCREENSHOT 1) ==================== */
+        function loadLedgerGridUI() {
+            const container = document.getElementById('masterCardsContainer');
+            if(!container) return;
+            container.innerHTML = '';
+
+            const filterType = document.getElementById('filterType').value;
+            const grouped = {};
+
+            cloudKhataData.forEach(e => {
+                const key = (e.name || 'Unknown').trim() + '_' + (e.phone || '').trim();
+                if(!grouped[key]) {
+                    grouped[key] = {
+                        key: key,
+                        name: e.name || 'Unknown',
+                        phone: e.phone || '',
+                        address: e.address || '',
+                        type: e.type || 'customer',
+                        totalBusiness: 0,
+                        totalReceived: 0,
+                        worksCount: 0
+                    };
+                }
+                let total = parseFloat(e.total) || 0;
+                let paid = (parseFloat(e.pay1) || 0) + (parseFloat(e.pay2) || 0) + (parseFloat(e.pay3) || 0);
+                
+                grouped[key].totalBusiness += total;
+                grouped[key].totalReceived += paid;
+                grouped[key].worksCount += 1;
+            });
+
+            let personList = Object.values(grouped);
+            if(filterType !== 'all') {
+                personList = personList.filter(p => p.type === filterType);
+            }
+
+            if(personList.length === 0) {
+                container.innerHTML = `<p style="color:#94a3b8; padding: 20px 0;">Abhi tak koi hisab save nahi hua hai.</p>`;
+                return;
+            }
+
+            personList.forEach(p => {
+                let outstanding = p.totalBusiness - p.totalReceived;
+                let initial = p.name.charAt(0).toUpperCase();
+                let phoneDisplay = p.phone || 'N/A';
+                
+                container.innerHTML += `
+                    <div class="person-card ${p.type}">
+                        <div>
+                            <div class="person-card-top">
+                                <div class="avatar-circle">${initial}</div>
+                                <div class="person-name">
+                                    <h3>${p.name}</h3>
+                                    <p>📞 ${phoneDisplay} &nbsp;|&nbsp; <span style="text-transform:uppercase; font-size:0.75rem; color:#cbd5e1;">${p.type}</span></p>
+                                </div>
+                            </div>
+                            <div class="stats-box">
+                                <div class="stat-item outstanding">
+                                    <h4>Outstanding</h4>
+                                    <p>₹${outstanding}</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h4>Works</h4>
+                                    <p>${p.worksCount}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="person-actions">
+                            <a href="tel:${p.phone}" class="action-icon-btn" title="Call">📞</a>
+                            <a href="https://wa.me/91${p.phone}" target="_blank" class="action-icon-btn" title="WhatsApp" style="background:#16a34a;">💬</a>
+                            <button onclick="openPersonDetail('${p.key}')" class="action-icon-btn" title="View Detail Works" style="background:#3b82f6;">👁️</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        /* ==================== CUSTOMER DETAIL VIEW (SCREENSHOT 2) ==================== */
+        function openPersonDetail(personKey) {
+            currentActivePersonKey = personKey;
+            document.getElementById('ledgerGridView').style.display = 'none';
+            document.getElementById('personDetailView').style.display = 'block';
+            renderPersonDetailView(personKey);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closePersonDetail() {
+            currentActivePersonKey = null;
+            document.getElementById('personDetailView').style.display = 'none';
+            document.getElementById('ledgerGridView').style.display = 'block';
+            loadLedgerGridUI();
+        }
+
+        function renderPersonDetailView(personKey) {
+            const container = document.getElementById('worksCardsContainer');
+            container.innerHTML = '';
+
+            const works = cloudKhataData.filter(e => {
+                const k = (e.name || 'Unknown').trim() + '_' + (e.phone || '').trim();
+                return k === personKey;
+            });
+
+            if(works.length === 0) {
+                closePersonDetail();
+                return;
+            }
+
+            let personName = works[0].name;
+            let totalBusiness = 0;
+            let totalReceived = 0;
+
+            works.forEach(w => {
+                let finalAmt = parseFloat(w.total) || 0;
+                let rcvAmt = (parseFloat(w.pay1) || 0) + (parseFloat(w.pay2) || 0) + (parseFloat(w.pay3) || 0);
+                totalBusiness += finalAmt;
+                totalReceived += rcvAmt;
+            });
+
+            let outstanding = totalBusiness - totalReceived;
+
+            document.getElementById('detailOutstandingAmt').innerText = `₹${outstanding}`;
+            document.getElementById('detailBusinessAmt').innerText = `₹${totalBusiness}`;
+            document.getElementById('detailReceivedAmt').innerText = `₹${totalReceived}`;
+            document.getElementById('detailWorksCount').innerText = works.length;
+            document.getElementById('detailPersonNameTitle').innerText = `${personName} - All Works`;
+
+            // Render works matching Screenshot 2
+            works.forEach((w, idx) => {
+                let finalAmt = parseFloat(w.total) || 0;
+                let rcvAmt = (parseFloat(w.pay1) || 0) + (parseFloat(w.pay2) || 0) + (parseFloat(w.pay3) || 0);
+                let pendAmt = finalAmt - rcvAmt;
+
+                let title = w.workTitle || w.item || `Work #${idx + 1}`;
+                let cat = w.category || w.type || 'Fabrication';
+                let status = w.status || (pendAmt <= 0 ? 'Delivered' : 'Pending');
+                let badgeClass = (status === 'Delivered') ? 'delivered' : '';
+
+                let payDesc = '';
+                if(w.pay1 > 0) payDesc += `1st: ₹${w.pay1} (${w.date1 || '-'}) | `;
+                if(w.pay2 > 0) payDesc += `2nd: ₹${w.pay2} (${w.date2 || '-'}) | `;
+                if(w.pay3 > 0) payDesc += `3rd: ₹${w.pay3} (${w.date3 || '-'})`;
+
+                let noteDesc = w.note ? `<p style="color:#94a3b8; font-size:0.8rem; margin-top:8px; font-style:italic;">Note: ${w.note}</p>` : '';
+
+                container.innerHTML += `
+                    <div class="work-card">
+                        <div class="work-item-actions">
+                            <button class="work-btn" onclick="editWorkEntry('${w.id}')">✏️ Edit</button>
+                            <button class="work-btn" onclick="deleteWorkEntry('${w.id}')" style="background:#dc2626;">🗑️</button>
+                        </div>
+                        <div class="work-header">
+                            <div>
+                                <h4>${title}</h4>
+                                <span class="category-badge">${cat} &nbsp;|&nbsp; <small>Entry Date: ${w.entryDate || '-'}</small></span>
+                            </div>
+                        </div>
+                        <span class="status-badge ${badgeClass}">${status}</span>
+                        
+                        <div class="work-amounts-grid">
+                            <div class="amt-box">
+                                <h5>Final</h5>
+                                <p>₹${finalAmt}</p>
+                            </div>
+                            <div class="amt-box received">
+                                <h5>Received</h5>
+                                <p>₹${rcvAmt}</p>
+                            </div>
+                            <div class="amt-box pending">
+                                <h5>Pending</h5>
+                                <p>₹${pendAmt}</p>
+                            </div>
+                        </div>
+                        <p style="font-size:0.82rem; color:#cbd5e1; margin-top:10px;">${payDesc}</p>
+                        ${noteDesc}
+                    </div>
+                `;
+            });
+        }
+
+        function printPersonDetail() { window.print(); }
+
+        /* ==================== WORK MODAL (ADD / EDIT) ==================== */
+        function openWorkModalForNewPerson() {
+            resetWorkModal();
+            document.getElementById('workModalTitle').innerText = "Naya Grahak / Kaam Jodein";
+            document.getElementById('workModal').style.display = 'flex';
+        }
+
+        function openWorkModalForCurrentPerson() {
+            if(!currentActivePersonKey) return;
+            resetWorkModal();
+            
+            const works = cloudKhataData.filter(e => {
+                const k = (e.name || 'Unknown').trim() + '_' + (e.phone || '').trim();
+                return k === currentActivePersonKey;
+            });
+
+            if(works.length > 0) {
+                document.getElementById('kName').value = works[0].name || '';
+                document.getElementById('kPhone').value = works[0].phone || '';
+                document.getElementById('kAddress').value = works[0].address || '';
+                document.getElementById('khataType').value = works[0].type || 'customer';
+                toggleKhataFields();
+            }
+
+            document.getElementById('workModalTitle').innerText = "Naya Kaam Jodein: " + document.getElementById('kName').value;
+            document.getElementById('workModal').style.display = 'flex';
+        }
+
+        function closeWorkModal() {
+            document.getElementById('workModal').style.display = 'none';
+            resetWorkModal();
+        }
+
         function toggleKhataFields() {
             const type = document.getElementById('khataType').value;
-            const addr = document.getElementById('kAddress');
-            if(type === 'supplier') {
-                addr.style.display = 'none';
-            } else {
-                addr.style.display = 'block';
-            }
+            document.getElementById('kAddress').style.display = (type === 'supplier') ? 'none' : 'block';
         }
 
         function calculateTotal() {
             const qty = parseFloat(document.getElementById('kQty').value) || 0;
             const rate = parseFloat(document.getElementById('kRate').value) || 0;
             const disc = parseFloat(document.getElementById('kDiscount').value) || 0;
-            
             let total = (qty * rate) - disc;
             if (total < 0) total = 0;
-            
-            if(qty > 0 || rate > 0) {
-                document.getElementById('kTotal').value = total;
-            }
+            if(qty > 0 || rate > 0) document.getElementById('kTotal').value = total;
         }
 
-        function saveKhataEntry() {
+        function saveWorkEntry() {
             const name = document.getElementById('kName').value.trim();
-            if(!name) {
-                alert("Kripya Grahak / Supplier ka Naam likhein!");
-                return;
-            }
+            if(!name) { alert("Kripya Naam likhein!"); return; }
 
-            const today = new Date().toISOString().split('T')[0];
             const editId = document.getElementById('editEntryId').value;
+            const today = new Date().toISOString().split('T')[0];
 
             const entry = {
-                entryDate: today, 
+                entryDate: today,
                 type: document.getElementById('khataType').value,
                 name: name,
                 phone: document.getElementById('kPhone').value,
                 address: document.getElementById('kAddress').value,
+                workTitle: document.getElementById('kWorkTitle').value || document.getElementById('kItem').value || 'Work Item',
+                category: document.getElementById('kCategory').value || 'Fabrication',
+                status: document.getElementById('kStatus').value || 'Delivered',
                 item: document.getElementById('kItem').value,
                 qty: parseFloat(document.getElementById('kQty').value) || 0,
                 rate: parseFloat(document.getElementById('kRate').value) || 0,
@@ -608,46 +734,38 @@
                 pay3: parseFloat(document.getElementById('kPay3').value) || 0,
                 note: document.getElementById('kNote').value
             };
-            
+
             if(editId) {
-                db.ref('shopKhata/' + editId).update(entry)
-                  .then(() => {
-                      alert("Hisab successfully update ho gaya! ✅");
-                      resetKhataForm();
-                  })
-                  .catch((err) => {
-                      alert("Error: " + err.message + "\nCheck Firebase Database Rules!");
-                  });
+                db.ref('shopKhata/' + editId).update(entry).then(() => {
+                    alert("Work successfully updated! ✅");
+                    closeWorkModal();
+                });
             } else {
-                db.ref('shopKhata').push(entry)
-                  .then(() => {
-                      alert("Naya Hisab successfully save ho gaya! ✅");
-                      resetKhataForm();
-                  })
-                  .catch((err) => {
-                      alert("Error: " + err.message + "\nCheck Firebase Database Rules!");
-                  });
+                db.ref('shopKhata').push(entry).then(() => {
+                    alert("Naya Work successfully save ho gaya! ✅");
+                    closeWorkModal();
+                });
             }
         }
 
-        function editKhataEntry(id) {
+        function editWorkEntry(id) {
             const item = cloudKhataData.find(e => e.id === id);
             if(!item) return;
 
-            document.getElementById('formTitle').innerText = "Hisab Edit Karein: " + item.name;
             document.getElementById('editEntryId').value = item.id;
             document.getElementById('khataType').value = item.type || 'customer';
             toggleKhataFields();
-
             document.getElementById('kName').value = item.name || '';
             document.getElementById('kPhone').value = item.phone || '';
             document.getElementById('kAddress').value = item.address || '';
+            document.getElementById('kWorkTitle').value = item.workTitle || '';
+            document.getElementById('kCategory').value = item.category || '';
+            document.getElementById('kStatus').value = item.status || 'Delivered';
             document.getElementById('kItem').value = item.item || '';
             document.getElementById('kQty').value = item.qty || '';
             document.getElementById('kRate').value = item.rate || '';
             document.getElementById('kDiscount').value = item.discount || '';
             document.getElementById('kTotal').value = item.total || '';
-
             document.getElementById('kDate1').value = item.date1 || '';
             document.getElementById('kPay1').value = item.pay1 || '';
             document.getElementById('kDate2').value = item.date2 || '';
@@ -656,17 +774,24 @@
             document.getElementById('kPay3').value = item.pay3 || '';
             document.getElementById('kNote').value = item.note || '';
 
-            document.getElementById('saveBtn').innerText = "Update Hisab";
-            document.getElementById('cancelEditBtn').style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('workModalTitle').innerText = "Edit Work: " + item.name;
+            document.getElementById('workModal').style.display = 'flex';
         }
 
-        function resetKhataForm() {
-            document.getElementById('formTitle').innerText = "Naya Hisab Jodein";
-            document.getElementById('editEntryId').value = "";
+        function deleteWorkEntry(id) {
+            if(confirm("Kya aap sach me is work entry ko delete karna chahte hain?")) {
+                db.ref('shopKhata/' + id).remove();
+            }
+        }
+
+        function resetWorkModal() {
+            document.getElementById('editEntryId').value = '';
             document.getElementById('kName').value = '';
             document.getElementById('kPhone').value = '';
             document.getElementById('kAddress').value = '';
+            document.getElementById('kWorkTitle').value = '';
+            document.getElementById('kCategory').value = '';
+            document.getElementById('kStatus').value = 'Delivered';
             document.getElementById('kItem').value = '';
             document.getElementById('kQty').value = '';
             document.getElementById('kRate').value = '';
@@ -679,116 +804,39 @@
             document.getElementById('kDate3').value = '';
             document.getElementById('kPay3').value = '';
             document.getElementById('kNote').value = '';
-            document.getElementById('saveBtn').innerText = "Hisab Save Karo";
-            document.getElementById('cancelEditBtn').style.display = "none";
         }
 
-        /* 100% CLEAN TOGGLING OF CUSTOMER & SUPPLIER VIEWS */
-        function loadKhataUI() {
-            const custDisplay = document.getElementById('customerDisplay');
-            const suppDisplay = document.getElementById('supplierDisplay');
-            const custHeader = document.getElementById('customerHeader');
-            const suppHeader = document.getElementById('supplierHeader');
-            
-            custDisplay.innerHTML = '';
-            suppDisplay.innerHTML = '';
-            
-            const filterDate = document.getElementById('filterDate').value;
-            const filterType = document.getElementById('filterType').value || 'all';
-            
-            let filteredKhata = cloudKhataData;
-            if(filterDate) {
-                filteredKhata = cloudKhataData.filter(e => e.entryDate === filterDate || e.date1 === filterDate || e.date2 === filterDate || e.date3 === filterDate);
-            }
-
-            const customers = filteredKhata.filter(e => e.type === 'customer');
-            const suppliers = filteredKhata.filter(e => e.type === 'supplier');
-
-            // 1. Customer Section Control
-            if(filterType === 'all' || filterType === 'customer') {
-                custHeader.style.display = 'block';
-                if(customers.length === 0) {
-                    custDisplay.innerHTML = `<p style="color:#888; padding: 10px 0;">Abhi tak koi Customer ka hisab nahi hai.</p>`;
-                } else {
-                    customers.forEach((e) => {
-                        custDisplay.innerHTML += createKhataCardHTML(e);
-                    });
-                }
-            } else {
-                custHeader.style.display = 'none';
-                custDisplay.innerHTML = '';
-            }
-
-            // 2. Supplier Section Control
-            if(filterType === 'all' || filterType === 'supplier') {
-                suppHeader.style.display = 'block';
-                if(suppliers.length === 0) {
-                    suppDisplay.innerHTML = `<p style="color:#888; padding: 10px 0;">Abhi tak koi Supplier ka hisab nahi hai.</p>`;
-                } else {
-                    suppliers.forEach((e) => {
-                        suppDisplay.innerHTML += createKhataCardHTML(e);
-                    });
-                }
-            } else {
-                suppHeader.style.display = 'none';
-                suppDisplay.innerHTML = '';
-            }
+        function loadImagesUI() {
+            const item = document.getElementById('itemFilter').value;
+            const grid = document.getElementById('imageGrid');
+            grid.innerHTML = '';
+            let imgs = cloudImagesData[item] || [];
+            imgs.forEach((imgUrl, index) => {
+                grid.innerHTML += `
+                    <div class="img-card">
+                        <img src="${imgUrl}" onclick="openModal('${imgUrl}')">
+                        <div class="img-card-body">
+                            <h3>${item} Design #${index + 1}</h3>
+                            <a href="https://wa.me/919304672299?text=Order%20${item}%20Design%20${index + 1}" target="_blank">
+                                <button style="background:#16a34a;">🟢 Order on WhatsApp</button>
+                            </a>
+                        </div>
+                    </div>`;
+            });
         }
 
-        function createKhataCardHTML(e) {
-            let paid = (e.pay1 || 0) + (e.pay2 || 0) + (e.pay3 || 0);
-            let due = (e.total || 0) - paid;
-            
-            let pay1Html = e.pay1 > 0 ? `<p><b>1st Payment:</b> Rs. ${e.pay1} <span style="color:#aaa; font-size:0.8rem;">(${e.date1 || 'Date not given'})</span></p>` : '';
-            let pay2Html = e.pay2 > 0 ? `<p><b>2nd Payment:</b> Rs. ${e.pay2} <span style="color:#aaa; font-size:0.8rem;">(${e.date2 || 'Date not given'})</span></p>` : '';
-            let pay3Html = e.pay3 > 0 ? `<p><b>3rd Payment:</b> Rs. ${e.pay3} <span style="color:#aaa; font-size:0.8rem;">(${e.date3 || 'Date not given'})</span></p>` : '';
-            
-            let addressHtml = e.address ? `<p style="font-size:0.85rem; color:#ccc;"><b>Address:</b> ${e.address}</p>` : '';
-            let noteHtml = e.note ? `<p style="font-style:italic; color:#aaa; margin-top:6px;"><b>Note:</b> ${e.note}</p>` : '';
-
-            return `
-                <div class="khata-item ${e.type}">
-                    <div class="khata-actions">
-                        <button class="action-btn btn-edit" onclick="editKhataEntry('${e.id}')">✏️ Edit</button>
-                        <button class="action-btn btn-del" onclick="deleteKhataEntry('${e.id}')">🗑️ Delete</button>
-                    </div>
-                    <h4><b>${e.name}</b> (${e.type.toUpperCase()}) - Ph: ${e.phone || 'N/A'}</h4>
-                    ${addressHtml}
-                    <p style="font-size:0.8rem; color:#888; margin-bottom:8px;">Entry Date: ${e.entryDate || 'N/A'}</p>
-                    <div style="background:#111; padding:10px; border-radius:6px; margin: 8px 0; white-space: pre-line;">
-                        <b>Kaam / Item Details:</b><br>${e.item || 'No item description'}
-                    </div>
-                    <p><b>Kul Keemat (Total):</b> Rs. ${e.total || 0}</p>
-                    ${pay1Html}
-                    ${pay2Html}
-                    ${pay3Html}
-                    <p style="color:${due > 0 ? '#ff5252' : '#4caf50'}; font-size:1.05rem; font-weight:bold; margin-top:8px;">
-                        <b>Baaki Udhaari (Due):</b> Rs. ${due}
-                    </p>
-                    ${noteHtml}
-                </div>`;
+        function openModal(url) {
+            document.getElementById('myModal').style.display = "flex";
+            document.getElementById('imgModalTarget').src = url;
         }
-
-        function clearFilter() {
-            document.getElementById('filterDate').value = '';
-            document.getElementById('filterType').value = 'all';
-            loadKhataUI();
-        }
-
-        function printKhata() { window.print(); }
-
-        function deleteKhataEntry(id) {
-            if(confirm("Kya aap sach me is entry ko delete karna chahte hain?")) {
-                db.ref('shopKhata/' + id).remove();
-            }
-        }
+        function closeModal() { document.getElementById('myModal').style.display = "none"; }
 
         function loadLogsUI() {
             const display = document.getElementById('logDisplay');
             display.innerHTML = '';
             let logs = [...cloudLogsData].reverse();
             logs.forEach(l => {
-                display.innerHTML += `<p style="padding:8px; border-bottom:1px solid #444;">⏱️ <b>${l.time}</b> -> Role: ${l.role.toUpperCase()} | Phone: <b>${l.phone}</b></p>`;
+                display.innerHTML += `<p style="padding:8px; border-bottom:1px solid #334155;">⏱️ <b>${l.time}</b> -> Role: ${l.role.toUpperCase()} | Phone: <b>${l.phone}</b></p>`;
             });
         }
 
@@ -798,9 +846,6 @@
             loggedInRole = 'customer';
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
-            document.getElementById('tabKhata').style.display = 'none';
-            document.getElementById('tabLogs').style.display = 'none';
-            document.getElementById('loginPass').value = '';
         }
     </script>
 </body>
