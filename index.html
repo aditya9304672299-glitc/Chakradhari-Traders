@@ -181,32 +181,18 @@
             <div id="tabLogs" class="tab-btn" onclick="switchTab('logs')" style="display: none;">📱 Customer Login Logs</div>
         </div>
 
-        <!-- SHOWROOM -->
+        <!-- SHOWROOM (UPGRADED DYNAMIC DROPDOWN) -->
         <div id="showroomSection">
-            <div class="controls">
-                <h3 style="color:#fff; margin-bottom: 10px;">Lohe aur Steel ke Behtareen Designs</h3>
-                <select id="itemFilter" onchange="loadImagesUI()">
-                    <option value="Iron Gate">💥 Iron Gate (Lohe ka Phatak)</option>
-                    <option value="Steel Gate">✨ Steel Gate (Premium)</option>
-                    <option value="Khatiya">🛏️ Khatiya / Palang</option>
-                    <option value="Window">🪟 Iron Window (Khidki)</option>
-                    <option value="Chair">🪑 Iron Chair (Kursi)</option>
-                    <option value="Grill">🛡️ Window Grill</option>
-                    <option value="Ventilator">💨 Ventilator (Roshandan)</option>
-                    <option value="Railing">🪜 Stairs Railing</option>
-                    <option value="Almirah">🗄️ Iron Almirah</option>
-                    <option value="Sofa">🛋️ Iron/Steel Sofa Set</option>
-                    <option value="Door">🚪 Iron Door</option>
-                    <option value="Rolling Shutter">🏬 Rolling Shutter</option>
-                    <option value="Boundary Wall">🧱 Boundary Wall Design</option>
-                    <option value="Shed">🏠 Iron Shed</option>
-                    <option value="Truss">🏗️ Truss Work</option>
-                    <option value="Steel Grill">❇️ Steel Grill</option>
-                    <option value="Steel Railing">🌟 Steel Railing</option>
-                    <option value="Spiral Stairs">🪜 Spiral Stairs</option>
-                    <option value="Racks">🗄️ Iron/Steel Racks</option>
-                    <option value="Jhula">🎢 Iron Jhula (Swing)</option>
-                </select>
+            <div class="controls" style="display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;">
+                <div style="flex-grow: 1;">
+                    <h3 style="color:#fff; margin-bottom: 10px;">Lohe aur Steel ke Behtareen Designs</h3>
+                    <select id="itemFilter" onchange="loadImagesUI()">
+                        <!-- Dropdown Options Will Be Populated By JavaScript -->
+                    </select>
+                </div>
+                <button id="addCategoryBtn" onclick="addNewCategory()" style="width: auto; background: #f59e0b; color: black; display: none; margin-bottom: 8px;">
+                    ➕ Naya Category Jodein
+                </button>
             </div>
             <div class="image-grid" id="imageGrid"></div>
         </div>
@@ -378,17 +364,23 @@
         let cloudLogsData = [];
         let currentActivePersonKey = null;
 
+        // DEFAULT 3 CATEGORIES
         const defaultImages = {
-            "Iron Gate": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600"],
-            "Steel Gate": ["https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"],
-            "Khatiya": ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600"],
-            "Window": ["https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?w=600"]
+            "Gate Design": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600"],
+            "Window": ["https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?w=600"],
+            "Railing": ["https://images.unsplash.com/photo-1563714113014-25cb4cf3952a?w=600"]
         };
 
         // LOAD CLOUD DATA
         db.ref('customShowroomImages').on('value', (snapshot) => {
             let data = snapshot.val();
-            cloudImagesData = data || defaultImages;
+            if(!data) {
+                db.ref('customShowroomImages').set(defaultImages);
+                cloudImagesData = defaultImages;
+            } else {
+                cloudImagesData = data;
+            }
+            updateCategoryDropdown();
             if(loggedInRole === 'owner' || loggedInRole === 'customer') loadImagesUI();
         });
 
@@ -418,7 +410,9 @@
                 document.getElementById('mainDashboard').style.display = 'block';
                 document.getElementById('tabKhata').style.display = 'block';
                 document.getElementById('tabLogs').style.display = 'block';
+                document.getElementById('addCategoryBtn').style.display = 'block'; // SHOW BUTTON FOR OWNER
                 loggedInRole = 'owner';
+                updateCategoryDropdown();
                 loadImagesUI();
                 loadLedgerGridUI();
                 loadLogsUI();
@@ -449,6 +443,8 @@
                     document.getElementById('mainDashboard').style.display = 'block';
                     document.getElementById('tabKhata').style.display = 'block';
                     document.getElementById('tabLogs').style.display = 'block';
+                    document.getElementById('addCategoryBtn').style.display = 'block'; // SHOW BUTTON FOR OWNER
+                    updateCategoryDropdown();
                     loadImagesUI();
                     loadLedgerGridUI();
                     loadLogsUI();
@@ -461,6 +457,8 @@
                     document.getElementById('mainDashboard').style.display = 'block';
                     document.getElementById('tabKhata').style.display = 'none';
                     document.getElementById('tabLogs').style.display = 'none';
+                    document.getElementById('addCategoryBtn').style.display = 'none'; // HIDE FROM CUSTOMER
+                    updateCategoryDropdown();
                     loadImagesUI();
                 } else { alert("Kripya sahi 10 digit ka phone number dalein."); }
             }
@@ -475,6 +473,38 @@
             document.getElementById('tabKhata').classList.toggle('active', tab === 'khata');
             document.getElementById('tabLogs').classList.toggle('active', tab === 'logs');
             if(tab === 'khata') closePersonDetail();
+        }
+
+        /* ==================== DYNAMIC CATEGORY DROPDOWN LOGIC ==================== */
+        function updateCategoryDropdown() {
+            const select = document.getElementById('itemFilter');
+            const currentVal = select.value;
+            select.innerHTML = '';
+            
+            Object.keys(cloudImagesData).forEach(cat => {
+                select.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+
+            if (cloudImagesData[currentVal]) {
+                select.value = currentVal;
+            } else if (Object.keys(cloudImagesData).length > 0) {
+                select.value = Object.keys(cloudImagesData)[0];
+            }
+        }
+
+        function addNewCategory() {
+            const newCat = prompt("Naya category ka naam likhein (e.g., Jhula, Grill):");
+            if (newCat && newCat.trim() !== "") {
+                const catName = newCat.trim();
+                if (!cloudImagesData[catName]) {
+                    // Save with a default placeholder image so firebase doesn't delete the empty node
+                    db.ref('customShowroomImages/' + catName).set(["https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"]).then(() => {
+                        alert("Naya category '" + catName + "' add ho gaya!");
+                    });
+                } else {
+                    alert("Ye category pehle se list me hai!");
+                }
+            }
         }
 
         /* ==================== ERP LEDGER MASTER CARDS GRID (SCREENSHOT 1) ==================== */
@@ -603,7 +633,6 @@
             document.getElementById('detailWorksCount').innerText = works.length;
             document.getElementById('detailPersonNameTitle').innerText = `${personName} - All Works`;
 
-            // Render works matching Screenshot 2
             works.forEach((w, idx) => {
                 let finalAmt = parseFloat(w.total) || 0;
                 let rcvAmt = (parseFloat(w.pay1) || 0) + (parseFloat(w.pay2) || 0) + (parseFloat(w.pay3) || 0);
@@ -811,18 +840,42 @@
             const grid = document.getElementById('imageGrid');
             grid.innerHTML = '';
             let imgs = cloudImagesData[item] || [];
+            
             imgs.forEach((imgUrl, index) => {
+                let ownerButtons = '';
+                if(loggedInRole === 'owner') {
+                    ownerButtons = `
+                        <div class="owner-actions">
+                            <button class="btn-replace" onclick="triggerReplace('${item}', ${index})" style="background:#2563eb;">✏️ Replace</button>
+                            <button class="btn-delete" onclick="deleteImage('${item}', ${index})" style="background:#dc2626;">🗑️ Delete</button>
+                        </div>
+                    `;
+                }
+
                 grid.innerHTML += `
                     <div class="img-card">
                         <img src="${imgUrl}" onclick="openModal('${imgUrl}')">
                         <div class="img-card-body">
-                            <h3>${item} Design #${index + 1}</h3>
+                            <h3 style="color:#fff;">${item} Design #${index + 1}</h3>
                             <a href="https://wa.me/919304672299?text=Order%20${item}%20Design%20${index + 1}" target="_blank">
                                 <button style="background:#16a34a;">🟢 Order on WhatsApp</button>
                             </a>
+                            ${ownerButtons}
                         </div>
                     </div>`;
             });
+
+            // ADD IMAGE CARD FOR OWNER AT THE END
+            if(loggedInRole === 'owner') {
+                grid.innerHTML += `
+                    <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:rgba(255,255,255,0.05); border: 2px dashed #475569; min-height:240px; cursor:pointer;" onclick="triggerAdd('${item}')">
+                        <div style="text-align:center; padding: 20px;">
+                            <div style="font-size: 3rem; color: #94a3b8; margin-bottom: 10px;">+</div>
+                            <h3 style="color:#e2e8f0;">Is Category Me Photo Add Karein</h3>
+                        </div>
+                    </div>
+                `;
+            }
         }
 
         function openModal(url) {
@@ -846,6 +899,7 @@
             loggedInRole = 'customer';
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('addCategoryBtn').style.display = 'none'; // HIDE ON LOGOUT
         }
     </script>
 </body>
