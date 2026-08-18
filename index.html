@@ -51,11 +51,10 @@
         .img-card-body { padding: 15px; text-align: center; }
         .owner-actions { display: flex; gap: 10px; margin-top: 10px; }
         
-        /* ==================== ERP LEDGER UI (SCREENSHOT 1 STYLE) ==================== */
+        /* ==================== ERP LEDGER UI ==================== */
         .erp-top-bar { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; background: var(--card-bg); padding: 15px; border-radius: 14px; border: 1px solid #334155; }
         .erp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
         
-        /* Person Master Card */
         .person-card { background: var(--card-bg); border-radius: 18px; border: 1px solid #334155; overflow: hidden; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .person-card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
         .avatar-circle { width: 48px; height: 48px; border-radius: 50%; background: var(--blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: bold; flex-shrink: 0; }
@@ -72,7 +71,7 @@
         .action-icon-btn { background: var(--blue); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.2s; }
         .action-icon-btn:hover { background: #1d4ed8; }
         
-        /* ==================== CUSTOMER DETAIL VIEW (SCREENSHOT 2 STYLE) ==================== */
+        /* ==================== CUSTOMER DETAIL VIEW ==================== */
         #personDetailView { display: none; }
         .detail-banner { background: var(--blue); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(37,99,235,0.3); }
         .detail-banner h2 { font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
@@ -86,7 +85,6 @@
         .works-section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .works-section-title h3 { font-size: 1.4rem; color: #fff; font-weight: 700; }
         
-        /* Work Card (Screenshot 2 Style) */
         .work-card { background: var(--card-bg); border-radius: 16px; border: 1px solid #334155; padding: 18px; margin-bottom: 15px; position: relative; }
         .work-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
         .work-header h4 { font-size: 1.15rem; color: #fff; font-weight: 700; margin-bottom: 4px; }
@@ -104,11 +102,9 @@
         .work-btn { background: #334155; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer; font-weight: bold; }
         .work-btn:hover { background: #475569; }
         
-        /* Floating Add Button for Customer Detail */
         .floating-add-btn { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; width: 64px; height: 64px; border-radius: 50%; border: none; font-size: 2.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(37,99,235,0.6); z-index: 100; transition: 0.2s; }
         .floating-add-btn:hover { transform: scale(1.08); }
 
-        /* Modal for Add / Edit Work */
         .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 15px; }
         .modal-content { background: var(--card-bg); max-width: 550px; width: 100%; border-radius: 18px; padding: 25px; border: 1px solid #475569; max-height: 90vh; overflow-y: auto; position: relative; }
         .modal-close { position: absolute; top: 18px; right: 22px; font-size: 1.8rem; color: #94a3b8; cursor: pointer; }
@@ -136,7 +132,7 @@
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="loader">Kripya Pratiksha Karein... (Saving to Cloud)</div>
+    <div id="loader">Kripya Pratiksha Karein... (Process ho raha hai ⌛)</div>
 
     <!-- LOGIN PAGE -->
     <div id="loginPage" class="login-container">
@@ -181,17 +177,18 @@
             <div id="tabLogs" class="tab-btn" onclick="switchTab('logs')" style="display: none;">📱 Customer Login Logs</div>
         </div>
 
-        <!-- SHOWROOM (UPGRADED DYNAMIC DROPDOWN) -->
+        <!-- SHOWROOM (UPGRADED CATEGORY MANAGER) -->
         <div id="showroomSection">
             <div class="controls" style="display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;">
                 <div style="flex-grow: 1;">
                     <h3 style="color:#fff; margin-bottom: 10px;">Lohe aur Steel ke Behtareen Designs</h3>
-                    <select id="itemFilter" onchange="loadImagesUI()">
-                        <!-- Dropdown Options Will Be Populated By JavaScript -->
-                    </select>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select id="itemFilter" onchange="loadImagesUI()" style="margin: 0; flex-grow: 1;"></select>
+                        <button id="delCategoryBtn" onclick="deleteCurrentCategory()" style="width: auto; background: #dc2626; color: white; display: none; margin: 0; padding: 12px 15px;" title="Is category ko permanently delete karein">🗑️</button>
+                    </div>
                 </div>
-                <button id="addCategoryBtn" onclick="addNewCategory()" style="width: auto; background: #f59e0b; color: black; display: none; margin-bottom: 8px;">
-                    ➕ Naya Category Jodein
+                <button id="addCategoryBtn" onclick="addNewCategory()" style="width: auto; background: #f59e0b; color: black; display: none; margin-bottom: 0; padding: 12px 15px;">
+                    ➕ Naya Category
                 </button>
             </div>
             <div class="image-grid" id="imageGrid"></div>
@@ -199,8 +196,7 @@
 
         <!-- ERP KHATA BOOK SECTION -->
         <div id="khataSection" style="display: none;">
-            
-            <!-- 1. MASTER CARDS LIST VIEW (SCREENSHOT 1) -->
+            <!-- 1. MASTER CARDS LIST VIEW -->
             <div id="ledgerGridView">
                 <div class="erp-top-bar">
                     <h3 style="flex-grow: 1; color: #fff;">📋 Saved ERP Ledger Accounts</h3>
@@ -219,7 +215,7 @@
                 <div class="erp-grid" id="masterCardsContainer"></div>
             </div>
 
-            <!-- 2. CUSTOMER DETAILS VIEW (SCREENSHOT 2) -->
+            <!-- 2. CUSTOMER DETAILS VIEW -->
             <div id="personDetailView">
                 <button class="back-btn" onclick="closePersonDetail()" style="width: auto; background: #334155; margin-bottom: 20px; padding: 10px 18px;">
                     ⬅️ Back to Ledger List
@@ -250,8 +246,6 @@
                 </div>
 
                 <div id="worksCardsContainer"></div>
-
-                <!-- Floating + Button for this person -->
                 <button class="floating-add-btn" onclick="openWorkModalForCurrentPerson()" title="Add Work for this Customer">+</button>
             </div>
         </div>
@@ -360,27 +354,29 @@
 
         let loggedInRole = 'customer';
         let cloudImagesData = {};
+        let cloudCategories = ["Gate Design", "Window", "Railing"]; // Default initial categories
         let cloudKhataData = [];
         let cloudLogsData = [];
         let currentActivePersonKey = null;
 
-        // DEFAULT 3 CATEGORIES
-        const defaultImages = {
-            "Gate Design": ["https://images.unsplash.com/photo-1558036117-15d82a90b9b1?w=600"],
-            "Window": ["https://images.unsplash.com/photo-1509644851169-2acc08aa25b5?w=600"],
-            "Railing": ["https://images.unsplash.com/photo-1563714113014-25cb4cf3952a?w=600"]
-        };
-
-        // LOAD CLOUD DATA
-        db.ref('customShowroomImages').on('value', (snapshot) => {
+        // LOAD CATEGORIES
+        db.ref('showroomCategories').on('value', (snapshot) => {
             let data = snapshot.val();
-            if(!data) {
-                db.ref('customShowroomImages').set(defaultImages);
-                cloudImagesData = defaultImages;
+            if(data) {
+                cloudCategories = data;
             } else {
-                cloudImagesData = data;
+                db.ref('showroomCategories').set(cloudCategories);
             }
-            updateCategoryDropdown();
+            if(loggedInRole === 'owner' || loggedInRole === 'customer') {
+                updateCategoryDropdown();
+                loadImagesUI();
+            }
+        });
+
+        // LOAD IMAGES
+        db.ref('customShowroomImages').on('value', (snapshot) => {
+            let data = snapshot.val() || {};
+            cloudImagesData = data;
             if(loggedInRole === 'owner' || loggedInRole === 'customer') loadImagesUI();
         });
 
@@ -389,9 +385,7 @@
             cloudKhataData = Object.keys(data).map(key => ({ id: key, ...data[key] }));
             if(loggedInRole === 'owner') {
                 loadLedgerGridUI();
-                if(currentActivePersonKey) {
-                    renderPersonDetailView(currentActivePersonKey);
-                }
+                if(currentActivePersonKey) renderPersonDetailView(currentActivePersonKey);
             }
         });
 
@@ -410,7 +404,8 @@
                 document.getElementById('mainDashboard').style.display = 'block';
                 document.getElementById('tabKhata').style.display = 'block';
                 document.getElementById('tabLogs').style.display = 'block';
-                document.getElementById('addCategoryBtn').style.display = 'block'; // SHOW BUTTON FOR OWNER
+                document.getElementById('addCategoryBtn').style.display = 'block'; 
+                document.getElementById('delCategoryBtn').style.display = 'block'; 
                 loggedInRole = 'owner';
                 updateCategoryDropdown();
                 loadImagesUI();
@@ -443,7 +438,8 @@
                     document.getElementById('mainDashboard').style.display = 'block';
                     document.getElementById('tabKhata').style.display = 'block';
                     document.getElementById('tabLogs').style.display = 'block';
-                    document.getElementById('addCategoryBtn').style.display = 'block'; // SHOW BUTTON FOR OWNER
+                    document.getElementById('addCategoryBtn').style.display = 'block'; 
+                    document.getElementById('delCategoryBtn').style.display = 'block'; 
                     updateCategoryDropdown();
                     loadImagesUI();
                     loadLedgerGridUI();
@@ -457,7 +453,8 @@
                     document.getElementById('mainDashboard').style.display = 'block';
                     document.getElementById('tabKhata').style.display = 'none';
                     document.getElementById('tabLogs').style.display = 'none';
-                    document.getElementById('addCategoryBtn').style.display = 'none'; // HIDE FROM CUSTOMER
+                    document.getElementById('addCategoryBtn').style.display = 'none'; 
+                    document.getElementById('delCategoryBtn').style.display = 'none'; 
                     updateCategoryDropdown();
                     loadImagesUI();
                 } else { alert("Kripya sahi 10 digit ka phone number dalein."); }
@@ -475,20 +472,20 @@
             if(tab === 'khata') closePersonDetail();
         }
 
-        /* ==================== DYNAMIC CATEGORY DROPDOWN LOGIC ==================== */
+        /* ==================== CATEGORY MANAGER ==================== */
         function updateCategoryDropdown() {
             const select = document.getElementById('itemFilter');
             const currentVal = select.value;
             select.innerHTML = '';
             
-            Object.keys(cloudImagesData).forEach(cat => {
+            cloudCategories.forEach(cat => {
                 select.innerHTML += `<option value="${cat}">${cat}</option>`;
             });
 
-            if (cloudImagesData[currentVal]) {
+            if (cloudCategories.includes(currentVal)) {
                 select.value = currentVal;
-            } else if (Object.keys(cloudImagesData).length > 0) {
-                select.value = Object.keys(cloudImagesData)[0];
+            } else if (cloudCategories.length > 0) {
+                select.value = cloudCategories[0];
             }
         }
 
@@ -496,16 +493,165 @@
             const newCat = prompt("Naya category ka naam likhein (e.g., Jhula, Grill):");
             if (newCat && newCat.trim() !== "") {
                 const catName = newCat.trim();
-                if (!cloudImagesData[catName]) {
-                    // Save with a default placeholder image so firebase doesn't delete the empty node
-                    db.ref('customShowroomImages/' + catName).set(["https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600"]).then(() => {
-                        alert("Naya category '" + catName + "' add ho gaya!");
+                if (!cloudCategories.includes(catName)) {
+                    cloudCategories.push(catName);
+                    db.ref('showroomCategories').set(cloudCategories).then(() => {
+                        alert("Naya category '" + catName + "' add ho gaya! ✅");
                     });
                 } else {
                     alert("Ye category pehle se list me hai!");
                 }
             }
         }
+
+        function deleteCurrentCategory() {
+            const select = document.getElementById('itemFilter');
+            const catName = select.value;
+            if(!catName) return;
+
+            if(confirm(`Kya aap sach me '${catName}' category aur uski saari photos delete karna chahte hain?`)) {
+                cloudCategories = cloudCategories.filter(c => c !== catName);
+                db.ref('showroomCategories').set(cloudCategories);
+                db.ref('customShowroomImages/' + catName).remove();
+                alert(`Category '${catName}' aur uski saari photos delete ho gayin! 🗑️`);
+            }
+        }
+
+        /* ==================== PHOTO ADD/REPLACE LOGIC (BUG FIXED) ==================== */
+        function compressAndSaveImage(file, callback) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    callback(compressedDataUrl);
+                };
+            };
+        }
+
+        function triggerReplace(category, index) {
+            currentReplacingKey = category;
+            currentReplacingIndex = index;
+            document.getElementById('replaceFileInput').click();
+        }
+
+        function triggerAdd(category) {
+            currentAddingKey = category;
+            document.getElementById('addFileInput').click();
+        }
+
+        function handleImageFileChange(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            document.getElementById('loader').style.display = 'block';
+            
+            compressAndSaveImage(file, function(compressedImage) {
+                if(!cloudImagesData[currentReplacingKey]) cloudImagesData[currentReplacingKey] = [];
+                cloudImagesData[currentReplacingKey][currentReplacingIndex] = compressedImage;
+                
+                db.ref('customShowroomImages/' + currentReplacingKey).set(cloudImagesData[currentReplacingKey])
+                .then(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    e.target.value = ''; // Reset input
+                }).catch(err => {
+                    document.getElementById('loader').style.display = 'none';
+                    alert("Error: " + err.message);
+                });
+            });
+        }
+
+        function handleAddImageFileChange(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            document.getElementById('loader').style.display = 'block';
+            
+            compressAndSaveImage(file, function(compressedImage) {
+                if(!cloudImagesData[currentAddingKey]) cloudImagesData[currentAddingKey] = [];
+                cloudImagesData[currentAddingKey].push(compressedImage);
+                
+                db.ref('customShowroomImages/' + currentAddingKey).set(cloudImagesData[currentAddingKey])
+                .then(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    e.target.value = ''; // Reset input
+                }).catch(err => {
+                    document.getElementById('loader').style.display = 'none';
+                    alert("Error: " + err.message);
+                });
+            });
+        }
+
+        function deleteImage(category, index) {
+            if(confirm("Kya aap sach me is image ko delete karna chahte hain?")) {
+                cloudImagesData[category].splice(index, 1);
+                db.ref('customShowroomImages/' + category).set(cloudImagesData[category]);
+            }
+        }
+
+        function loadImagesUI() {
+            const item = document.getElementById('itemFilter').value;
+            if(!item) return;
+
+            const grid = document.getElementById('imageGrid');
+            grid.innerHTML = '';
+            let imgs = cloudImagesData[item] || [];
+            
+            imgs.forEach((imgUrl, index) => {
+                let ownerButtons = '';
+                if(loggedInRole === 'owner') {
+                    ownerButtons = `
+                        <div class="owner-actions">
+                            <button class="btn-replace" onclick="triggerReplace('${item}', ${index})" style="background:#2563eb;">✏️ Replace</button>
+                            <button class="btn-delete" onclick="deleteImage('${item}', ${index})" style="background:#dc2626;">🗑️ Delete</button>
+                        </div>
+                    `;
+                }
+
+                grid.innerHTML += `
+                    <div class="img-card">
+                        <img src="${imgUrl}" onclick="openModal('${imgUrl}')">
+                        <div class="img-card-body">
+                            <h3 style="color:#fff;">${item} Design #${index + 1}</h3>
+                            <a href="https://wa.me/919304672299?text=Order%20${item}%20Design%20${index + 1}" target="_blank">
+                                <button style="background:#16a34a;">🟢 Order on WhatsApp</button>
+                            </a>
+                            ${ownerButtons}
+                        </div>
+                    </div>`;
+            });
+
+            // ADD IMAGE CARD FOR OWNER AT THE END
+            if(loggedInRole === 'owner') {
+                grid.innerHTML += `
+                    <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:rgba(255,255,255,0.05); border: 2px dashed #475569; min-height:240px; cursor:pointer;" onclick="triggerAdd('${item}')">
+                        <div style="text-align:center; padding: 20px;">
+                            <div style="font-size: 3rem; color: #94a3b8; margin-bottom: 10px;">+</div>
+                            <h3 style="color:#e2e8f0;">Is Category Me Photo Add Karein</h3>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function openModal(url) {
+            document.getElementById('myModal').style.display = "flex";
+            document.getElementById('imgModalTarget').src = url;
+        }
+        function closeModal() { document.getElementById('myModal').style.display = "none"; }
 
         /* ==================== ERP LEDGER MASTER CARDS GRID (SCREENSHOT 1) ==================== */
         function loadLedgerGridUI() {
@@ -835,55 +981,6 @@
             document.getElementById('kNote').value = '';
         }
 
-        function loadImagesUI() {
-            const item = document.getElementById('itemFilter').value;
-            const grid = document.getElementById('imageGrid');
-            grid.innerHTML = '';
-            let imgs = cloudImagesData[item] || [];
-            
-            imgs.forEach((imgUrl, index) => {
-                let ownerButtons = '';
-                if(loggedInRole === 'owner') {
-                    ownerButtons = `
-                        <div class="owner-actions">
-                            <button class="btn-replace" onclick="triggerReplace('${item}', ${index})" style="background:#2563eb;">✏️ Replace</button>
-                            <button class="btn-delete" onclick="deleteImage('${item}', ${index})" style="background:#dc2626;">🗑️ Delete</button>
-                        </div>
-                    `;
-                }
-
-                grid.innerHTML += `
-                    <div class="img-card">
-                        <img src="${imgUrl}" onclick="openModal('${imgUrl}')">
-                        <div class="img-card-body">
-                            <h3 style="color:#fff;">${item} Design #${index + 1}</h3>
-                            <a href="https://wa.me/919304672299?text=Order%20${item}%20Design%20${index + 1}" target="_blank">
-                                <button style="background:#16a34a;">🟢 Order on WhatsApp</button>
-                            </a>
-                            ${ownerButtons}
-                        </div>
-                    </div>`;
-            });
-
-            // ADD IMAGE CARD FOR OWNER AT THE END
-            if(loggedInRole === 'owner') {
-                grid.innerHTML += `
-                    <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:rgba(255,255,255,0.05); border: 2px dashed #475569; min-height:240px; cursor:pointer;" onclick="triggerAdd('${item}')">
-                        <div style="text-align:center; padding: 20px;">
-                            <div style="font-size: 3rem; color: #94a3b8; margin-bottom: 10px;">+</div>
-                            <h3 style="color:#e2e8f0;">Is Category Me Photo Add Karein</h3>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        function openModal(url) {
-            document.getElementById('myModal').style.display = "flex";
-            document.getElementById('imgModalTarget').src = url;
-        }
-        function closeModal() { document.getElementById('myModal').style.display = "none"; }
-
         function loadLogsUI() {
             const display = document.getElementById('logDisplay');
             display.innerHTML = '';
@@ -899,7 +996,8 @@
             loggedInRole = 'customer';
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
-            document.getElementById('addCategoryBtn').style.display = 'none'; // HIDE ON LOGOUT
+            document.getElementById('addCategoryBtn').style.display = 'none'; 
+            document.getElementById('delCategoryBtn').style.display = 'none'; 
         }
     </script>
 </body>
