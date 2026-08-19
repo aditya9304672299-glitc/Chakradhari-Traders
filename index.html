@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- FORCED DESKTOP MODE (Auto Desktop View on Mobile) -->
+    <meta name="viewport" content="width=1200">
     <title>Chakradhari Traders - ERP System</title>
     <style>
         :root { 
@@ -126,22 +127,25 @@
         #loader { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.85); padding: 20px 30px; border-radius: 12px; color: #fff; z-index: 9999; font-weight: bold; border: 1px solid #475569; }
 
         /* ==================== PRINTABLE INVOICE CSS ==================== */
-        #invoicePrintArea { display: none; background: #fff; color: #000; padding: 20px; font-family: Arial, sans-serif; }
+        #invoicePrintArea { display: none; background: #fff; color: #000; padding: 30px; font-family: 'Segoe UI', Arial, sans-serif; }
         
         @media print {
+            @page { margin: 0; } /* Removes Browser Header & Footer Texts */
+            body { margin: 1cm; background: white; color: black; }
             body > * { display: none !important; }
             #invoicePrintArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: #fff; }
             
-            .inv-header { display: flex; justify-content: space-between; border-bottom: 3px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
-            .inv-title { font-size: 24px; font-weight: bold; color: #000; margin-bottom: 5px; text-transform: uppercase;}
-            .inv-box { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
-            .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
-            .inv-table th { background: #f0f0f0; border: 1px solid #000; padding: 10px; text-align: left; }
-            .inv-table td { border: 1px solid #ccc; padding: 10px; }
-            .inv-summary { width: 50%; float: right; font-size: 14px; }
-            .inv-summary table { width: 100%; border-collapse: collapse; }
-            .inv-summary td { padding: 6px 10px; border: 1px solid #ccc; }
-            .inv-summary .total-row { font-weight: bold; background: #f0f0f0; font-size: 16px;}
+            .inv-header { display: flex; justify-content: space-between; border-bottom: 4px solid var(--blue) !important; padding-bottom: 20px; margin-bottom: 25px; }
+            .inv-logo-box { background: var(--blue) !important; color: #fff !important; font-size: 32px; font-weight: 900; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .inv-title { font-size: 28px; font-weight: 900; color: var(--blue) !important; margin-bottom: 5px; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact;}
+            
+            .inv-box { background: #f8fafc !important; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #e2e8f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;}
+            .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 14px; }
+            .inv-table th { background: #eff6ff !important; color: #1e3a8a !important; border: 1px solid #cbd5e1 !important; padding: 12px; text-align: left; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .inv-table td { border: 1px solid #cbd5e1 !important; padding: 12px; color: #334155; }
+            
+            .inv-summary-row { background: #eff6ff !important; font-weight: bold; font-size: 16px; color: #1e3a8a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .inv-footer-msg { margin-top:50px; border-top: 1px solid #cbd5e1; padding-top: 15px; font-size: 13px; color: #64748b; text-align:center; }
         }
     </style>
     <!-- FIREBASE CLOUD LIBRARIES -->
@@ -835,13 +839,17 @@
             });
         }
 
-        /* ==================== INVOICE GENERATOR LOGIC ==================== */
+        /* ==================== INVOICE GENERATOR LOGIC (UPGRADED PROFESSIONAL DESIGN) ==================== */
         function generateInvoice(workId) {
             const w = cloudKhataData.find(e => e.id === workId);
             if(!w) return;
 
             let invoiceNo = "WK" + Date.now().toString().slice(-5);
-            let entryDate = w.entryDate || new Date().toISOString().split('T')[0];
+            
+            // Format Date as DD-MM-YYYY
+            let rawDate = w.entryDate || new Date().toISOString().split('T')[0];
+            let dParts = rawDate.split('-');
+            let formattedDate = dParts.length === 3 ? `${dParts[2]}-${dParts[1]}-${dParts[0]}` : rawDate;
 
             let itemsHtml = '';
             let subtotal = 0;
@@ -859,10 +867,10 @@
             }
 
             let chargesHtml = '';
-            if((w.labour || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Labour</td><td>₹${w.labour}</td></tr>`;
-            if((w.transport || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Transport</td><td>₹${w.transport}</td></tr>`;
-            if((w.installation || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Installation</td><td>₹${w.installation}</td></tr>`;
-            if((w.otherCharges || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Other</td><td>₹${w.otherCharges}</td></tr>`;
+            if((w.labour || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Labour Charge</td><td>₹${w.labour}</td></tr>`;
+            if((w.transport || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Transport Charge</td><td>₹${w.transport}</td></tr>`;
+            if((w.installation || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Installation Charge</td><td>₹${w.installation}</td></tr>`;
+            if((w.otherCharges || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Other Charges</td><td>₹${w.otherCharges}</td></tr>`;
             
             let discHtml = '';
             if((w.discount || 0) > 0) discHtml = `<tr><td colspan="3" style="text-align:right;">Discount</td><td>- ₹${w.discount}</td></tr>`;
@@ -873,27 +881,34 @@
 
             const printHtml = `
                 <div class="inv-header">
-                    <div style="font-size: 24px; font-weight: bold;">Chakradhari Traders</div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="inv-logo-box">CT</div>
+                        <div style="font-size: 28px; font-weight: 900; color: #1e293b;">Chakradhari Traders</div>
+                    </div>
                     <div style="text-align: right;">
                         <div class="inv-title">INVOICE</div>
-                        <div>Invoice No: <b>${invoiceNo}</b></div>
-                        <div>Date: <b>${entryDate}</b></div>
+                        <div style="font-size: 14px; color: #475569;">Invoice No: <b style="color:#0f172a;">${invoiceNo}</b></div>
+                        <div style="font-size: 14px; color: #475569;">Date: <b style="color:#0f172a;">${formattedDate}</b></div>
                     </div>
                 </div>
                 
-                <div style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 25px;">
                     <div class="inv-box" style="width: 45%;">
-                        <strong style="color: #666;">BILL TO:</strong><br>
-                        <h3 style="margin: 5px 0;">${w.name}</h3>
-                        ${w.phone ? `Phone: ${w.phone}<br>` : ''}
-                        ${w.address ? `Address: ${w.address}` : ''}
+                        <strong style="color: #64748b; font-size: 12px; letter-spacing: 1px;">BILL TO:</strong><br>
+                        <h3 style="margin: 5px 0; color: #0f172a; font-size: 20px;">${w.name}</h3>
+                        <div style="color: #334155; font-size: 14px;">
+                            ${w.phone ? `Phone: ${w.phone}<br>` : ''}
+                            ${w.address ? `Address: ${w.address}` : ''}
+                        </div>
                     </div>
                     <div class="inv-box" style="width: 45%; text-align:right;">
-                        <strong style="color: #666;">FROM:</strong><br>
-                        <h3 style="margin: 5px 0;">Chakradhari Traders</h3>
-                        Nayagaon Bariyarpur, Vaishali<br>
-                        Bihar (844506)<br>
-                        Phone: 9304672299
+                        <strong style="color: #64748b; font-size: 12px; letter-spacing: 1px;">FROM:</strong><br>
+                        <h3 style="margin: 5px 0; color: #0f172a; font-size: 20px;">Chakradhari Traders</h3>
+                        <div style="color: #334155; font-size: 14px;">
+                            Nayagaon Bariyarpur, Vaishali<br>
+                            Bihar (844506)<br>
+                            Phone: 9304672299
+                        </div>
                     </div>
                 </div>
 
@@ -914,12 +929,12 @@
                         </tr>
                         ${chargesHtml}
                         ${discHtml}
-                        <tr style="background:#f0f0f0;">
-                            <td colspan="3" style="text-align:right; font-weight:bold; font-size:16px;">Final Total</td>
-                            <td style="font-weight:bold; font-size:16px;">₹${finalTotal}</td>
+                        <tr class="inv-summary-row">
+                            <td colspan="3" style="text-align:right; font-size: 18px;">Final Total</td>
+                            <td style="font-size: 18px;">₹${finalTotal}</td>
                         </tr>
                         <tr>
-                            <td colspan="3" style="text-align:right; color:#16a34a;">Amount Received</td>
+                            <td colspan="3" style="text-align:right; color:#16a34a; font-weight:bold;">Amount Received</td>
                             <td style="color:#16a34a; font-weight:bold;">₹${rcvAmt}</td>
                         </tr>
                         <tr>
@@ -928,8 +943,8 @@
                         </tr>
                     </tbody>
                 </table>
-                <div style="margin-top:40px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 12px; color: #666; text-align:center;">
-                    Thank you for your business! - Chakradhari Traders
+                <div class="inv-footer-msg">
+                    Thank you for your business! - Chakradhari Traders ERP
                 </div>
             `;
 
