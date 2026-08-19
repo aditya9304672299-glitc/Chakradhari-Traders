@@ -177,17 +177,18 @@
             <div id="tabLogs" class="tab-btn" onclick="switchTab('logs')" style="display: none;">📱 Customer Login Logs</div>
         </div>
 
-        <!-- SHOWROOM (UPGRADED CATEGORY MANAGER) -->
+        <!-- SHOWROOM (CATEGORY MANAGER WITH EDIT/RENAME & DELETE) -->
         <div id="showroomSection">
-            <div class="controls" style="display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;">
+            <div class="controls" style="display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap;">
                 <div style="flex-grow: 1;">
                     <h3 style="color:#fff; margin-bottom: 10px;">Lohe aur Steel ke Behtareen Designs</h3>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <select id="itemFilter" onchange="loadImagesUI()" style="margin: 0; flex-grow: 1;"></select>
-                        <button id="delCategoryBtn" onclick="deleteCurrentCategory()" style="width: auto; background: #dc2626; color: white; display: none; margin: 0; padding: 12px 15px;" title="Is category ko permanently delete karein">🗑️</button>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <select id="itemFilter" onchange="loadImagesUI()" style="margin: 0; flex-grow: 1; min-width: 200px;"></select>
+                        <button id="editCategoryBtn" onclick="renameCurrentCategory()" style="width: auto; background: #3b82f6; color: white; display: none; margin: 0; padding: 12px 14px;" title="Is category ka naam badlein (Rename)">✏️ Rename</button>
+                        <button id="delCategoryBtn" onclick="deleteCurrentCategory()" style="width: auto; background: #dc2626; color: white; display: none; margin: 0; padding: 12px 14px;" title="Is category ko permanently delete karein">🗑️ Delete</button>
                     </div>
                 </div>
-                <button id="addCategoryBtn" onclick="addNewCategory()" style="width: auto; background: #f59e0b; color: black; display: none; margin-bottom: 0; padding: 12px 15px;">
+                <button id="addCategoryBtn" onclick="addNewCategory()" style="width: auto; background: #f59e0b; color: black; display: none; margin-bottom: 0; padding: 12px 16px;">
                     ➕ Naya Category
                 </button>
             </div>
@@ -330,7 +331,7 @@
     <input type="file" id="addFileInput" class="hidden-file-input" accept="image/*" onchange="handleAddImageFileChange(event)">
 
     <script>
-        // SECURITY - Disable F12 and Shortcuts safely
+        // SECURITY
         document.ondragstart = function() { return false; };
         document.onkeydown = function(e) {
             if(e.keyCode == 123) return false;
@@ -354,30 +355,31 @@
 
         let loggedInRole = 'customer';
         let cloudImagesData = {};
-        let cloudCategories = ["Gate Design", "Window", "Railing"]; // Default initial categories
+        let cloudCategories = [];
         let cloudKhataData = [];
         let cloudLogsData = [];
         let currentActivePersonKey = null;
+        let currentReplacingKey = '';
+        let currentReplacingIndex = -1;
+        let currentAddingKey = '';
 
-        // LOAD CATEGORIES
-        db.ref('showroomCategories').on('value', (snapshot) => {
-            let data = snapshot.val();
-            if(data) {
-                cloudCategories = data;
-            } else {
-                db.ref('showroomCategories').set(cloudCategories);
-            }
-            if(loggedInRole === 'owner' || loggedInRole === 'customer') {
-                updateCategoryDropdown();
-                loadImagesUI();
-            }
-        });
-
-        // LOAD IMAGES
+        // REAL-TIME SYNC FOR CATEGORIES & IMAGES
         db.ref('customShowroomImages').on('value', (snapshot) => {
             let data = snapshot.val() || {};
             cloudImagesData = data;
-            if(loggedInRole === 'owner' || loggedInRole === 'customer') loadImagesUI();
+            
+            // Sync all existing keys from database to categories automatically
+            db.ref('showroomCategories').once('value', (catSnap) => {
+                let savedCats = catSnap.val() || [];
+                let allKeys = Object.keys(cloudImagesData);
+                
+                let merged = Array.from(new Set([...savedCats, ...allKeys]));
+                if(merged.length === 0) merged = ["Iron Gate", "Window", "Railing"];
+                
+                cloudCategories = merged;
+                updateCategoryDropdown();
+                loadImagesUI();
+            });
         });
 
         db.ref('shopKhata').on('value', (snapshot) => {
@@ -405,6 +407,7 @@
                 document.getElementById('tabKhata').style.display = 'block';
                 document.getElementById('tabLogs').style.display = 'block';
                 document.getElementById('addCategoryBtn').style.display = 'block'; 
+                document.getElementById('editCategoryBtn').style.display = 'block'; 
                 document.getElementById('delCategoryBtn').style.display = 'block'; 
                 loggedInRole = 'owner';
                 updateCategoryDropdown();
@@ -439,6 +442,7 @@
                     document.getElementById('tabKhata').style.display = 'block';
                     document.getElementById('tabLogs').style.display = 'block';
                     document.getElementById('addCategoryBtn').style.display = 'block'; 
+                    document.getElementById('editCategoryBtn').style.display = 'block'; 
                     document.getElementById('delCategoryBtn').style.display = 'block'; 
                     updateCategoryDropdown();
                     loadImagesUI();
@@ -454,6 +458,7 @@
                     document.getElementById('tabKhata').style.display = 'none';
                     document.getElementById('tabLogs').style.display = 'none';
                     document.getElementById('addCategoryBtn').style.display = 'none'; 
+                    document.getElementById('editCategoryBtn').style.display = 'none'; 
                     document.getElementById('delCategoryBtn').style.display = 'none'; 
                     updateCategoryDropdown();
                     loadImagesUI();
@@ -472,7 +477,7 @@
             if(tab === 'khata') closePersonDetail();
         }
 
-        /* ==================== CATEGORY MANAGER ==================== */
+        /* ==================== CATEGORY MANAGER: ADD / RENAME / DELETE ==================== */
         function updateCategoryDropdown() {
             const select = document.getElementById('itemFilter');
             const currentVal = select.value;
@@ -490,17 +495,52 @@
         }
 
         function addNewCategory() {
-            const newCat = prompt("Naya category ka naam likhein (e.g., Jhula, Grill):");
+            const newCat = prompt("Naya category ka naam likhein (e.g., Gate Design, Jhula, Grill):");
             if (newCat && newCat.trim() !== "") {
                 const catName = newCat.trim();
                 if (!cloudCategories.includes(catName)) {
                     cloudCategories.push(catName);
-                    db.ref('showroomCategories').set(cloudCategories).then(() => {
+                    db.ref('showroomCategories').set(cloudCategories);
+                    db.ref('customShowroomImages/' + catName).set([]).then(() => {
+                        updateCategoryDropdown();
+                        document.getElementById('itemFilter').value = catName;
+                        loadImagesUI();
                         alert("Naya category '" + catName + "' add ho gaya! ✅");
                     });
                 } else {
                     alert("Ye category pehle se list me hai!");
                 }
+            }
+        }
+
+        function renameCurrentCategory() {
+            const select = document.getElementById('itemFilter');
+            const oldCatName = select.value;
+            if(!oldCatName) return;
+
+            const newName = prompt(`'${oldCatName}' ka naya naam likhein:`, oldCatName);
+            if(newName && newName.trim() !== "" && newName.trim() !== oldCatName) {
+                const newCatName = newName.trim();
+                document.getElementById('loader').style.display = 'block';
+
+                // Get existing images from old category
+                let existingImages = cloudImagesData[oldCatName] || [];
+
+                // 1. Save images under new name
+                db.ref('customShowroomImages/' + newCatName).set(existingImages).then(() => {
+                    // 2. Remove old category data
+                    db.ref('customShowroomImages/' + oldCatName).remove();
+
+                    // 3. Update category list
+                    cloudCategories = cloudCategories.map(c => c === oldCatName ? newCatName : c);
+                    db.ref('showroomCategories').set(cloudCategories);
+
+                    document.getElementById('loader').style.display = 'none';
+                    alert(`Category ka naam '${oldCatName}' se badal kar '${newCatName}' ho gaya! Photos safe hain. ✅`);
+                }).catch(err => {
+                    document.getElementById('loader').style.display = 'none';
+                    alert("Error: " + err.message);
+                });
             }
         }
 
@@ -513,11 +553,11 @@
                 cloudCategories = cloudCategories.filter(c => c !== catName);
                 db.ref('showroomCategories').set(cloudCategories);
                 db.ref('customShowroomImages/' + catName).remove();
-                alert(`Category '${catName}' aur uski saari photos delete ho gayin! 🗑️`);
+                alert(`Category '${catName}' delete ho gayi! 🗑️`);
             }
         }
 
-        /* ==================== PHOTO ADD/REPLACE LOGIC (BUG FIXED) ==================== */
+        /* ==================== PHOTO ADD / REPLACE / DELETE LOGIC ==================== */
         function compressAndSaveImage(file, callback) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -567,7 +607,7 @@
                 db.ref('customShowroomImages/' + currentReplacingKey).set(cloudImagesData[currentReplacingKey])
                 .then(() => {
                     document.getElementById('loader').style.display = 'none';
-                    e.target.value = ''; // Reset input
+                    e.target.value = '';
                 }).catch(err => {
                     document.getElementById('loader').style.display = 'none';
                     alert("Error: " + err.message);
@@ -587,7 +627,7 @@
                 db.ref('customShowroomImages/' + currentAddingKey).set(cloudImagesData[currentAddingKey])
                 .then(() => {
                     document.getElementById('loader').style.display = 'none';
-                    e.target.value = ''; // Reset input
+                    e.target.value = '';
                 }).catch(err => {
                     document.getElementById('loader').style.display = 'none';
                     alert("Error: " + err.message);
@@ -653,7 +693,7 @@
         }
         function closeModal() { document.getElementById('myModal').style.display = "none"; }
 
-        /* ==================== ERP LEDGER MASTER CARDS GRID (SCREENSHOT 1) ==================== */
+        /* ==================== ERP LEDGER MASTER CARDS GRID ==================== */
         function loadLedgerGridUI() {
             const container = document.getElementById('masterCardsContainer');
             if(!container) return;
@@ -730,7 +770,7 @@
             });
         }
 
-        /* ==================== CUSTOMER DETAIL VIEW (SCREENSHOT 2) ==================== */
+        /* ==================== CUSTOMER DETAIL VIEW ==================== */
         function openPersonDetail(personKey) {
             currentActivePersonKey = personKey;
             document.getElementById('ledgerGridView').style.display = 'none';
@@ -997,6 +1037,7 @@
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
             document.getElementById('addCategoryBtn').style.display = 'none'; 
+            document.getElementById('editCategoryBtn').style.display = 'none'; 
             document.getElementById('delCategoryBtn').style.display = 'none'; 
         }
     </script>
