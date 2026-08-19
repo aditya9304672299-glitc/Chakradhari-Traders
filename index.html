@@ -30,7 +30,7 @@
         /* Login Styles */
         .login-container { max-width: 420px; margin: 80px auto; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; border: 1px solid #334155; }
         .login-container h2 { margin-bottom: 20px; color: var(--blue); }
-        select, input, textarea { width: 100%; padding: 12px; margin: 8px 0; background: var(--card-inner); border: 1px solid #475569; color: white; border-radius: 8px; font-size: 0.95rem; }
+        select, input, textarea { width: 100%; padding: 10px; margin: 6px 0; background: var(--card-inner); border: 1px solid #475569; color: white; border-radius: 8px; font-size: 0.95rem; }
         button { background: var(--blue); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; margin-top: 10px; transition: 0.2s; }
         button:hover { opacity: 0.9; }
         
@@ -105,25 +105,43 @@
         .floating-add-btn { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; width: 64px; height: 64px; border-radius: 50%; border: none; font-size: 2.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(37,99,235,0.6); z-index: 100; transition: 0.2s; }
         .floating-add-btn:hover { transform: scale(1.08); }
 
+        /* MULTIPLE ITEMS & BILLING CSS */
+        .items-container { background: #111; padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #334155; }
+        .item-row { background: var(--card-inner); padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px dashed #475569; position: relative; }
+        .item-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .item-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .del-item-btn { background: var(--red); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; }
+        
+        .charges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: #111; padding: 10px; border-radius: 8px; border: 1px solid #334155;}
+        
         .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 15px; }
-        .modal-content { background: var(--card-bg); max-width: 550px; width: 100%; border-radius: 18px; padding: 25px; border: 1px solid #475569; max-height: 90vh; overflow-y: auto; position: relative; }
+        .modal-content { background: var(--card-bg); max-width: 600px; width: 100%; border-radius: 18px; padding: 25px; border: 1px solid #475569; max-height: 90vh; overflow-y: auto; position: relative; }
         .modal-close { position: absolute; top: 18px; right: 22px; font-size: 1.8rem; color: #94a3b8; cursor: pointer; }
         
-        .calc-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .payment-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         
         .logout-btn { background: #475569; width: auto; padding: 8px 15px; float: right; margin-top: -45px; }
         .hidden-file-input { display: none; }
         #loader { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.85); padding: 20px 30px; border-radius: 12px; color: #fff; z-index: 9999; font-weight: bold; border: 1px solid #475569; }
 
+        /* ==================== PRINTABLE INVOICE CSS ==================== */
+        #invoicePrintArea { display: none; background: #fff; color: #000; padding: 20px; font-family: Arial, sans-serif; }
+        
         @media print {
-            body { background: white; color: black; }
-            body * { visibility: hidden; }
-            #personDetailView, #personDetailView * { visibility: visible; color: black; }
-            #personDetailView { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 0; }
-            .detail-banner { background: #eee !important; color: black !important; }
-            .work-card, .banner-stat-card { border: 1px solid #ccc !important; background: white !important; }
-            .work-item-actions, .floating-add-btn, .back-btn { display: none !important; }
+            body > * { display: none !important; }
+            #invoicePrintArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: #fff; }
+            
+            .inv-header { display: flex; justify-content: space-between; border-bottom: 3px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
+            .inv-title { font-size: 24px; font-weight: bold; color: #000; margin-bottom: 5px; text-transform: uppercase;}
+            .inv-box { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
+            .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
+            .inv-table th { background: #f0f0f0; border: 1px solid #000; padding: 10px; text-align: left; }
+            .inv-table td { border: 1px solid #ccc; padding: 10px; }
+            .inv-summary { width: 50%; float: right; font-size: 14px; }
+            .inv-summary table { width: 100%; border-collapse: collapse; }
+            .inv-summary td { padding: 6px 10px; border: 1px solid #ccc; }
+            .inv-summary .total-row { font-weight: bold; background: #f0f0f0; font-size: 16px;}
         }
     </style>
     <!-- FIREBASE CLOUD LIBRARIES -->
@@ -133,6 +151,9 @@
 <body oncontextmenu="return false;">
 
     <div id="loader">Kripya Pratiksha Karein... (Process ho raha hai ⌛)</div>
+
+    <!-- INVOICE PRINT AREA (HIDDEN BY DEFAULT) -->
+    <div id="invoicePrintArea"></div>
 
     <!-- LOGIN PAGE -->
     <div id="loginPage" class="login-container">
@@ -177,15 +198,15 @@
             <div id="tabLogs" class="tab-btn" onclick="switchTab('logs')" style="display: none;">📱 Customer Login Logs</div>
         </div>
 
-        <!-- SHOWROOM (CATEGORY MANAGER WITH EDIT/RENAME & DELETE) -->
+        <!-- SHOWROOM (CATEGORY MANAGER) -->
         <div id="showroomSection">
             <div class="controls" style="display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap;">
                 <div style="flex-grow: 1;">
                     <h3 style="color:#fff; margin-bottom: 10px;">Lohe aur Steel ke Behtareen Designs</h3>
                     <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                         <select id="itemFilter" onchange="loadImagesUI()" style="margin: 0; flex-grow: 1; min-width: 200px;"></select>
-                        <button id="editCategoryBtn" onclick="renameCurrentCategory()" style="width: auto; background: #3b82f6; color: white; display: none; margin: 0; padding: 12px 14px;" title="Is category ka naam badlein (Rename)">✏️ Rename</button>
-                        <button id="delCategoryBtn" onclick="deleteCurrentCategory()" style="width: auto; background: #dc2626; color: white; display: none; margin: 0; padding: 12px 14px;" title="Is category ko permanently delete karein">🗑️ Delete</button>
+                        <button id="editCategoryBtn" onclick="renameCurrentCategory()" style="width: auto; background: #3b82f6; color: white; display: none; margin: 0; padding: 12px 14px;" title="Rename">✏️ Rename</button>
+                        <button id="delCategoryBtn" onclick="deleteCurrentCategory()" style="width: auto; background: #dc2626; color: white; display: none; margin: 0; padding: 12px 14px;" title="Delete">🗑️ Delete</button>
                     </div>
                 </div>
                 <button id="addCategoryBtn" onclick="addNewCategory()" style="width: auto; background: #f59e0b; color: black; display: none; margin-bottom: 0; padding: 12px 16px;">
@@ -243,7 +264,6 @@
 
                 <div class="works-section-title">
                     <h3 id="detailPersonNameTitle">Works</h3>
-                    <button onclick="printPersonDetail()" style="width: auto; margin: 0; padding: 8px 15px; background: #f59e0b; color: #000;">📄 Print Detail PDF</button>
                 </div>
 
                 <div id="worksCardsContainer"></div>
@@ -277,10 +297,10 @@
             <input type="number" id="kPhone" placeholder="Mobile Number">
             <input type="text" id="kAddress" placeholder="Address / Pata">
 
-            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Work Title / Kaam ka Naam:</label>
-            <input type="text" id="kWorkTitle" placeholder="e.g., Gate to cut krke chota krna tha">
+            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Work Title (Short Name):</label>
+            <input type="text" id="kWorkTitle" placeholder="e.g., Ghar ka Gate banwaya">
 
-            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px; display: block;">Work Category & Status:</label>
+            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 5px; display: block;">Category & Status:</label>
             <div class="calc-row">
                 <input type="text" id="kCategory" placeholder="Category (Repair, Fabrication)">
                 <select id="kStatus">
@@ -290,18 +310,34 @@
                 </select>
             </div>
 
-            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Kaam / Item Detail (Full Description):</label>
-            <textarea id="kItem" rows="2" placeholder="1. 40kg Iron Gate&#10;2. Window Grill 2 piece"></textarea>
-
-            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Pricing Calculator (Qty × Rate - Discount):</label>
-            <div class="calc-row">
-                <input type="number" id="kQty" placeholder="Qty/Weight" oninput="calculateTotal()">
-                <input type="number" id="kRate" placeholder="Rate (Rs)" oninput="calculateTotal()">
-                <input type="number" id="kDiscount" placeholder="Discount" oninput="calculateTotal()">
+            <!-- NEW MULTIPLE ITEMS SECTION -->
+            <label style="font-size: 0.95rem; color: #fff; margin-top: 15px; display: block; border-bottom: 1px solid #334155; padding-bottom: 5px;">Work Items (Bill Details):</label>
+            <div class="items-container" id="workItemsList">
+                <!-- Item rows will be added here -->
             </div>
-            <input type="number" id="kTotal" placeholder="Final Bill Price (Rs)" style="border-color: var(--blue); font-weight: bold;">
+            <button type="button" onclick="addWorkItemRow()" style="background: #3b82f6; padding: 8px; font-size: 0.85rem; margin-bottom: 15px;">+ Add New Item</button>
 
-            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Payment History (Paisa mila to likhein):</label>
+            <!-- EXTRA CHARGES -->
+            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 8px; display: block;">Extra Charges (Sirf tabhi bharein agar zaroorat ho):</label>
+            <div class="charges-grid">
+                <input type="number" id="kLabour" placeholder="Labour (Rs)" oninput="calcWorkTotal()">
+                <input type="number" id="kTransport" placeholder="Transport (Rs)" oninput="calcWorkTotal()">
+                <input type="number" id="kInstallation" placeholder="Installation (Rs)" oninput="calcWorkTotal()">
+                <input type="number" id="kOther" placeholder="Other Charge (Rs)" oninput="calcWorkTotal()">
+            </div>
+            
+            <div style="margin-top: 10px;">
+                <input type="number" id="kDiscount" placeholder="Discount (Minus karega)" oninput="calcWorkTotal()" style="border-color:#f59e0b;">
+            </div>
+
+            <div style="background: var(--blue); padding: 12px; border-radius: 8px; margin-top: 10px; display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: bold;">
+                <span>Grand Total:</span>
+                <span>₹<span id="kGrandTotalLabel">0</span></span>
+            </div>
+            <input type="hidden" id="kTotal" value="0"> <!-- Hidden for saving logic -->
+
+            <!-- PAYMENT -->
+            <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 15px; display: block;">Payment Received:</label>
             <div class="payment-row">
                 <input type="date" id="kDate1">
                 <input type="number" id="kPay1" placeholder="1st Payment Amount">
@@ -317,7 +353,7 @@
 
             <textarea id="kNote" placeholder="Koi special note likhna hai?"></textarea>
             
-            <button onclick="saveWorkEntry()" style="background: var(--blue); padding: 14px;">Kaam Save Karo 🔥</button>
+            <button onclick="saveWorkEntry()" style="background: var(--green); padding: 14px; font-size: 1.1rem;">✅ Kaam Save Karo</button>
         </div>
     </div>
 
@@ -331,15 +367,6 @@
     <input type="file" id="addFileInput" class="hidden-file-input" accept="image/*" onchange="handleAddImageFileChange(event)">
 
     <script>
-        // SECURITY
-        document.ondragstart = function() { return false; };
-        document.onkeydown = function(e) {
-            if(e.keyCode == 123) return false;
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 73) return false;
-            if(e.ctrlKey && e.shiftKey && e.keyCode == 74) return false;
-            if(e.ctrlKey && e.keyCode == 85) return false;
-        };
-
         // FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyDYuJJ1jbWF-NELI-B8BikkkVqdhMmklYw",
@@ -368,13 +395,12 @@
             let data = snapshot.val() || {};
             cloudImagesData = data;
             
-            // Sync all existing keys from database to categories automatically
             db.ref('showroomCategories').once('value', (catSnap) => {
                 let savedCats = catSnap.val() || [];
                 let allKeys = Object.keys(cloudImagesData);
                 
                 let merged = Array.from(new Set([...savedCats, ...allKeys]));
-                if(merged.length === 0) merged = ["Iron Gate", "Window", "Railing"];
+                if(merged.length === 0) merged = ["Gate Design", "Window", "Railing"];
                 
                 cloudCategories = merged;
                 updateCategoryDropdown();
@@ -477,16 +503,14 @@
             if(tab === 'khata') closePersonDetail();
         }
 
-        /* ==================== CATEGORY MANAGER: ADD / RENAME / DELETE ==================== */
+        /* ==================== CATEGORY MANAGER ==================== */
         function updateCategoryDropdown() {
             const select = document.getElementById('itemFilter');
             const currentVal = select.value;
             select.innerHTML = '';
-            
             cloudCategories.forEach(cat => {
                 select.innerHTML += `<option value="${cat}">${cat}</option>`;
             });
-
             if (cloudCategories.includes(currentVal)) {
                 select.value = currentVal;
             } else if (cloudCategories.length > 0) {
@@ -505,11 +529,8 @@
                         updateCategoryDropdown();
                         document.getElementById('itemFilter').value = catName;
                         loadImagesUI();
-                        alert("Naya category '" + catName + "' add ho gaya! ✅");
                     });
-                } else {
-                    alert("Ye category pehle se list me hai!");
-                }
+                } else { alert("Ye category pehle se list me hai!"); }
             }
         }
 
@@ -523,23 +544,12 @@
                 const newCatName = newName.trim();
                 document.getElementById('loader').style.display = 'block';
 
-                // Get existing images from old category
                 let existingImages = cloudImagesData[oldCatName] || [];
-
-                // 1. Save images under new name
                 db.ref('customShowroomImages/' + newCatName).set(existingImages).then(() => {
-                    // 2. Remove old category data
                     db.ref('customShowroomImages/' + oldCatName).remove();
-
-                    // 3. Update category list
                     cloudCategories = cloudCategories.map(c => c === oldCatName ? newCatName : c);
                     db.ref('showroomCategories').set(cloudCategories);
-
                     document.getElementById('loader').style.display = 'none';
-                    alert(`Category ka naam '${oldCatName}' se badal kar '${newCatName}' ho gaya! Photos safe hain. ✅`);
-                }).catch(err => {
-                    document.getElementById('loader').style.display = 'none';
-                    alert("Error: " + err.message);
                 });
             }
         }
@@ -548,16 +558,14 @@
             const select = document.getElementById('itemFilter');
             const catName = select.value;
             if(!catName) return;
-
-            if(confirm(`Kya aap sach me '${catName}' category aur uski saari photos delete karna chahte hain?`)) {
+            if(confirm(`Kya aap sach me '${catName}' category delete karna chahte hain?`)) {
                 cloudCategories = cloudCategories.filter(c => c !== catName);
                 db.ref('showroomCategories').set(cloudCategories);
                 db.ref('customShowroomImages/' + catName).remove();
-                alert(`Category '${catName}' delete ho gayi! 🗑️`);
             }
         }
 
-        /* ==================== PHOTO ADD / REPLACE / DELETE LOGIC ==================== */
+        /* ==================== PHOTO ADD / REPLACE ==================== */
         function compressAndSaveImage(file, callback) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -567,26 +575,18 @@
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const MAX_WIDTH = 800;
-                    let width = img.width;
-                    let height = img.height;
-                    
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
+                    let width = img.width; let height = img.height;
+                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                    canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                    callback(compressedDataUrl);
+                    callback(canvas.toDataURL('image/jpeg', 0.7));
                 };
             };
         }
 
         function triggerReplace(category, index) {
-            currentReplacingKey = category;
-            currentReplacingIndex = index;
+            currentReplacingKey = category; currentReplacingIndex = index;
             document.getElementById('replaceFileInput').click();
         }
 
@@ -599,18 +599,11 @@
             const file = e.target.files[0];
             if (!file) return;
             document.getElementById('loader').style.display = 'block';
-            
             compressAndSaveImage(file, function(compressedImage) {
                 if(!cloudImagesData[currentReplacingKey]) cloudImagesData[currentReplacingKey] = [];
                 cloudImagesData[currentReplacingKey][currentReplacingIndex] = compressedImage;
-                
-                db.ref('customShowroomImages/' + currentReplacingKey).set(cloudImagesData[currentReplacingKey])
-                .then(() => {
-                    document.getElementById('loader').style.display = 'none';
-                    e.target.value = '';
-                }).catch(err => {
-                    document.getElementById('loader').style.display = 'none';
-                    alert("Error: " + err.message);
+                db.ref('customShowroomImages/' + currentReplacingKey).set(cloudImagesData[currentReplacingKey]).then(() => {
+                    document.getElementById('loader').style.display = 'none'; e.target.value = '';
                 });
             });
         }
@@ -619,18 +612,11 @@
             const file = e.target.files[0];
             if (!file) return;
             document.getElementById('loader').style.display = 'block';
-            
             compressAndSaveImage(file, function(compressedImage) {
                 if(!cloudImagesData[currentAddingKey]) cloudImagesData[currentAddingKey] = [];
                 cloudImagesData[currentAddingKey].push(compressedImage);
-                
-                db.ref('customShowroomImages/' + currentAddingKey).set(cloudImagesData[currentAddingKey])
-                .then(() => {
-                    document.getElementById('loader').style.display = 'none';
-                    e.target.value = '';
-                }).catch(err => {
-                    document.getElementById('loader').style.display = 'none';
-                    alert("Error: " + err.message);
+                db.ref('customShowroomImages/' + currentAddingKey).set(cloudImagesData[currentAddingKey]).then(() => {
+                    document.getElementById('loader').style.display = 'none'; e.target.value = '';
                 });
             });
         }
@@ -660,7 +646,6 @@
                         </div>
                     `;
                 }
-
                 grid.innerHTML += `
                     <div class="img-card">
                         <img src="${imgUrl}" onclick="openModal('${imgUrl}')">
@@ -674,7 +659,6 @@
                     </div>`;
             });
 
-            // ADD IMAGE CARD FOR OWNER AT THE END
             if(loggedInRole === 'owner') {
                 grid.innerHTML += `
                     <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:rgba(255,255,255,0.05); border: 2px dashed #475569; min-height:240px; cursor:pointer;" onclick="triggerAdd('${item}')">
@@ -706,14 +690,8 @@
                 const key = (e.name || 'Unknown').trim() + '_' + (e.phone || '').trim();
                 if(!grouped[key]) {
                     grouped[key] = {
-                        key: key,
-                        name: e.name || 'Unknown',
-                        phone: e.phone || '',
-                        address: e.address || '',
-                        type: e.type || 'customer',
-                        totalBusiness: 0,
-                        totalReceived: 0,
-                        worksCount: 0
+                        key: key, name: e.name || 'Unknown', phone: e.phone || '', address: e.address || '',
+                        type: e.type || 'customer', totalBusiness: 0, totalReceived: 0, worksCount: 0
                     };
                 }
                 let total = parseFloat(e.total) || 0;
@@ -725,13 +703,10 @@
             });
 
             let personList = Object.values(grouped);
-            if(filterType !== 'all') {
-                personList = personList.filter(p => p.type === filterType);
-            }
+            if(filterType !== 'all') personList = personList.filter(p => p.type === filterType);
 
             if(personList.length === 0) {
-                container.innerHTML = `<p style="color:#94a3b8; padding: 20px 0;">Abhi tak koi hisab save nahi hua hai.</p>`;
-                return;
+                container.innerHTML = `<p style="color:#94a3b8; padding: 20px 0;">Abhi tak koi hisab save nahi hua hai.</p>`; return;
             }
 
             personList.forEach(p => {
@@ -750,14 +725,8 @@
                                 </div>
                             </div>
                             <div class="stats-box">
-                                <div class="stat-item outstanding">
-                                    <h4>Outstanding</h4>
-                                    <p>₹${outstanding}</p>
-                                </div>
-                                <div class="stat-item">
-                                    <h4>Works</h4>
-                                    <p>${p.worksCount}</p>
-                                </div>
+                                <div class="stat-item outstanding"><h4>Outstanding</h4><p>₹${outstanding}</p></div>
+                                <div class="stat-item"><h4>Works</h4><p>${p.worksCount}</p></div>
                             </div>
                         </div>
                         <div class="person-actions">
@@ -765,8 +734,7 @@
                             <a href="https://wa.me/91${p.phone}" target="_blank" class="action-icon-btn" title="WhatsApp" style="background:#16a34a;">💬</a>
                             <button onclick="openPersonDetail('${p.key}')" class="action-icon-btn" title="View Detail Works" style="background:#3b82f6;">👁️</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
@@ -795,20 +763,15 @@
                 return k === personKey;
             });
 
-            if(works.length === 0) {
-                closePersonDetail();
-                return;
-            }
+            if(works.length === 0) { closePersonDetail(); return; }
 
             let personName = works[0].name;
-            let totalBusiness = 0;
-            let totalReceived = 0;
+            let totalBusiness = 0; let totalReceived = 0;
 
             works.forEach(w => {
                 let finalAmt = parseFloat(w.total) || 0;
                 let rcvAmt = (parseFloat(w.pay1) || 0) + (parseFloat(w.pay2) || 0) + (parseFloat(w.pay3) || 0);
-                totalBusiness += finalAmt;
-                totalReceived += rcvAmt;
+                totalBusiness += finalAmt; totalReceived += rcvAmt;
             });
 
             let outstanding = totalBusiness - totalReceived;
@@ -834,11 +797,18 @@
                 if(w.pay2 > 0) payDesc += `2nd: ₹${w.pay2} (${w.date2 || '-'}) | `;
                 if(w.pay3 > 0) payDesc += `3rd: ₹${w.pay3} (${w.date3 || '-'})`;
 
-                let noteDesc = w.note ? `<p style="color:#94a3b8; font-size:0.8rem; margin-top:8px; font-style:italic;">Note: ${w.note}</p>` : '';
+                // Sub-items overview
+                let itemsOverview = '';
+                if(w.items && w.items.length > 0) {
+                    itemsOverview = w.items.map(it => `• ${it.name} - ${it.qty} ${it.unit}`).join('<br>');
+                } else if(w.item) {
+                    itemsOverview = w.item;
+                }
 
                 container.innerHTML += `
                     <div class="work-card">
                         <div class="work-item-actions">
+                            <button class="work-btn" onclick="generateInvoice('${w.id}')" style="background:#f59e0b; color:black;">📄 Invoice</button>
                             <button class="work-btn" onclick="editWorkEntry('${w.id}')">✏️ Edit</button>
                             <button class="work-btn" onclick="deleteWorkEntry('${w.id}')" style="background:#dc2626;">🗑️</button>
                         </div>
@@ -850,34 +820,172 @@
                         </div>
                         <span class="status-badge ${badgeClass}">${status}</span>
                         
+                        <div style="background:#111; padding:10px; border-radius:6px; margin-bottom:12px; font-size: 0.85rem; color:#cbd5e1; line-height: 1.4;">
+                            ${itemsOverview || 'No items listed'}
+                        </div>
+
                         <div class="work-amounts-grid">
-                            <div class="amt-box">
-                                <h5>Final</h5>
-                                <p>₹${finalAmt}</p>
-                            </div>
-                            <div class="amt-box received">
-                                <h5>Received</h5>
-                                <p>₹${rcvAmt}</p>
-                            </div>
-                            <div class="amt-box pending">
-                                <h5>Pending</h5>
-                                <p>₹${pendAmt}</p>
-                            </div>
+                            <div class="amt-box"><h5>Final</h5><p>₹${finalAmt}</p></div>
+                            <div class="amt-box received"><h5>Received</h5><p>₹${rcvAmt}</p></div>
+                            <div class="amt-box pending"><h5>Pending</h5><p>₹${pendAmt}</p></div>
                         </div>
                         <p style="font-size:0.82rem; color:#cbd5e1; margin-top:10px;">${payDesc}</p>
-                        ${noteDesc}
                     </div>
                 `;
             });
         }
 
-        function printPersonDetail() { window.print(); }
+        /* ==================== INVOICE GENERATOR LOGIC ==================== */
+        function generateInvoice(workId) {
+            const w = cloudKhataData.find(e => e.id === workId);
+            if(!w) return;
 
-        /* ==================== WORK MODAL (ADD / EDIT) ==================== */
-        function openWorkModalForNewPerson() {
-            resetWorkModal();
-            document.getElementById('workModalTitle').innerText = "Naya Grahak / Kaam Jodein";
-            document.getElementById('workModal').style.display = 'flex';
+            let invoiceNo = "WK" + Date.now().toString().slice(-5);
+            let entryDate = w.entryDate || new Date().toISOString().split('T')[0];
+
+            let itemsHtml = '';
+            let subtotal = 0;
+
+            if(w.items && w.items.length > 0) {
+                w.items.forEach(it => {
+                    let amt = it.amount || ((it.qty || 0) * (it.rate || 0));
+                    itemsHtml += `<tr><td>${it.name}</td><td>${it.qty} ${it.unit}</td><td>₹${it.rate}</td><td>₹${amt}</td></tr>`;
+                    subtotal += amt;
+                });
+            } else {
+                let amt = (w.qty || 0) * (w.rate || 0);
+                itemsHtml += `<tr><td>${w.item || w.workTitle || 'Fabrication Work'}</td><td>${w.qty || '-'}</td><td>₹${w.rate || '-'}</td><td>₹${amt}</td></tr>`;
+                subtotal += amt;
+            }
+
+            let chargesHtml = '';
+            if((w.labour || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Labour</td><td>₹${w.labour}</td></tr>`;
+            if((w.transport || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Transport</td><td>₹${w.transport}</td></tr>`;
+            if((w.installation || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Installation</td><td>₹${w.installation}</td></tr>`;
+            if((w.otherCharges || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Other</td><td>₹${w.otherCharges}</td></tr>`;
+            
+            let discHtml = '';
+            if((w.discount || 0) > 0) discHtml = `<tr><td colspan="3" style="text-align:right;">Discount</td><td>- ₹${w.discount}</td></tr>`;
+
+            let finalTotal = w.total || 0;
+            let rcvAmt = (parseFloat(w.pay1) || 0) + (parseFloat(w.pay2) || 0) + (parseFloat(w.pay3) || 0);
+            let pending = finalTotal - rcvAmt;
+
+            const printHtml = `
+                <div class="inv-header">
+                    <div style="font-size: 24px; font-weight: bold;">Chakradhari Traders</div>
+                    <div style="text-align: right;">
+                        <div class="inv-title">INVOICE</div>
+                        <div>Invoice No: <b>${invoiceNo}</b></div>
+                        <div>Date: <b>${entryDate}</b></div>
+                    </div>
+                </div>
+                
+                <div style="display:flex; justify-content:space-between; margin-bottom: 20px;">
+                    <div class="inv-box" style="width: 45%;">
+                        <strong style="color: #666;">BILL TO:</strong><br>
+                        <h3 style="margin: 5px 0;">${w.name}</h3>
+                        ${w.phone ? `Phone: ${w.phone}<br>` : ''}
+                        ${w.address ? `Address: ${w.address}` : ''}
+                    </div>
+                    <div class="inv-box" style="width: 45%; text-align:right;">
+                        <strong style="color: #666;">FROM:</strong><br>
+                        <h3 style="margin: 5px 0;">Chakradhari Traders</h3>
+                        Nayagaon Bariyarpur, Vaishali<br>
+                        Bihar (844506)<br>
+                        Phone: 9304672299
+                    </div>
+                </div>
+
+                <table class="inv-table">
+                    <thead>
+                        <tr>
+                            <th>Item Description</th>
+                            <th>Qty / Unit</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsHtml}
+                        <tr>
+                            <td colspan="3" style="text-align:right; font-weight:bold;">Subtotal</td>
+                            <td style="font-weight:bold;">₹${subtotal}</td>
+                        </tr>
+                        ${chargesHtml}
+                        ${discHtml}
+                        <tr style="background:#f0f0f0;">
+                            <td colspan="3" style="text-align:right; font-weight:bold; font-size:16px;">Final Total</td>
+                            <td style="font-weight:bold; font-size:16px;">₹${finalTotal}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align:right; color:#16a34a;">Amount Received</td>
+                            <td style="color:#16a34a; font-weight:bold;">₹${rcvAmt}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align:right; color:#dc2626; font-weight:bold;">Pending Balance</td>
+                            <td style="color:#dc2626; font-weight:bold;">₹${pending}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top:40px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 12px; color: #666; text-align:center;">
+                    Thank you for your business! - Chakradhari Traders
+                </div>
+            `;
+
+            document.getElementById('invoicePrintArea').innerHTML = printHtml;
+            window.print();
+        }
+
+        /* ==================== WORK MODAL (MULTIPLE ITEMS & CALCULATION) ==================== */
+        function addWorkItemRow(name='', qty='', unit='KG', rate='', amount='') {
+            const list = document.getElementById('workItemsList');
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            row.innerHTML = `
+                <div class="item-row-header">
+                    <span style="color:#94a3b8; font-size:0.8rem; font-weight:bold;">Item Detail</span>
+                    <button type="button" class="del-item-btn" onclick="this.parentElement.parentElement.remove(); calcWorkTotal();">🗑️ Remove</button>
+                </div>
+                <input type="text" class="itemName" placeholder="Item Name (e.g., Gate Frame)" value="${name}">
+                <div class="item-grid" style="margin-top:6px;">
+                    <input type="number" class="itemQty" placeholder="Qty" value="${qty}" oninput="calcWorkTotal()">
+                    <select class="itemUnit" style="margin:0;">
+                        <option value="KG" ${unit==='KG'?'selected':''}>KG</option>
+                        <option value="Pcs" ${unit==='Pcs'?'selected':''}>Pcs</option>
+                        <option value="Feet" ${unit==='Feet'?'selected':''}>Feet</option>
+                        <option value="Sq.Feet" ${unit==='Sq.Feet'?'selected':''}>Sq.Feet</option>
+                        <option value="Ltr" ${unit==='Ltr'?'selected':''}>Ltr</option>
+                        <option value="Set" ${unit==='Set'?'selected':''}>Set</option>
+                    </select>
+                    <input type="number" class="itemRate" placeholder="Rate (₹)" value="${rate}" oninput="calcWorkTotal()">
+                </div>
+                <input type="number" class="itemAmount" placeholder="Amount" value="${amount}" readonly style="margin-top:6px; border-color:#334155; color:#4ade80;">
+            `;
+            list.appendChild(row);
+        }
+
+        function calcWorkTotal() {
+            let subtotal = 0;
+            document.querySelectorAll('.item-row').forEach(row => {
+                let q = parseFloat(row.querySelector('.itemQty').value) || 0;
+                let r = parseFloat(row.querySelector('.itemRate').value) || 0;
+                let amt = q * r;
+                row.querySelector('.itemAmount').value = amt.toFixed(2);
+                subtotal += amt;
+            });
+            
+            let l = parseFloat(document.getElementById('kLabour').value) || 0;
+            let t = parseFloat(document.getElementById('kTransport').value) || 0;
+            let i = parseFloat(document.getElementById('kInstallation').value) || 0;
+            let o = parseFloat(document.getElementById('kOther').value) || 0;
+            let d = parseFloat(document.getElementById('kDiscount').value) || 0;
+            
+            let finalTotal = subtotal + l + t + i + o - d;
+            if(finalTotal < 0) finalTotal = 0;
+
+            document.getElementById('kTotal').value = finalTotal;
+            document.getElementById('kGrandTotalLabel').innerText = finalTotal;
         }
 
         function openWorkModalForCurrentPerson() {
@@ -898,6 +1006,14 @@
             }
 
             document.getElementById('workModalTitle').innerText = "Naya Kaam Jodein: " + document.getElementById('kName').value;
+            addWorkItemRow(); // Add one empty row by default
+            document.getElementById('workModal').style.display = 'flex';
+        }
+
+        function openWorkModalForNewPerson() {
+            resetWorkModal();
+            document.getElementById('workModalTitle').innerText = "Naya Grahak / Kaam Jodein";
+            addWorkItemRow(); // Add one empty row by default
             document.getElementById('workModal').style.display = 'flex';
         }
 
@@ -911,15 +1027,6 @@
             document.getElementById('kAddress').style.display = (type === 'supplier') ? 'none' : 'block';
         }
 
-        function calculateTotal() {
-            const qty = parseFloat(document.getElementById('kQty').value) || 0;
-            const rate = parseFloat(document.getElementById('kRate').value) || 0;
-            const disc = parseFloat(document.getElementById('kDiscount').value) || 0;
-            let total = (qty * rate) - disc;
-            if (total < 0) total = 0;
-            if(qty > 0 || rate > 0) document.getElementById('kTotal').value = total;
-        }
-
         function saveWorkEntry() {
             const name = document.getElementById('kName').value.trim();
             if(!name) { alert("Kripya Naam likhein!"); return; }
@@ -927,20 +1034,40 @@
             const editId = document.getElementById('editEntryId').value;
             const today = new Date().toISOString().split('T')[0];
 
+            // GATHER MULTIPLE ITEMS
+            let workItems = [];
+            document.querySelectorAll('.item-row').forEach(row => {
+                let n = row.querySelector('.itemName').value.trim();
+                if(n) {
+                    workItems.push({
+                        name: n,
+                        qty: parseFloat(row.querySelector('.itemQty').value) || 0,
+                        unit: row.querySelector('.itemUnit').value || 'KG',
+                        rate: parseFloat(row.querySelector('.itemRate').value) || 0,
+                        amount: parseFloat(row.querySelector('.itemAmount').value) || 0
+                    });
+                }
+            });
+
             const entry = {
                 entryDate: today,
                 type: document.getElementById('khataType').value,
                 name: name,
                 phone: document.getElementById('kPhone').value,
                 address: document.getElementById('kAddress').value,
-                workTitle: document.getElementById('kWorkTitle').value || document.getElementById('kItem').value || 'Work Item',
+                workTitle: document.getElementById('kWorkTitle').value || 'Work Item',
                 category: document.getElementById('kCategory').value || 'Fabrication',
                 status: document.getElementById('kStatus').value || 'Delivered',
-                item: document.getElementById('kItem').value,
-                qty: parseFloat(document.getElementById('kQty').value) || 0,
-                rate: parseFloat(document.getElementById('kRate').value) || 0,
+                
+                items: workItems, // New structure
+                
+                labour: parseFloat(document.getElementById('kLabour').value) || 0,
+                transport: parseFloat(document.getElementById('kTransport').value) || 0,
+                installation: parseFloat(document.getElementById('kInstallation').value) || 0,
+                otherCharges: parseFloat(document.getElementById('kOther').value) || 0,
                 discount: parseFloat(document.getElementById('kDiscount').value) || 0,
                 total: parseFloat(document.getElementById('kTotal').value) || 0,
+                
                 date1: document.getElementById('kDate1').value,
                 pay1: parseFloat(document.getElementById('kPay1').value) || 0,
                 date2: document.getElementById('kDate2').value,
@@ -967,6 +1094,7 @@
             const item = cloudKhataData.find(e => e.id === id);
             if(!item) return;
 
+            resetWorkModal();
             document.getElementById('editEntryId').value = item.id;
             document.getElementById('khataType').value = item.type || 'customer';
             toggleKhataFields();
@@ -976,11 +1104,26 @@
             document.getElementById('kWorkTitle').value = item.workTitle || '';
             document.getElementById('kCategory').value = item.category || '';
             document.getElementById('kStatus').value = item.status || 'Delivered';
-            document.getElementById('kItem').value = item.item || '';
-            document.getElementById('kQty').value = item.qty || '';
-            document.getElementById('kRate').value = item.rate || '';
+            
+            // Populating Multiple Items
+            const list = document.getElementById('workItemsList');
+            if(item.items && item.items.length > 0) {
+                item.items.forEach(it => {
+                    addWorkItemRow(it.name, it.qty, it.unit, it.rate, it.amount);
+                });
+            } else {
+                // Fallback for old data
+                addWorkItemRow(item.item, item.qty, 'KG', item.rate, (item.qty||0)*(item.rate||0));
+            }
+
+            document.getElementById('kLabour').value = item.labour || '';
+            document.getElementById('kTransport').value = item.transport || '';
+            document.getElementById('kInstallation').value = item.installation || '';
+            document.getElementById('kOther').value = item.otherCharges || '';
             document.getElementById('kDiscount').value = item.discount || '';
-            document.getElementById('kTotal').value = item.total || '';
+            
+            calcWorkTotal(); // Initialize totals
+
             document.getElementById('kDate1').value = item.date1 || '';
             document.getElementById('kPay1').value = item.pay1 || '';
             document.getElementById('kDate2').value = item.date2 || '';
@@ -1007,11 +1150,17 @@
             document.getElementById('kWorkTitle').value = '';
             document.getElementById('kCategory').value = '';
             document.getElementById('kStatus').value = 'Delivered';
-            document.getElementById('kItem').value = '';
-            document.getElementById('kQty').value = '';
-            document.getElementById('kRate').value = '';
+            
+            document.getElementById('workItemsList').innerHTML = ''; // Clear item rows
+            
+            document.getElementById('kLabour').value = '';
+            document.getElementById('kTransport').value = '';
+            document.getElementById('kInstallation').value = '';
+            document.getElementById('kOther').value = '';
             document.getElementById('kDiscount').value = '';
-            document.getElementById('kTotal').value = '';
+            document.getElementById('kTotal').value = '0';
+            document.getElementById('kGrandTotalLabel').innerText = '0';
+
             document.getElementById('kDate1').value = '';
             document.getElementById('kPay1').value = '';
             document.getElementById('kDate2').value = '';
@@ -1036,9 +1185,6 @@
             loggedInRole = 'customer';
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
-            document.getElementById('addCategoryBtn').style.display = 'none'; 
-            document.getElementById('editCategoryBtn').style.display = 'none'; 
-            document.getElementById('delCategoryBtn').style.display = 'none'; 
         }
     </script>
 </body>
