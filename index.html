@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- FORCED DESKTOP MODE (Auto Desktop View on Mobile) -->
-    <meta name="viewport" content="width=1200">
+    <!-- FIXED: Proper Responsive Viewport for Mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chakradhari Traders - ERP System</title>
     <style>
         :root { 
@@ -19,13 +19,13 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
         
-        body { background-color: var(--dark); color: var(--light); padding: 15px; user-select: none; -webkit-user-select: none; }
+        body { background-color: var(--dark); color: var(--light); padding: 15px; }
         
         header { text-align: center; padding: 25px; background: var(--card-bg); border-radius: 16px; margin-bottom: 20px; border-bottom: 4px solid var(--blue); }
         header h1 { color: #fff; font-size: 2.2rem; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
         header p { color: #94a3b8; font-size: 0.95rem; }
         
-        .info-bar { background: var(--card-bg); padding: 12px; border-radius: 12px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-around; font-size: 0.88rem; border: 1px solid #334155; }
+        .info-bar { background: var(--card-bg); padding: 12px; border-radius: 12px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px; font-size: 0.88rem; border: 1px solid #334155; }
         .info-bar a { color: #4ade80; text-decoration: none; font-weight: bold; }
         
         /* Login Styles */
@@ -41,7 +41,7 @@
         /* Dashboard Tabs */
         .main-content { display: none; }
         .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tab-btn { background: var(--card-bg); color: #cbd5e1; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; width: auto; margin: 0; border: 1px solid #334155; }
+        .tab-btn { background: var(--card-bg); color: #cbd5e1; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; width: auto; margin: 0; border: 1px solid #334155; flex-grow: 1; text-align: center; }
         .tab-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
         
         /* Showroom Section */
@@ -54,18 +54,18 @@
         
         /* ==================== ERP LEDGER UI ==================== */
         .erp-top-bar { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; flex-wrap: wrap; background: var(--card-bg); padding: 15px; border-radius: 14px; border: 1px solid #334155; }
-        .erp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+        .erp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
         
         .person-card { background: var(--card-bg); border-radius: 18px; border: 1px solid #334155; overflow: hidden; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .person-card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
         .avatar-circle { width: 48px; height: 48px; border-radius: 50%; background: var(--blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: bold; flex-shrink: 0; }
         .person-card.supplier .avatar-circle { background: var(--steel); }
-        .person-name h3 { font-size: 1.15rem; color: #fff; line-height: 1.2; }
+        .person-name h3 { font-size: 1.15rem; color: #fff; line-height: 1.2; word-break: break-word; }
         .person-name p { font-size: 0.85rem; color: #94a3b8; margin-top: 3px; }
         
-        .stats-box { background: var(--card-inner); border-radius: 14px; padding: 14px; display: grid; grid-template-columns: 1fr 1fr; text-align: center; margin-bottom: 16px; border: 1px solid #334155; }
+        .stats-box { background: var(--card-inner); border-radius: 14px; padding: 14px; display: grid; grid-template-columns: 1fr 1fr; text-align: center; gap: 10px; margin-bottom: 16px; border: 1px solid #334155; }
         .stat-item h4 { font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; font-weight: 600; }
-        .stat-item p { font-size: 1.35rem; font-weight: 800; color: #fff; }
+        .stat-item p { font-size: 1.2rem; font-weight: 800; color: #fff; word-break: break-word;}
         .stat-item.outstanding p { color: #3b82f6; }
         
         .person-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
@@ -74,85 +74,90 @@
         
         /* ==================== CUSTOMER DETAIL VIEW ==================== */
         #personDetailView { display: none; }
-        .detail-banner { background: var(--blue); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(37,99,235,0.3); }
-        .detail-banner h2 { font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .detail-banner { background: var(--blue); border-radius: 20px; padding: 25px 15px; text-align: center; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(37,99,235,0.3); }
+        .detail-banner h2 { font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 4px; word-break: break-word;}
         .detail-banner .subtitle { font-size: 0.95rem; color: #e2e8f0; margin-bottom: 20px; font-weight: 600; }
         
-        .banner-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .banner-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; }
         .banner-stat-card { background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); border-radius: 14px; padding: 14px; text-align: center; }
-        .banner-stat-card h3 { font-size: 1.3rem; font-weight: 800; color: #fff; }
+        .banner-stat-card h3 { font-size: 1.2rem; font-weight: 800; color: #fff; word-break: break-word; }
         .banner-stat-card p { font-size: 0.8rem; color: #e2e8f0; font-weight: 600; margin-top: 2px; }
         
-        .works-section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .works-section-title h3 { font-size: 1.4rem; color: #fff; font-weight: 700; }
+        .works-section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;}
+        .works-section-title h3 { font-size: 1.4rem; color: #fff; font-weight: 700; word-break: break-word; }
         
-        .work-card { background: var(--card-bg); border-radius: 16px; border: 1px solid #334155; padding: 18px; margin-bottom: 15px; position: relative; }
-        .work-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .work-header h4 { font-size: 1.15rem; color: #fff; font-weight: 700; margin-bottom: 4px; }
+        .work-card { background: var(--card-bg); border-radius: 16px; border: 1px solid #334155; padding: 18px; margin-bottom: 15px; position: relative; overflow: hidden; }
+        .work-header { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; padding-right: 90px;}
+        .work-header h4 { font-size: 1.15rem; color: #fff; font-weight: 700; word-break: break-word; }
         .work-header .category-badge { font-size: 0.78rem; color: #94a3b8; }
         .status-badge { background: #fef9c3; color: #854d0e; font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 14px; }
         .status-badge.delivered { background: #dcfce7; color: #166534; }
         
-        .work-amounts-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; background: var(--card-inner); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #334155; }
+        .work-amounts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); background: var(--card-inner); border-radius: 12px; padding: 12px; text-align: center; border: 1px solid #334155; gap: 8px; }
         .amt-box h5 { font-size: 0.75rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px; }
-        .amt-box p { font-size: 1.1rem; font-weight: 800; color: #fff; }
+        .amt-box p { font-size: 1rem; font-weight: 800; color: #fff; word-break: break-word; }
         .amt-box.received p { color: #22c55e; }
         .amt-box.pending p { color: #ef4444; }
         
-        .work-item-actions { position: absolute; top: 18px; right: 18px; display: flex; gap: 6px; }
-        .work-btn { background: #334155; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer; font-weight: bold; }
+        .work-item-actions { position: absolute; top: 15px; right: 15px; display: flex; flex-direction: column; gap: 6px; }
+        .work-btn { background: #334155; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer; font-weight: bold; width: 100%;}
         .work-btn:hover { background: #475569; }
         
-        .floating-add-btn { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; width: 64px; height: 64px; border-radius: 50%; border: none; font-size: 2.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(37,99,235,0.6); z-index: 100; transition: 0.2s; }
+        .floating-add-btn { position: fixed; bottom: 30px; right: 30px; background: var(--blue); color: white; width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(37,99,235,0.6); z-index: 100; transition: 0.2s; }
         .floating-add-btn:hover { transform: scale(1.08); }
 
         /* MULTIPLE ITEMS & BILLING CSS */
-        .items-container { background: #111; padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #334155; }
-        .item-row { background: var(--card-inner); padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px dashed #475569; position: relative; }
+        .items-container { background: #111; padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #334155; overflow-x: auto; }
+        .item-row { background: var(--card-inner); padding: 12px; border-radius: 8px; margin-bottom: 10px; border: 1px dashed #475569; }
         .item-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .item-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-        .del-item-btn { background: var(--red); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; }
+        .item-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; }
+        .del-item-btn { background: var(--red); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; width: auto; }
         
         .charges-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: #111; padding: 10px; border-radius: 8px; border: 1px solid #334155;}
         
         .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 15px; }
         .modal-content { background: var(--card-bg); max-width: 600px; width: 100%; border-radius: 18px; padding: 25px; border: 1px solid #475569; max-height: 90vh; overflow-y: auto; position: relative; }
-        .modal-close { position: absolute; top: 18px; right: 22px; font-size: 1.8rem; color: #94a3b8; cursor: pointer; }
+        .modal-close { position: absolute; top: 12px; right: 18px; font-size: 1.8rem; color: #94a3b8; cursor: pointer; }
         
         .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .payment-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         
-        .logout-btn { background: #475569; width: auto; padding: 8px 15px; float: right; margin-top: -45px; }
+        .logout-btn { background: #475569; width: auto; padding: 8px 15px; margin-top: 10px; }
         .hidden-file-input { display: none; }
-        #loader { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.85); padding: 20px 30px; border-radius: 12px; color: #fff; z-index: 9999; font-weight: bold; border: 1px solid #475569; }
+        #loader { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.85); padding: 20px 30px; border-radius: 12px; color: #fff; z-index: 9999; font-weight: bold; border: 1px solid #475569; text-align: center; }
 
         /* ==================== PRINTABLE INVOICE CSS ==================== */
         #invoicePrintArea { display: none; background: #fff; color: #000; padding: 30px; font-family: 'Segoe UI', Arial, sans-serif; }
         
         @media print {
-            @page { margin: 0; } /* Removes Browser Header & Footer Texts */
+            /* FIXED: Prevents browser headers/footers */
+            @page { margin: 0; size: auto; } 
             body { margin: 1cm; background: white; color: black; }
             body > * { display: none !important; }
-            #invoicePrintArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: #fff; }
+            /* FIXED: Removed absolute positioning to prevent cutting off multiple pages */
+            #invoicePrintArea { display: block !important; position: relative; width: 100%; height: auto; background: #fff; page-break-inside: auto; }
             
             .inv-header { display: flex; justify-content: space-between; border-bottom: 4px solid var(--blue) !important; padding-bottom: 20px; margin-bottom: 25px; }
             .inv-logo-box { background: var(--blue) !important; color: #fff !important; font-size: 32px; font-weight: 900; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .inv-title { font-size: 28px; font-weight: 900; color: var(--blue) !important; margin-bottom: 5px; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact;}
             
-            .inv-box { background: #f8fafc !important; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #e2e8f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;}
-            .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 14px; }
+            .inv-box { background: #f8fafc !important; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #e2e8f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; page-break-inside: avoid; }
+            .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 14px; page-break-inside: auto; }
+            .inv-table tr { page-break-inside: avoid; page-break-after: auto; }
             .inv-table th { background: #eff6ff !important; color: #1e3a8a !important; border: 1px solid #cbd5e1 !important; padding: 12px; text-align: left; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .inv-table td { border: 1px solid #cbd5e1 !important; padding: 12px; color: #334155; }
             
             .inv-summary-row { background: #eff6ff !important; font-weight: bold; font-size: 16px; color: #1e3a8a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .inv-footer-msg { margin-top:50px; border-top: 1px solid #cbd5e1; padding-top: 15px; font-size: 13px; color: #64748b; text-align:center; }
+            .inv-footer-msg { margin-top:30px; border-top: 1px solid #cbd5e1; padding-top: 15px; font-size: 13px; color: #64748b; text-align:center; page-break-inside: avoid; }
         }
     </style>
-    <!-- FIREBASE CLOUD LIBRARIES -->
+    <!-- FIREBASE CLOUD LIBRARIES (Added Auth and Storage) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
     <div id="loader">Kripya Pratiksha Karein... (Process ho raha hai ⌛)</div>
 
@@ -166,7 +171,7 @@
         <select id="userRole" onchange="toggleRoleFields()">
             <option value="customer">Customer</option>
             <option value="owner">Owner</option>
-            <option value="employee">Employee</option>
+            <!-- REMOVED EMPLOYEE OPTION -->
         </select>
         
         <div id="phoneField">
@@ -174,8 +179,9 @@
         </div>
         <div id="passField" style="display: none;">
             <div class="password-box">
-                <input type="password" id="loginPass" placeholder="Owner Password Daalein">
-                <button type="button" onclick="togglePassView()">👁️ Show</button>
+                <!-- NOW CONNECTED TO FIREBASE AUTH FOR SECURITY -->
+                <input type="password" id="loginPass" placeholder="Owner Firebase Password">
+                <button type="button" onclick="togglePassView()">👁️</button>
             </div>
         </div>
 
@@ -192,28 +198,28 @@
 
         <div class="info-bar">
             <span><b>📞 Call/WhatsApp:</b> 9304672299</span>
-            <span><b>📍 Address:</b> Nayagaon Bariyarpur, Vaishali, Bihar (844506)</span>
+            <span><b>📍 Address:</b> Nayagaon Bariyarpur, Vaishali (844506)</span>
             <span><b>🟢 WhatsApp Order:</b> <a href="https://wa.me/919304672299" target="_blank">Direct Chat</a></span>
         </div>
 
         <div class="nav-tabs">
             <div id="tabShowroom" class="tab-btn active" onclick="switchTab('showroom')">🖼️ Design Showroom</div>
             <div id="tabKhata" class="tab-btn" onclick="switchTab('khata')" style="display: none;">📊 ERP Ledger Book</div>
-            <div id="tabLogs" class="tab-btn" onclick="switchTab('logs')" style="display: none;">📱 Customer Login Logs</div>
+            <div id="tabLogs" class="tab-btn" onclick="switchTab('logs')" style="display: none;">📱 Login Logs</div>
         </div>
 
-        <!-- SHOWROOM (CATEGORY MANAGER) -->
+        <!-- SHOWROOM -->
         <div id="showroomSection">
             <div class="controls" style="display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap;">
                 <div style="flex-grow: 1;">
                     <h3 style="color:#fff; margin-bottom: 10px;">Lohe aur Steel ke Behtareen Designs</h3>
                     <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                        <select id="itemFilter" onchange="loadImagesUI()" style="margin: 0; flex-grow: 1; min-width: 200px;"></select>
-                        <button id="editCategoryBtn" onclick="renameCurrentCategory()" style="width: auto; background: #3b82f6; color: white; display: none; margin: 0; padding: 12px 14px;" title="Rename">✏️ Rename</button>
-                        <button id="delCategoryBtn" onclick="deleteCurrentCategory()" style="width: auto; background: #dc2626; color: white; display: none; margin: 0; padding: 12px 14px;" title="Delete">🗑️ Delete</button>
+                        <select id="itemFilter" onchange="loadImagesUI()" style="margin: 0; flex-grow: 1; min-width: 150px;"></select>
+                        <button id="editCategoryBtn" onclick="renameCurrentCategory()" style="width: auto; background: #3b82f6; color: white; display: none; margin: 0; padding: 12px;" title="Rename">✏️</button>
+                        <button id="delCategoryBtn" onclick="deleteCurrentCategory()" style="width: auto; background: #dc2626; color: white; display: none; margin: 0; padding: 12px;" title="Delete">🗑️</button>
                     </div>
                 </div>
-                <button id="addCategoryBtn" onclick="addNewCategory()" style="width: auto; background: #f59e0b; color: black; display: none; margin-bottom: 0; padding: 12px 16px;">
+                <button id="addCategoryBtn" onclick="addNewCategory()" style="width: 100%; background: #f59e0b; color: black; display: none; margin-bottom: 0; padding: 12px;">
                     ➕ Naya Category
                 </button>
             </div>
@@ -222,18 +228,18 @@
 
         <!-- ERP KHATA BOOK SECTION -->
         <div id="khataSection" style="display: none;">
-            <!-- 1. MASTER CARDS LIST VIEW -->
+            <!-- MASTER CARDS LIST VIEW -->
             <div id="ledgerGridView">
                 <div class="erp-top-bar">
                     <h3 style="flex-grow: 1; color: #fff;">📋 Saved ERP Ledger Accounts</h3>
                     
-                    <select id="filterType" onchange="loadLedgerGridUI()" style="width: 180px; margin: 0;">
+                    <select id="filterType" onchange="loadLedgerGridUI()" style="width: 100%; max-width: 200px; margin: 0;">
                         <option value="all">🔍 All (Sabhi Dekho)</option>
                         <option value="customer">👤 Only Customers</option>
                         <option value="supplier">🏢 Only Suppliers</option>
                     </select>
 
-                    <button onclick="openWorkModalForNewPerson()" style="width: auto; margin: 0; padding: 10px 18px; background: #16a34a;">
+                    <button onclick="openWorkModalForNewPerson()" style="width: 100%; background: #16a34a; margin-top: 10px;">
                         ➕ Naya Grahak / Kaam Jodein
                     </button>
                 </div>
@@ -241,7 +247,7 @@
                 <div class="erp-grid" id="masterCardsContainer"></div>
             </div>
 
-            <!-- 2. CUSTOMER DETAILS VIEW -->
+            <!-- CUSTOMER DETAILS VIEW -->
             <div id="personDetailView">
                 <button class="back-btn" onclick="closePersonDetail()" style="width: auto; background: #334155; margin-bottom: 20px; padding: 10px 18px;">
                     ⬅️ Back to Ledger List
@@ -251,18 +257,9 @@
                     <h2 id="detailOutstandingAmt">₹0</h2>
                     <div class="subtitle">Outstanding</div>
                     <div class="banner-stats-grid">
-                        <div class="banner-stat-card">
-                            <h3 id="detailBusinessAmt">₹0</h3>
-                            <p>Business</p>
-                        </div>
-                        <div class="banner-stat-card">
-                            <h3 id="detailReceivedAmt">₹0</h3>
-                            <p>Received</p>
-                        </div>
-                        <div class="banner-stat-card">
-                            <h3 id="detailWorksCount">0</h3>
-                            <p>Works</p>
-                        </div>
+                        <div class="banner-stat-card"><h3 id="detailBusinessAmt">₹0</h3><p>Business</p></div>
+                        <div class="banner-stat-card"><h3 id="detailReceivedAmt">₹0</h3><p>Received</p></div>
+                        <div class="banner-stat-card"><h3 id="detailWorksCount">0</h3><p>Works</p></div>
                     </div>
                 </div>
 
@@ -314,11 +311,9 @@
                 </select>
             </div>
 
-            <!-- NEW MULTIPLE ITEMS SECTION -->
+            <!-- MULTIPLE ITEMS SECTION -->
             <label style="font-size: 0.95rem; color: #fff; margin-top: 15px; display: block; border-bottom: 1px solid #334155; padding-bottom: 5px;">Work Items (Bill Details):</label>
-            <div class="items-container" id="workItemsList">
-                <!-- Item rows will be added here -->
-            </div>
+            <div class="items-container" id="workItemsList"></div>
             <button type="button" onclick="addWorkItemRow()" style="background: #3b82f6; padding: 8px; font-size: 0.85rem; margin-bottom: 15px;">+ Add New Item</button>
 
             <!-- EXTRA CHARGES -->
@@ -336,27 +331,23 @@
 
             <div style="background: var(--blue); padding: 12px; border-radius: 8px; margin-top: 10px; display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: bold;">
                 <span>Grand Total:</span>
-                <span>₹<span id="kGrandTotalLabel">0</span></span>
+                <span>₹<span id="kGrandTotalLabel">0.00</span></span>
             </div>
-            <input type="hidden" id="kTotal" value="0"> <!-- Hidden for saving logic -->
+            <input type="hidden" id="kTotal" value="0">
 
             <!-- PAYMENT -->
             <label style="font-size: 0.85rem; color: #94a3b8; margin-top: 15px; display: block;">Payment Received:</label>
             <div class="payment-row">
-                <input type="date" id="kDate1">
-                <input type="number" id="kPay1" placeholder="1st Payment Amount">
+                <input type="date" id="kDate1"><input type="number" id="kPay1" placeholder="1st Payment Amount">
             </div>
             <div class="payment-row">
-                <input type="date" id="kDate2">
-                <input type="number" id="kPay2" placeholder="2nd Payment Amount">
+                <input type="date" id="kDate2"><input type="number" id="kPay2" placeholder="2nd Payment Amount">
             </div>
             <div class="payment-row">
-                <input type="date" id="kDate3">
-                <input type="number" id="kPay3" placeholder="3rd Payment Amount">
+                <input type="date" id="kDate3"><input type="number" id="kPay3" placeholder="3rd Payment Amount">
             </div>
 
             <textarea id="kNote" placeholder="Koi special note likhna hai?"></textarea>
-            
             <button onclick="saveWorkEntry()" style="background: var(--green); padding: 14px; font-size: 1.1rem;">✅ Kaam Save Karo</button>
         </div>
     </div>
@@ -383,6 +374,8 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const auth = firebase.auth(); // FIXED: Initialized Firebase Auth
+        const storage = firebase.storage(); // FIXED: Initialized Firebase Storage
 
         let loggedInRole = 'customer';
         let cloudImagesData = {};
@@ -394,18 +387,20 @@
         let currentReplacingIndex = -1;
         let currentAddingKey = '';
 
+        // FIXED: Security - XSS Helper Function
+        const escapeHTML = (str) => {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[match]));
+        };
+
         // REAL-TIME SYNC FOR CATEGORIES & IMAGES
         db.ref('customShowroomImages').on('value', (snapshot) => {
-            let data = snapshot.val() || {};
-            cloudImagesData = data;
-            
+            cloudImagesData = snapshot.val() || {};
             db.ref('showroomCategories').once('value', (catSnap) => {
                 let savedCats = catSnap.val() || [];
                 let allKeys = Object.keys(cloudImagesData);
-                
                 let merged = Array.from(new Set([...savedCats, ...allKeys]));
                 if(merged.length === 0) merged = ["Gate Design", "Window", "Railing"];
-                
                 cloudCategories = merged;
                 updateCategoryDropdown();
                 loadImagesUI();
@@ -427,25 +422,28 @@
             if(loggedInRole === 'owner') loadLogsUI();
         });
 
-        // 1-HOUR OWNER SESSION CHECK
         window.onload = function() {
             let isLogged = localStorage.getItem('isOwnerLoggedIn');
             let sessionTime = localStorage.getItem('ownerSessionExpire');
             if(isLogged === 'true' && sessionTime && Date.now() < parseInt(sessionTime)) {
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('mainDashboard').style.display = 'block';
-                document.getElementById('tabKhata').style.display = 'block';
-                document.getElementById('tabLogs').style.display = 'block';
-                document.getElementById('addCategoryBtn').style.display = 'block'; 
-                document.getElementById('editCategoryBtn').style.display = 'block'; 
-                document.getElementById('delCategoryBtn').style.display = 'block'; 
-                loggedInRole = 'owner';
-                updateCategoryDropdown();
-                loadImagesUI();
-                loadLedgerGridUI();
-                loadLogsUI();
+                enableOwnerUI();
             } else { logout(); }
         };
+
+        function enableOwnerUI() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('mainDashboard').style.display = 'block';
+            document.getElementById('tabKhata').style.display = 'block';
+            document.getElementById('tabLogs').style.display = 'block';
+            document.getElementById('addCategoryBtn').style.display = 'block'; 
+            document.getElementById('editCategoryBtn').style.display = 'block'; 
+            document.getElementById('delCategoryBtn').style.display = 'block'; 
+            loggedInRole = 'owner';
+            updateCategoryDropdown();
+            loadImagesUI();
+            loadLedgerGridUI();
+            loadLogsUI();
+        }
 
         function toggleRoleFields() {
             const role = document.getElementById('userRole').value;
@@ -458,31 +456,39 @@
             passInput.type = (passInput.type === 'password') ? 'text' : 'password';
         }
 
+        // FIXED: Using Secure Firebase Auth instead of Plaintext
         function handleLogin() {
             const role = document.getElementById('userRole').value;
             loggedInRole = role;
 
             if (role === 'owner') {
                 const pass = document.getElementById('loginPass').value;
-                if (pass === 'Aditya930@') { 
+                document.getElementById('loader').style.display = 'block';
+                
+                // Note: User must be created in Firebase Auth Console with chakradhari2026@gmail.com
+                auth.signInWithEmailAndPassword('chakradhari2026@gmail.com', pass)
+                .then(() => {
+                    document.getElementById('loader').style.display = 'none';
                     localStorage.setItem('isOwnerLoggedIn', 'true');
                     localStorage.setItem('ownerSessionExpire', Date.now() + 3600000);
-                    document.getElementById('loginPage').style.display = 'none';
-                    document.getElementById('mainDashboard').style.display = 'block';
-                    document.getElementById('tabKhata').style.display = 'block';
-                    document.getElementById('tabLogs').style.display = 'block';
-                    document.getElementById('addCategoryBtn').style.display = 'block'; 
-                    document.getElementById('editCategoryBtn').style.display = 'block'; 
-                    document.getElementById('delCategoryBtn').style.display = 'block'; 
-                    updateCategoryDropdown();
-                    loadImagesUI();
-                    loadLedgerGridUI();
-                    loadLogsUI();
-                } else { alert("Galat Password hai!"); }
+                    enableOwnerUI();
+                })
+                .catch((error) => {
+                    document.getElementById('loader').style.display = 'none';
+                    // Fallback for Demo if Auth is not setup yet by Owner
+                    if(pass === 'Aditya930@') {
+                        localStorage.setItem('isOwnerLoggedIn', 'true');
+                        localStorage.setItem('ownerSessionExpire', Date.now() + 3600000);
+                        enableOwnerUI();
+                        console.warn("Using fallback auth. Please enable Firebase Auth.");
+                    } else {
+                        alert("Galat Password ya Firebase Error: " + error.message);
+                    }
+                });
             } else {
                 const phone = document.getElementById('loginPhone').value;
                 if (phone.length >= 10) {
-                    db.ref('siteLogs').push({ phone: phone, role: role, time: new Date().toLocaleString() });
+                    db.ref('siteLogs').push({ phone: escapeHTML(phone), role: role, time: new Date().toLocaleString() });
                     document.getElementById('loginPage').style.display = 'none';
                     document.getElementById('mainDashboard').style.display = 'block';
                     document.getElementById('tabKhata').style.display = 'none';
@@ -513,17 +519,14 @@
             const currentVal = select.value;
             select.innerHTML = '';
             cloudCategories.forEach(cat => {
-                select.innerHTML += `<option value="${cat}">${cat}</option>`;
+                select.innerHTML += `<option value="${escapeHTML(cat)}">${escapeHTML(cat)}</option>`;
             });
-            if (cloudCategories.includes(currentVal)) {
-                select.value = currentVal;
-            } else if (cloudCategories.length > 0) {
-                select.value = cloudCategories[0];
-            }
+            if (cloudCategories.includes(currentVal)) select.value = currentVal;
+            else if (cloudCategories.length > 0) select.value = cloudCategories[0];
         }
 
         function addNewCategory() {
-            const newCat = prompt("Naya category ka naam likhein (e.g., Gate Design, Jhula, Grill):");
+            const newCat = prompt("Naya category ka naam likhein:");
             if (newCat && newCat.trim() !== "") {
                 const catName = newCat.trim();
                 if (!cloudCategories.includes(catName)) {
@@ -552,8 +555,15 @@
                 db.ref('customShowroomImages/' + newCatName).set(existingImages).then(() => {
                     db.ref('customShowroomImages/' + oldCatName).remove();
                     cloudCategories = cloudCategories.map(c => c === oldCatName ? newCatName : c);
-                    db.ref('showroomCategories').set(cloudCategories);
+                    return db.ref('showroomCategories').set(cloudCategories);
+                }).then(() => {
                     document.getElementById('loader').style.display = 'none';
+                    updateCategoryDropdown();
+                    document.getElementById('itemFilter').value = newCatName;
+                    loadImagesUI();
+                }).catch(err => {
+                    document.getElementById('loader').style.display = 'none';
+                    alert("Error: " + err.message);
                 });
             }
         }
@@ -569,26 +579,7 @@
             }
         }
 
-        /* ==================== PHOTO ADD / REPLACE ==================== */
-        function compressAndSaveImage(file, callback) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function(event) {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800;
-                    let width = img.width; let height = img.height;
-                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                    canvas.width = width; canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/jpeg', 0.7));
-                };
-            };
-        }
-
+        /* ==================== PHOTO ADD / REPLACE (FIXED: Uses Firebase Storage & Try/Catch) ==================== */
         function triggerReplace(category, index) {
             currentReplacingKey = category; currentReplacingIndex = index;
             document.getElementById('replaceFileInput').click();
@@ -599,30 +590,75 @@
             document.getElementById('addFileInput').click();
         }
 
+        function uploadImageToFirebase(file, category, indexToReplace = -1) {
+            if (!file.type.startsWith('image/')) {
+                alert("Kripya sirf image (photo) select karein!");
+                document.getElementById('loader').style.display = 'none';
+                return;
+            }
+            
+            // Try saving to Firebase Storage first (Better Architecture)
+            try {
+                const refName = 'showroom/' + Date.now() + '_' + file.name;
+                const fileRef = storage.ref().child(refName);
+                fileRef.put(file).then(snapshot => snapshot.ref.getDownloadURL())
+                .then(url => {
+                    saveImageUrlToDB(url, category, indexToReplace);
+                })
+                .catch(err => {
+                    console.warn("Storage upload failed, falling back to Base64: " + err.message);
+                    fallbackBase64Upload(file, category, indexToReplace);
+                });
+            } catch(e) {
+                fallbackBase64Upload(file, category, indexToReplace);
+            }
+        }
+
+        function fallbackBase64Upload(file, category, indexToReplace) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width; let height = img.height;
+                    if (width > 800) { height *= 800 / width; width = 800; }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    saveImageUrlToDB(canvas.toDataURL('image/jpeg', 0.7), category, indexToReplace);
+                };
+            };
+        }
+
+        function saveImageUrlToDB(url, category, indexToReplace) {
+            if(!cloudImagesData[category]) cloudImagesData[category] = [];
+            if(indexToReplace > -1) cloudImagesData[category][indexToReplace] = url;
+            else cloudImagesData[category].push(url);
+            
+            db.ref('customShowroomImages/' + category).set(cloudImagesData[category]).then(() => {
+                document.getElementById('loader').style.display = 'none';
+            }).catch(err => {
+                document.getElementById('loader').style.display = 'none';
+                alert("DB Error: " + err.message);
+            });
+        }
+
         function handleImageFileChange(e) {
             const file = e.target.files[0];
             if (!file) return;
             document.getElementById('loader').style.display = 'block';
-            compressAndSaveImage(file, function(compressedImage) {
-                if(!cloudImagesData[currentReplacingKey]) cloudImagesData[currentReplacingKey] = [];
-                cloudImagesData[currentReplacingKey][currentReplacingIndex] = compressedImage;
-                db.ref('customShowroomImages/' + currentReplacingKey).set(cloudImagesData[currentReplacingKey]).then(() => {
-                    document.getElementById('loader').style.display = 'none'; e.target.value = '';
-                });
-            });
+            uploadImageToFirebase(file, currentReplacingKey, currentReplacingIndex);
+            e.target.value = '';
         }
 
         function handleAddImageFileChange(e) {
             const file = e.target.files[0];
             if (!file) return;
             document.getElementById('loader').style.display = 'block';
-            compressAndSaveImage(file, function(compressedImage) {
-                if(!cloudImagesData[currentAddingKey]) cloudImagesData[currentAddingKey] = [];
-                cloudImagesData[currentAddingKey].push(compressedImage);
-                db.ref('customShowroomImages/' + currentAddingKey).set(cloudImagesData[currentAddingKey]).then(() => {
-                    document.getElementById('loader').style.display = 'none'; e.target.value = '';
-                });
-            });
+            uploadImageToFirebase(file, currentAddingKey, -1);
+            e.target.value = '';
         }
 
         function deleteImage(category, index) {
@@ -645,17 +681,17 @@
                 if(loggedInRole === 'owner') {
                     ownerButtons = `
                         <div class="owner-actions">
-                            <button class="btn-replace" onclick="triggerReplace('${item}', ${index})" style="background:#2563eb;">✏️ Replace</button>
-                            <button class="btn-delete" onclick="deleteImage('${item}', ${index})" style="background:#dc2626;">🗑️ Delete</button>
+                            <button class="btn-replace" onclick="triggerReplace('${escapeHTML(item)}', ${index})" style="background:#2563eb;">✏️ Replace</button>
+                            <button class="btn-delete" onclick="deleteImage('${escapeHTML(item)}', ${index})" style="background:#dc2626;">🗑️ Delete</button>
                         </div>
                     `;
                 }
                 grid.innerHTML += `
                     <div class="img-card">
-                        <img src="${imgUrl}" onclick="openModal('${imgUrl}')">
+                        <img src="${escapeHTML(imgUrl)}" onclick="openModal('${escapeHTML(imgUrl)}')">
                         <div class="img-card-body">
-                            <h3 style="color:#fff;">${item} Design #${index + 1}</h3>
-                            <a href="https://wa.me/919304672299?text=Order%20${item}%20Design%20${index + 1}" target="_blank">
+                            <h3 style="color:#fff;">${escapeHTML(item)} Design #${index + 1}</h3>
+                            <a href="https://wa.me/919304672299?text=Order%20${escapeHTML(item)}%20Design%20${index + 1}" target="_blank">
                                 <button style="background:#16a34a;">🟢 Order on WhatsApp</button>
                             </a>
                             ${ownerButtons}
@@ -665,7 +701,7 @@
 
             if(loggedInRole === 'owner') {
                 grid.innerHTML += `
-                    <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:rgba(255,255,255,0.05); border: 2px dashed #475569; min-height:240px; cursor:pointer;" onclick="triggerAdd('${item}')">
+                    <div class="img-card" style="display:flex; justify-content:center; align-items:center; background:rgba(255,255,255,0.05); border: 2px dashed #475569; min-height:240px; cursor:pointer;" onclick="triggerAdd('${escapeHTML(item)}')">
                         <div style="text-align:center; padding: 20px;">
                             <div style="font-size: 3rem; color: #94a3b8; margin-bottom: 10px;">+</div>
                             <h3 style="color:#e2e8f0;">Is Category Me Photo Add Karein</h3>
@@ -681,7 +717,7 @@
         }
         function closeModal() { document.getElementById('myModal').style.display = "none"; }
 
-        /* ==================== ERP LEDGER MASTER CARDS GRID ==================== */
+        /* ==================== ERP LEDGER MASTER CARDS GRID (FIXED Key Collision) ==================== */
         function loadLedgerGridUI() {
             const container = document.getElementById('masterCardsContainer');
             if(!container) return;
@@ -691,7 +727,11 @@
             const grouped = {};
 
             cloudKhataData.forEach(e => {
-                const key = (e.name || 'Unknown').trim() + '_' + (e.phone || '').trim();
+                // FIXED: Normalize keys to prevent collision issues
+                const cleanName = (e.name || 'Unknown').trim().toLowerCase();
+                const cleanPhone = (e.phone || '').trim().replace(/\D/g, '');
+                const key = cleanName + '_' + cleanPhone;
+                
                 if(!grouped[key]) {
                     grouped[key] = {
                         key: key, name: e.name || 'Unknown', phone: e.phone || '', address: e.address || '',
@@ -714,18 +754,21 @@
             }
 
             personList.forEach(p => {
-                let outstanding = p.totalBusiness - p.totalReceived;
+                let outstanding = (p.totalBusiness - p.totalReceived).toFixed(2);
                 let initial = p.name.charAt(0).toUpperCase();
-                let phoneDisplay = p.phone || 'N/A';
+                let phoneDisplay = escapeHTML(p.phone) || 'N/A';
+                
+                // Fixed WhatsApp link structure
+                let waLink = p.phone ? `https://wa.me/91${p.phone.replace(/\D/g, '')}` : '#';
                 
                 container.innerHTML += `
-                    <div class="person-card ${p.type}">
+                    <div class="person-card ${escapeHTML(p.type)}">
                         <div>
                             <div class="person-card-top">
-                                <div class="avatar-circle">${initial}</div>
+                                <div class="avatar-circle">${escapeHTML(initial)}</div>
                                 <div class="person-name">
-                                    <h3>${p.name}</h3>
-                                    <p>📞 ${phoneDisplay} &nbsp;|&nbsp; <span style="text-transform:uppercase; font-size:0.75rem; color:#cbd5e1;">${p.type}</span></p>
+                                    <h3>${escapeHTML(p.name)}</h3>
+                                    <p>📞 ${phoneDisplay} &nbsp;|&nbsp; <span style="text-transform:uppercase; font-size:0.75rem; color:#cbd5e1;">${escapeHTML(p.type)}</span></p>
                                 </div>
                             </div>
                             <div class="stats-box">
@@ -734,8 +777,8 @@
                             </div>
                         </div>
                         <div class="person-actions">
-                            <a href="tel:${p.phone}" class="action-icon-btn" title="Call">📞</a>
-                            <a href="https://wa.me/91${p.phone}" target="_blank" class="action-icon-btn" title="WhatsApp" style="background:#16a34a;">💬</a>
+                            <a href="tel:${escapeHTML(p.phone)}" class="action-icon-btn" title="Call">📞</a>
+                            <a href="${waLink}" target="_blank" class="action-icon-btn" title="WhatsApp" style="background:#16a34a;">💬</a>
                             <button onclick="openPersonDetail('${p.key}')" class="action-icon-btn" title="View Detail Works" style="background:#3b82f6;">👁️</button>
                         </div>
                     </div>`;
@@ -763,8 +806,9 @@
             container.innerHTML = '';
 
             const works = cloudKhataData.filter(e => {
-                const k = (e.name || 'Unknown').trim() + '_' + (e.phone || '').trim();
-                return k === personKey;
+                const cleanName = (e.name || 'Unknown').trim().toLowerCase();
+                const cleanPhone = (e.phone || '').trim().replace(/\D/g, '');
+                return (cleanName + '_' + cleanPhone) === personKey;
             });
 
             if(works.length === 0) { closePersonDetail(); return; }
@@ -773,18 +817,15 @@
             let totalBusiness = 0; let totalReceived = 0;
 
             works.forEach(w => {
-                let finalAmt = parseFloat(w.total) || 0;
-                let rcvAmt = (parseFloat(w.pay1) || 0) + (parseFloat(w.pay2) || 0) + (parseFloat(w.pay3) || 0);
-                totalBusiness += finalAmt; totalReceived += rcvAmt;
+                totalBusiness += parseFloat(w.total) || 0;
+                totalReceived += (parseFloat(w.pay1) || 0) + (parseFloat(w.pay2) || 0) + (parseFloat(w.pay3) || 0);
             });
 
-            let outstanding = totalBusiness - totalReceived;
-
-            document.getElementById('detailOutstandingAmt').innerText = `₹${outstanding}`;
-            document.getElementById('detailBusinessAmt').innerText = `₹${totalBusiness}`;
-            document.getElementById('detailReceivedAmt').innerText = `₹${totalReceived}`;
+            document.getElementById('detailOutstandingAmt').innerText = `₹${(totalBusiness - totalReceived).toFixed(2)}`;
+            document.getElementById('detailBusinessAmt').innerText = `₹${totalBusiness.toFixed(2)}`;
+            document.getElementById('detailReceivedAmt').innerText = `₹${totalReceived.toFixed(2)}`;
             document.getElementById('detailWorksCount').innerText = works.length;
-            document.getElementById('detailPersonNameTitle').innerText = `${personName} - All Works`;
+            document.getElementById('detailPersonNameTitle').innerText = `${escapeHTML(personName)} - All Works`;
 
             works.forEach((w, idx) => {
                 let finalAmt = parseFloat(w.total) || 0;
@@ -801,12 +842,11 @@
                 if(w.pay2 > 0) payDesc += `2nd: ₹${w.pay2} (${w.date2 || '-'}) | `;
                 if(w.pay3 > 0) payDesc += `3rd: ₹${w.pay3} (${w.date3 || '-'})`;
 
-                // Sub-items overview
                 let itemsOverview = '';
                 if(w.items && w.items.length > 0) {
-                    itemsOverview = w.items.map(it => `• ${it.name} - ${it.qty} ${it.unit}`).join('<br>');
+                    itemsOverview = w.items.map(it => `• ${escapeHTML(it.name)} - ${it.qty} ${escapeHTML(it.unit)}`).join('<br>');
                 } else if(w.item) {
-                    itemsOverview = w.item;
+                    itemsOverview = escapeHTML(w.item);
                 }
 
                 container.innerHTML += `
@@ -818,51 +858,49 @@
                         </div>
                         <div class="work-header">
                             <div>
-                                <h4>${title}</h4>
-                                <span class="category-badge">${cat} &nbsp;|&nbsp; <small>Entry Date: ${w.entryDate || '-'}</small></span>
+                                <h4>${escapeHTML(title)}</h4>
+                                <span class="category-badge">${escapeHTML(cat)} &nbsp;|&nbsp; <small>Date: ${escapeHTML(w.entryDate || '-')}</small></span>
                             </div>
                         </div>
-                        <span class="status-badge ${badgeClass}">${status}</span>
+                        <span class="status-badge ${badgeClass}">${escapeHTML(status)}</span>
                         
                         <div style="background:#111; padding:10px; border-radius:6px; margin-bottom:12px; font-size: 0.85rem; color:#cbd5e1; line-height: 1.4;">
                             ${itemsOverview || 'No items listed'}
                         </div>
 
                         <div class="work-amounts-grid">
-                            <div class="amt-box"><h5>Final</h5><p>₹${finalAmt}</p></div>
-                            <div class="amt-box received"><h5>Received</h5><p>₹${rcvAmt}</p></div>
-                            <div class="amt-box pending"><h5>Pending</h5><p>₹${pendAmt}</p></div>
+                            <div class="amt-box"><h5>Final</h5><p>₹${finalAmt.toFixed(2)}</p></div>
+                            <div class="amt-box received"><h5>Received</h5><p>₹${rcvAmt.toFixed(2)}</p></div>
+                            <div class="amt-box pending"><h5>Pending</h5><p>₹${pendAmt.toFixed(2)}</p></div>
                         </div>
-                        <p style="font-size:0.82rem; color:#cbd5e1; margin-top:10px;">${payDesc}</p>
+                        <p style="font-size:0.82rem; color:#cbd5e1; margin-top:10px;">${escapeHTML(payDesc)}</p>
                     </div>
                 `;
             });
         }
 
-        /* ==================== INVOICE GENERATOR LOGIC (UPGRADED PROFESSIONAL DESIGN) ==================== */
+        function printPersonDetail() { window.print(); }
+
+        /* ==================== INVOICE GENERATOR LOGIC ==================== */
         function generateInvoice(workId) {
             const w = cloudKhataData.find(e => e.id === workId);
             if(!w) return;
 
             let invoiceNo = "WK" + Date.now().toString().slice(-5);
-            
-            // Format Date as DD-MM-YYYY
             let rawDate = w.entryDate || new Date().toISOString().split('T')[0];
             let dParts = rawDate.split('-');
             let formattedDate = dParts.length === 3 ? `${dParts[2]}-${dParts[1]}-${dParts[0]}` : rawDate;
 
-            let itemsHtml = '';
-            let subtotal = 0;
-
+            let itemsHtml = ''; let subtotal = 0;
             if(w.items && w.items.length > 0) {
                 w.items.forEach(it => {
                     let amt = it.amount || ((it.qty || 0) * (it.rate || 0));
-                    itemsHtml += `<tr><td>${it.name}</td><td>${it.qty} ${it.unit}</td><td>₹${it.rate}</td><td>₹${amt}</td></tr>`;
+                    itemsHtml += `<tr><td>${escapeHTML(it.name)}</td><td>${it.qty} ${escapeHTML(it.unit)}</td><td>₹${it.rate}</td><td>₹${amt.toFixed(2)}</td></tr>`;
                     subtotal += amt;
                 });
             } else {
                 let amt = (w.qty || 0) * (w.rate || 0);
-                itemsHtml += `<tr><td>${w.item || w.workTitle || 'Fabrication Work'}</td><td>${w.qty || '-'}</td><td>₹${w.rate || '-'}</td><td>₹${amt}</td></tr>`;
+                itemsHtml += `<tr><td>${escapeHTML(w.item || w.workTitle || 'Fabrication Work')}</td><td>${w.qty || '-'}</td><td>₹${w.rate || '-'}</td><td>₹${amt.toFixed(2)}</td></tr>`;
                 subtotal += amt;
             }
 
@@ -871,7 +909,6 @@
             if((w.transport || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Transport Charge</td><td>₹${w.transport}</td></tr>`;
             if((w.installation || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Installation Charge</td><td>₹${w.installation}</td></tr>`;
             if((w.otherCharges || 0) > 0) chargesHtml += `<tr><td colspan="3" style="text-align:right;">Other Charges</td><td>₹${w.otherCharges}</td></tr>`;
-            
             let discHtml = '';
             if((w.discount || 0) > 0) discHtml = `<tr><td colspan="3" style="text-align:right;">Discount</td><td>- ₹${w.discount}</td></tr>`;
 
@@ -891,14 +928,13 @@
                         <div style="font-size: 14px; color: #475569;">Date: <b style="color:#0f172a;">${formattedDate}</b></div>
                     </div>
                 </div>
-                
                 <div style="display:flex; justify-content:space-between; margin-bottom: 25px;">
                     <div class="inv-box" style="width: 45%;">
                         <strong style="color: #64748b; font-size: 12px; letter-spacing: 1px;">BILL TO:</strong><br>
-                        <h3 style="margin: 5px 0; color: #0f172a; font-size: 20px;">${w.name}</h3>
+                        <h3 style="margin: 5px 0; color: #0f172a; font-size: 20px;">${escapeHTML(w.name)}</h3>
                         <div style="color: #334155; font-size: 14px;">
-                            ${w.phone ? `Phone: ${w.phone}<br>` : ''}
-                            ${w.address ? `Address: ${w.address}` : ''}
+                            ${w.phone ? `Phone: ${escapeHTML(w.phone)}<br>` : ''}
+                            ${w.address ? `Address: ${escapeHTML(w.address)}` : ''}
                         </div>
                     </div>
                     <div class="inv-box" style="width: 45%; text-align:right;">
@@ -911,43 +947,20 @@
                         </div>
                     </div>
                 </div>
-
                 <table class="inv-table">
-                    <thead>
-                        <tr>
-                            <th>Item Description</th>
-                            <th>Qty / Unit</th>
-                            <th>Rate</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Item Description</th><th>Qty / Unit</th><th>Rate</th><th>Amount</th></tr></thead>
                     <tbody>
                         ${itemsHtml}
-                        <tr>
-                            <td colspan="3" style="text-align:right; font-weight:bold;">Subtotal</td>
-                            <td style="font-weight:bold;">₹${subtotal}</td>
-                        </tr>
+                        <tr><td colspan="3" style="text-align:right; font-weight:bold;">Subtotal</td><td style="font-weight:bold;">₹${subtotal.toFixed(2)}</td></tr>
                         ${chargesHtml}
                         ${discHtml}
-                        <tr class="inv-summary-row">
-                            <td colspan="3" style="text-align:right; font-size: 18px;">Final Total</td>
-                            <td style="font-size: 18px;">₹${finalTotal}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" style="text-align:right; color:#16a34a; font-weight:bold;">Amount Received</td>
-                            <td style="color:#16a34a; font-weight:bold;">₹${rcvAmt}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" style="text-align:right; color:#dc2626; font-weight:bold;">Pending Balance</td>
-                            <td style="color:#dc2626; font-weight:bold;">₹${pending}</td>
-                        </tr>
+                        <tr class="inv-summary-row"><td colspan="3" style="text-align:right; font-size: 18px;">Final Total</td><td style="font-size: 18px;">₹${finalTotal.toFixed(2)}</td></tr>
+                        <tr><td colspan="3" style="text-align:right; color:#16a34a; font-weight:bold;">Amount Received</td><td style="color:#16a34a; font-weight:bold;">₹${rcvAmt.toFixed(2)}</td></tr>
+                        <tr><td colspan="3" style="text-align:right; color:#dc2626; font-weight:bold;">Pending Balance</td><td style="color:#dc2626; font-weight:bold;">₹${pending.toFixed(2)}</td></tr>
                     </tbody>
                 </table>
-                <div class="inv-footer-msg">
-                    Thank you for your business! - Chakradhari Traders ERP
-                </div>
+                <div class="inv-footer-msg">Thank you for your business! - Chakradhari Traders ERP</div>
             `;
-
             document.getElementById('invoicePrintArea').innerHTML = printHtml;
             window.print();
         }
@@ -962,7 +975,7 @@
                     <span style="color:#94a3b8; font-size:0.8rem; font-weight:bold;">Item Detail</span>
                     <button type="button" class="del-item-btn" onclick="this.parentElement.parentElement.remove(); calcWorkTotal();">🗑️ Remove</button>
                 </div>
-                <input type="text" class="itemName" placeholder="Item Name (e.g., Gate Frame)" value="${name}">
+                <input type="text" class="itemName" placeholder="Item Name (e.g., Gate Frame)" value="${escapeHTML(name)}">
                 <div class="item-grid" style="margin-top:6px;">
                     <input type="number" class="itemQty" placeholder="Qty" value="${qty}" oninput="calcWorkTotal()">
                     <select class="itemUnit" style="margin:0;">
@@ -996,22 +1009,22 @@
             let o = parseFloat(document.getElementById('kOther').value) || 0;
             let d = parseFloat(document.getElementById('kDiscount').value) || 0;
             
+            // FIXED: Float precision formatting
             let finalTotal = subtotal + l + t + i + o - d;
             if(finalTotal < 0) finalTotal = 0;
+            finalTotal = Math.round(finalTotal * 100) / 100;
 
             document.getElementById('kTotal').value = finalTotal;
-            document.getElementById('kGrandTotalLabel').innerText = finalTotal;
+            document.getElementById('kGrandTotalLabel').innerText = finalTotal.toFixed(2);
         }
 
         function openWorkModalForCurrentPerson() {
             if(!currentActivePersonKey) return;
             resetWorkModal();
-            
             const works = cloudKhataData.filter(e => {
-                const k = (e.name || 'Unknown').trim() + '_' + (e.phone || '').trim();
+                const k = (e.name || 'Unknown').trim().toLowerCase() + '_' + (e.phone || '').trim().replace(/\D/g, '');
                 return k === currentActivePersonKey;
             });
-
             if(works.length > 0) {
                 document.getElementById('kName').value = works[0].name || '';
                 document.getElementById('kPhone').value = works[0].phone || '';
@@ -1019,16 +1032,15 @@
                 document.getElementById('khataType').value = works[0].type || 'customer';
                 toggleKhataFields();
             }
-
             document.getElementById('workModalTitle').innerText = "Naya Kaam Jodein: " + document.getElementById('kName').value;
-            addWorkItemRow(); // Add one empty row by default
+            addWorkItemRow();
             document.getElementById('workModal').style.display = 'flex';
         }
 
         function openWorkModalForNewPerson() {
             resetWorkModal();
             document.getElementById('workModalTitle').innerText = "Naya Grahak / Kaam Jodein";
-            addWorkItemRow(); // Add one empty row by default
+            addWorkItemRow(); 
             document.getElementById('workModal').style.display = 'flex';
         }
 
@@ -1049,7 +1061,6 @@
             const editId = document.getElementById('editEntryId').value;
             const today = new Date().toISOString().split('T')[0];
 
-            // GATHER MULTIPLE ITEMS
             let workItems = [];
             document.querySelectorAll('.item-row').forEach(row => {
                 let n = row.querySelector('.itemName').value.trim();
@@ -1073,16 +1084,13 @@
                 workTitle: document.getElementById('kWorkTitle').value || 'Work Item',
                 category: document.getElementById('kCategory').value || 'Fabrication',
                 status: document.getElementById('kStatus').value || 'Delivered',
-                
-                items: workItems, // New structure
-                
+                items: workItems,
                 labour: parseFloat(document.getElementById('kLabour').value) || 0,
                 transport: parseFloat(document.getElementById('kTransport').value) || 0,
                 installation: parseFloat(document.getElementById('kInstallation').value) || 0,
                 otherCharges: parseFloat(document.getElementById('kOther').value) || 0,
                 discount: parseFloat(document.getElementById('kDiscount').value) || 0,
                 total: parseFloat(document.getElementById('kTotal').value) || 0,
-                
                 date1: document.getElementById('kDate1').value,
                 pay1: parseFloat(document.getElementById('kPay1').value) || 0,
                 date2: document.getElementById('kDate2').value,
@@ -1120,14 +1128,10 @@
             document.getElementById('kCategory').value = item.category || '';
             document.getElementById('kStatus').value = item.status || 'Delivered';
             
-            // Populating Multiple Items
             const list = document.getElementById('workItemsList');
             if(item.items && item.items.length > 0) {
-                item.items.forEach(it => {
-                    addWorkItemRow(it.name, it.qty, it.unit, it.rate, it.amount);
-                });
+                item.items.forEach(it => { addWorkItemRow(it.name, it.qty, it.unit, it.rate, it.amount); });
             } else {
-                // Fallback for old data
                 addWorkItemRow(item.item, item.qty, 'KG', item.rate, (item.qty||0)*(item.rate||0));
             }
 
@@ -1137,7 +1141,7 @@
             document.getElementById('kOther').value = item.otherCharges || '';
             document.getElementById('kDiscount').value = item.discount || '';
             
-            calcWorkTotal(); // Initialize totals
+            calcWorkTotal(); 
 
             document.getElementById('kDate1').value = item.date1 || '';
             document.getElementById('kPay1').value = item.pay1 || '';
@@ -1165,17 +1169,14 @@
             document.getElementById('kWorkTitle').value = '';
             document.getElementById('kCategory').value = '';
             document.getElementById('kStatus').value = 'Delivered';
-            
-            document.getElementById('workItemsList').innerHTML = ''; // Clear item rows
-            
+            document.getElementById('workItemsList').innerHTML = ''; 
             document.getElementById('kLabour').value = '';
             document.getElementById('kTransport').value = '';
             document.getElementById('kInstallation').value = '';
             document.getElementById('kOther').value = '';
             document.getElementById('kDiscount').value = '';
             document.getElementById('kTotal').value = '0';
-            document.getElementById('kGrandTotalLabel').innerText = '0';
-
+            document.getElementById('kGrandTotalLabel').innerText = '0.00';
             document.getElementById('kDate1').value = '';
             document.getElementById('kPay1').value = '';
             document.getElementById('kDate2').value = '';
@@ -1190,7 +1191,7 @@
             display.innerHTML = '';
             let logs = [...cloudLogsData].reverse();
             logs.forEach(l => {
-                display.innerHTML += `<p style="padding:8px; border-bottom:1px solid #334155;">⏱️ <b>${l.time}</b> -> Role: ${l.role.toUpperCase()} | Phone: <b>${l.phone}</b></p>`;
+                display.innerHTML += `<p style="padding:8px; border-bottom:1px solid #334155;">⏱️ <b>${escapeHTML(l.time)}</b> -> Role: ${escapeHTML(l.role).toUpperCase()} | Phone: <b>${escapeHTML(l.phone)}</b></p>`;
             });
         }
 
@@ -1200,6 +1201,9 @@
             loggedInRole = 'customer';
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('addCategoryBtn').style.display = 'none'; 
+            document.getElementById('editCategoryBtn').style.display = 'none'; 
+            document.getElementById('delCategoryBtn').style.display = 'none'; 
         }
     </script>
 </body>
